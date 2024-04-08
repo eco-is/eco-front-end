@@ -1,0 +1,23 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+form {
+  width: 400px;
+  text-align: center;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+p {
+  margin-top: 10px;
+  text-align: center;
+}
