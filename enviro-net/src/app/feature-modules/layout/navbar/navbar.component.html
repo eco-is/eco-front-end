@@ -1,7 +1,13 @@
 <mat-toolbar color="primary">
-    <div>
-        <div id="buttons">
-            <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
-        </div>
+    <div id="logo">
+        <a [routerLink]="['/']">
+            <img src="../../../../assets/images/logo.png" alt="Logo">
+        </a>
+    </div>
+    <div id="name" [routerLink]="['/']">
+        EnviroNet
+    </div>
+    <div id="buttons">
+        <button mat-raised-button color="accent" [routerLink]="['/']">Home</button>
     </div>
 </mat-toolbar>

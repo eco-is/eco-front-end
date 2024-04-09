@@ -121,5 +121,7 @@ $custom-theme: mat.define-light-theme((color: (primary: $custom-theme-primary,
 
 html,
 body {
+    margin: 0;
+    padding: 0;
     height: 100%;
 }
