@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Registration } from '../model/registration.model';
+import { Gender, Registration } from '../model/registration.model';
 import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class RegistrationComponent {
   isButtonDisabled = true;
   passwordMessage = '';
   formGroup: FormGroup;
+  genders = Object.values(Gender);
   constructor(
     private authService: AuthService,
     private snackBar: MatSnackBar,
@@ -27,9 +28,9 @@ export class RegistrationComponent {
         email: new FormControl('', [Validators.required, Validators.email]),
         username: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required]),
-        phoneNumber: new FormControl('', [Validators.required]),
-        gender: new FormControl('', [Validators.required]),
-        dateOfBirth: new FormControl('', [Validators.required]),
+        phoneNumber: new FormControl(''),
+        gender: new FormControl(null),
+        dateOfBirth: new FormControl(''),
       });
 
   }
@@ -57,27 +58,14 @@ export class RegistrationComponent {
         lastName: this.formGroup.value.lastName || '',
         email: this.formGroup.value.email || '',
         username: this.formGroup.value.username || '',
-        phoneNumber: this.formGroup.value.phoneNumber || '',
+        phoneNumber: this.formGroup.value.phoneNumber || null,
         password: this.formGroup.value.password || '',
-        gender: this.formGroup.value.gender || '', // assuming gender is part of the form
-        dateOfBirth: this.formGroup.value.dateOfBirth || null, // assuming dateOfBirth is part of the form
+        gender: this.formGroup.value.gender || null,
+        dateOfBirth: this.formGroup.value.dateOfBirth || null,
       };
 
     if (this.formGroup.valid) {
       console.log(registration)
     }
-  }
-
-  private openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 30000,
-    });
-  }
-
-  private getLatLongFromAddressOpenCage(address: string) {
-    const apiKey = '7087c471f8054150abf1cd6421ae2324';
-    const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}&language=en&limit=1`;
-  
-    return this.http.get(apiUrl);
   }
 }

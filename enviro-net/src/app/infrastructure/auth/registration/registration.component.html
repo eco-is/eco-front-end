@@ -26,12 +26,14 @@
         </mat-form-field>
         <mat-form-field>
             <mat-label>Gender</mat-label>
-            <input matInput formControlName="gender" type="text" />
+            <mat-select formControlName="gender" placeholder="Select Gender">
+                <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
+            </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Date of Birth</mat-label>
             <input matInput formControlName="dateOfBirth" type="date" />
         </mat-form-field>
-        <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
+        <button color="primary" type="submit" mat-raised-button (click)="register()" [disabled]="!formGroup.valid">Register</button>
     </div>
 </form>

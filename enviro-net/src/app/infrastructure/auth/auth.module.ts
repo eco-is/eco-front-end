@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
 // import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
@@ -15,7 +16,8 @@ import { MaterialModule } from '../material/material.module';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule
   ],
   exports: [
     // LoginComponent
