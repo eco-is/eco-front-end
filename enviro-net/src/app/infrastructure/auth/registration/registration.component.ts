@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
+import { Login } from '../model/login.model';
 
 @Component({
   selector: 'app-registration',
@@ -89,11 +90,30 @@ export class RegistrationComponent {
       this.authService.registerUser(registration).subscribe(
         (response) => {
           console.log('User registration successful:', response);
+          const login: Login = {
+            username: registration.username,
+            password: registration.password,
+          };
+          this.authService.login(login).subscribe({
+            next: () => {
+              this.router.navigate(['/']);
+            },
+            error: (errorMessage) => {
+              this.openSnackBar(errorMessage);
+            },
+          });
         },
         (error) => {
-          console.error('Error registering user:', error);
+          this.openSnackBar('Error registering user: ' + error);
         }
       );
     }
   }
+
+  private openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 30000,
+    });
+  }
+
 }
