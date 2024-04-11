@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
-import { Member } from './model/member';
+import { Member } from './model/member.model';
+import { Registration } from './model/registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,10 @@ export class AdministrationService {
 
   removeOrganizationMember(memberId: number): Observable<void> {
     return this.http.delete<void>(environment.apiHost + `users/members/${memberId}`);
+  }
+
+  registerMember(member: Registration): Observable<void> {
+    return this.http.post<void>(environment.apiHost + `auth/register/members`, member);
   }
 
   private buildParams(name: string, surname: string, email: string, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {

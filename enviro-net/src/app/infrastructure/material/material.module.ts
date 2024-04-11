@@ -11,6 +11,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatOption, MatOptionModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatSelectModule
+    MatSelectModule,
+    MatOptionModule
   ],
   exports: [
     MatToolbar,
@@ -41,7 +43,8 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatPaginator,
     MatSortModule,
-    MatSelect
+    MatSelect,
+    MatOption
   ]
 })
 export class MaterialModule { }

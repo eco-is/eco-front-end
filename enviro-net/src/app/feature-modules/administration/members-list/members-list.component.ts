@@ -4,7 +4,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AdministrationService } from '../administration.service';
-import { Member } from '../model/member';
+import { Member } from '../model/member.model';
+import { RoleOrdinals } from '../model/role.model';
 
 @Component({
   selector: 'app-members-list',
@@ -12,7 +13,7 @@ import { Member } from '../model/member';
   styleUrls: ['./members-list.component.scss']
 })
 export class MembersListComponent {
-  displayedColumns: string[] = ['number', 'name', 'surname', 'email', 'role', 'status', 'actions'];
+  displayedColumns: string[] = ['number', 'surname', 'email', 'role', 'status', 'actions'];
   dataSource: MatTableDataSource<Member>;
   page: number = 0;
   size: number = 5;
@@ -99,7 +100,6 @@ export class MembersListComponent {
       }
     );
   }
-
 
   clearAll() {
     this.searchForm.reset();
