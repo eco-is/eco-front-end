@@ -1,7 +1,15 @@
 <mat-toolbar color="primary">
-    <div>
-        <div id="buttons">
-            <button mat-raised-button color="accent" [routerLink]="['']">Home</button>
-        </div>
+    <div id="logo">
+        <a [routerLink]="['/']">
+            <img src="../../../../assets/images/logo.png" alt="Logo">
+        </a>
+    </div>
+    <div id="name" [routerLink]="['/']">
+        EnviroNet
+    </div>
+    <div id="buttons">
+        <button mat-raised-button color="accent" [routerLink]="['/']">Home</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.username === ''" [routerLink]="['/login']">Log in</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" (click)="onLogout()">Log out</button>
     </div>
 </mat-toolbar>

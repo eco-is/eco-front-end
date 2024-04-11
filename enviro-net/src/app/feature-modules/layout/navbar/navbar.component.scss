@@ -1,0 +1,29 @@
+mat-toolbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    #logo {
+        display: flex;
+        align-items: center;
+    }
+
+    #name {
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    #buttons {
+        margin-left: auto;
+        display: flex;
+        gap: 10px;
+    }
+
+
+    img {
+        height: 65px;
+        width: auto;
+    }
+}

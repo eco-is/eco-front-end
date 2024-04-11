@@ -1,13 +1,8 @@
-<!-- TODO -->
-<p>home works!</p>
-<div class="container">
-    <h1>Test Typography</h1>
-    <button mat-raised-button color="primary" class="custom-button">Primary color button</button>
-    <button mat-raised-button color="accent" class="custom-button">Accent color button</button>
-    <button mat-raised-button color="warn" class="custom-button">Warn color button</button>
-    <form>
-        <mat-form-field class="custom-field">
-            <input matInput placeholder="Username">
-        </mat-form-field>
-    </form>
-</div>
+<h1 *ngIf="user && user.username !== ''">Hello {{user.username}}</h1>
+<section class="landing-section">
+    <img src="../../../../assets/images/background.png" alt="EnviroNet">
+</section>
+
+<footer>
+    <p><a href="mailto:environet.eco@gmail.com">Join the Green Movement: environet.eco@gmail.com</a></p>
+</footer>

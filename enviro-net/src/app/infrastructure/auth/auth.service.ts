@@ -15,9 +15,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
-  user$ = new BehaviorSubject<User>({ email: '', id: 0, role: '' });
+  user$ = new BehaviorSubject<User>({ username: '', id: 0, role: '' });
 
-  constructor(private http: HttpClient, private tokenStorage: TokenStorage, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorage,
+    private router: Router
+  ) {}
 
   // register(registration: Registration): Observable<AuthenticationResponse> {
   //   return this.http.post<AuthenticationResponse>(environment.apiHost + 'users/register', registration)
@@ -30,14 +34,19 @@ export class AuthService {
 
   login(login: Login): Observable<AuthenticationResponse> {
     return this.http
-      .post<AuthenticationResponse>(environment.apiHost + 'users/login', login)
+      .post<AuthenticationResponse>(
+        environment.apiHost + 'auth/authenticate',
+        login
+      )
       .pipe(
         tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.access_token);
+          this.tokenStorage.saveAccessToken(authenticationResponse.token);
           this.setUser();
         }),
         catchError(() => {
-          return throwError('Login failed. Please check your credentials.\nIf you haven\'t activated your account via the email link, please do so now to complete the registration process.');
+          return throwError(
+            "Login failed. Please check your credentials.\nIf you haven't activated your account via the email link, please do so now to complete the registration process."
+          );
         })
       );
   }
@@ -47,7 +56,7 @@ export class AuthService {
     const accessToken = this.tokenStorage.getAccessToken() || '';
     const user: User = {
       id: +jwtHelperService.decodeToken(accessToken).id,
-      email: jwtHelperService.decodeToken(accessToken).sub,
+      username: jwtHelperService.decodeToken(accessToken).sub,
       role: jwtHelperService.decodeToken(accessToken).role,
     };
     this.user$.next(user);
@@ -64,11 +73,13 @@ export class AuthService {
   logout(): void {
     this.router.navigate(['/']).then(() => {
       this.tokenStorage.clear();
-      this.user$.next({ email: '', id: 0, role: '' });
+      this.user$.next({ id: 0, role: '', username: '' });
     });
   }
 
   getPasswordChanged(id: number): Observable<Boolean> {
-    return this.http.get<Boolean>(environment.apiHost + 'users/password-change/' + id);
+    return this.http.get<Boolean>(
+      environment.apiHost + 'users/password-change/' + id
+    );
   }
 }
