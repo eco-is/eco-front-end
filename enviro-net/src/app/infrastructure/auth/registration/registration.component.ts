@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-registration',
@@ -39,7 +40,16 @@ export class RegistrationComponent {
     this.formGroup.statusChanges.subscribe(() => {
       this.isButtonDisabled = !this.formGroup.valid || !this.passwordsMatch();
     });
+    const inputElement = document.querySelector('#phone');
+    if (inputElement) {
+      intlTelInput(inputElement,{
+        initialCountry: 'rs',
+        separateDialCode: true,
+        utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js'
+    });
+
   }
+}
 
   passwordConfirmation = new FormControl('', [Validators.required]);
 
