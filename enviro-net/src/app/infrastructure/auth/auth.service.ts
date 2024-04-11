@@ -10,6 +10,7 @@ import { TokenStorage } from './jwt/token.service';
 import { Router } from '@angular/router';
 import { User } from './model/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Registration } from './model/registration.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,14 +24,14 @@ export class AuthService {
     private router: Router
   ) {}
 
-  // register(registration: Registration): Observable<AuthenticationResponse> {
-  //   return this.http.post<AuthenticationResponse>(environment.apiHost + 'users/register', registration)
-  //     .pipe(
-  //       catchError(() => {
-  //         return throwError('An error occurred during registration.');
-  //       })
-  //     );
-  // }
+  registerUser(registration: Registration): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(environment.apiHost + 'auth/register', registration)
+      .pipe(
+        catchError(() => {
+          return throwError('An error occurred during registration.');
+        })
+      );
+  }
 
   login(login: Login): Observable<AuthenticationResponse> {
     return this.http

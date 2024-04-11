@@ -4,13 +4,15 @@ export enum Gender {
   }
   
   export interface Registration {
-    firstName: string;
-    lastName: string;
+    name: string;
+    surname: string;
     email: string;
     username: string;
     password: string;
     phoneNumber: string;
-    gender: Gender | null;
+    gender: number | null;
     dateOfBirth: Date;
+    points: number;
+    role: number; 
   }
   
