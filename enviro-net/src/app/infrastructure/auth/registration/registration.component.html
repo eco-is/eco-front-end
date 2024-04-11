@@ -20,13 +20,9 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password" />
         </mat-form-field>
-        <!--<mat-form-field>-->
-            <!--<mat-label>Phone Number</mat-label>-->
         <div class="phoneInput" >
             <input matInput formControlName="phoneNumber" type="tel" id="phone" />
         </div>
-            
-        <!--</mat-form-field>-->
         <mat-form-field>
             <mat-label>Gender</mat-label>
             <mat-select formControlName="gender" placeholder="Select Gender">
@@ -37,6 +33,6 @@
             <mat-label>Date of Birth</mat-label>
             <input matInput formControlName="dateOfBirth" type="date" />
         </mat-form-field>
-        <button color="primary" type="submit" mat-raised-button (click)="register()" [disabled]="!formGroup.valid">Register</button>
+        <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
     </div>
 </form>

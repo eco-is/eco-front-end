@@ -63,19 +63,37 @@ export class RegistrationComponent {
   }
 
   register(): void {
+
+    let genderValue: number | null = null;
+
+    if (this.formGroup.value.gender === Gender.Male) {
+      genderValue = 0;
+    } else if (this.formGroup.value.gender === Gender.Female) {
+      genderValue = 1;
+    }
+
     const registration: Registration = {
-        firstName: this.formGroup.value.firstName || '',
-        lastName: this.formGroup.value.lastName || '',
+        name: this.formGroup.value.firstName || '',
+        surname: this.formGroup.value.lastName || '',
         email: this.formGroup.value.email || '',
         username: this.formGroup.value.username || '',
         phoneNumber: this.formGroup.value.phoneNumber || null,
         password: this.formGroup.value.password || '',
-        gender: this.formGroup.value.gender || null,
+        gender: genderValue,
         dateOfBirth: this.formGroup.value.dateOfBirth || null,
+        points: 0,
+        role: 1,
       };
-
     if (this.formGroup.valid) {
       console.log(registration)
+      this.authService.registerUser(registration).subscribe(
+        (response) => {
+          console.log('User registration successful:', response);
+        },
+        (error) => {
+          console.error('Error registering user:', error);
+        }
+      );
     }
   }
 }
