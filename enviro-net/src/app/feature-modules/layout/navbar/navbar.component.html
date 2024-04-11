@@ -9,6 +9,7 @@
     </div>
     <div id="buttons">
         <button mat-raised-button color="accent" [routerLink]="['/']">Home</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" [routerLink]="['/my-profile']">My Profile</button>
         <button mat-raised-button color="accent" *ngIf="user && user.username === ''" [routerLink]="['/login']">Log in</button>
         <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" (click)="onLogout()">Log out</button>
     </div>
