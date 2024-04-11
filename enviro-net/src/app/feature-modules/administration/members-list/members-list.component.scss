@@ -1,0 +1,63 @@
+// TODO style
+.mat-elevation-z8 {
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    .search-header {
+        font-weight: bold;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        transition: height 0.3s ease-in-out;
+        align-items: flex-end;
+        align-items: center;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    input {
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            width: 33%;
+        }
+
+        th {
+            background-color: #b3b0b091;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+
+        tr:not(th):hover td {
+            background-color: #e5e5e5;
+            cursor: pointer;
+        }
+    }
+}

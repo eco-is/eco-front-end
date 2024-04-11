@@ -4,8 +4,14 @@ import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+
 
 @NgModule({
   declarations: [],
@@ -16,7 +22,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatSelectModule
   ],
   exports: [
     MatToolbar,
@@ -26,7 +36,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatInput,
     MatIconButton,
     MatIcon,
-    MatSnackBarModule
+    MatExpansionModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatPaginator,
+    MatSortModule,
+    MatSelect
   ]
 })
 export class MaterialModule { }

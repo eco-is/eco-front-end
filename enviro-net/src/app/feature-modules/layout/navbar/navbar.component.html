@@ -9,7 +9,13 @@
     </div>
     <div id="buttons">
         <button mat-raised-button color="accent" [routerLink]="['/']">Home</button>
-        <button mat-raised-button color="accent" *ngIf="user && user.username === ''" [routerLink]="['/login']">Log in</button>
-        <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" (click)="onLogout()">Log out</button>
+
+        <!-- ADMIN -->
+        <button mat-raised-button color="accent" *ngIf="user && user.role == 'ADMINISTRATOR'" [routerLink]="['/admin/register']">Register</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.role == 'ADMINISTRATOR'" [routerLink]="['/admin/members']">Members</button>
+        <!--  -->
+
+        <button mat-raised-button color="accent" *ngIf="user && user.username === ''" [routerLink]="['/login']">Login</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" (click)="onLogout()">Logout</button>
     </div>
 </mat-toolbar>
