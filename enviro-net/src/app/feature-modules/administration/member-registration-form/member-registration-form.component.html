@@ -1,28 +1,29 @@
-<form [formGroup]="formGroup" (ngSubmit)="register()">
-    <div class="form">
-        <mat-form-field>
-            <mat-label>First name</mat-label>
-            <input matInput formControlName="firstName" type="text" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Last name</mat-label>
-            <input matInput formControlName="lastName" type="text" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Phone number</mat-label>
-            <input matInput formControlName="phoneNumber" type="tel" id="phone" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Role</mat-label>
-            <mat-select formControlName="role" required>
-                <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+<div class="form-container">
+    <form [formGroup]="formGroup" (ngSubmit)="register()">
+        <div class="form">
+            <mat-form-field>
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstName" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastName" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" />
+            </mat-form-field>
+            <div class="phoneInput">
+                <input matInput formControlName="phoneNumber" type="tel" id="phone" />
+            </div>
+            <mat-form-field appearance="fill">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role" required>
+                    <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+                </mat-select>
+            </mat-form-field>
 
-        <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
-    </div>
-</form>
+            <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
+        </div>
+    </form>
+</div>

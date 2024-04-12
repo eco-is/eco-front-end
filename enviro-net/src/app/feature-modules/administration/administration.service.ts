@@ -5,6 +5,7 @@ import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
 import { Member } from './model/member.model';
 import { Registration } from './model/registration.model';
+import { Verification } from './model/verification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class AdministrationService {
 
   registerMember(member: Registration): Observable<void> {
     return this.http.post<void>(environment.apiHost + `auth/register/members`, member);
+  }
+
+  verifyMember(member: Verification): Observable<void> {
+    return this.http.post<void>(environment.apiHost + `auth/verify/members`, member);
   }
 
   private buildParams(name: string, surname: string, email: string, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {

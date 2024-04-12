@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import * as intlTelInput from 'intl-tel-input';
 import { Registration } from '../model/registration.model';
 import { AdministrationService } from '../administration.service';
 import { Role, RoleOrdinals } from '../model/role.model';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-member-registration-form',
@@ -14,8 +14,9 @@ import { Role, RoleOrdinals } from '../model/role.model';
 })
 export class MemberRegistrationFormComponent {
   isButtonDisabled = true;
-  formGroup: FormGroup; 
-  roles: Role[] = Object.values(Role).slice(2); 
+  formGroup: FormGroup;
+  roles: Role[] = Object.values(Role).slice(2);
+  phoneNumberInput: any;
 
   constructor(
     private adminService: AdministrationService,
@@ -29,31 +30,35 @@ export class MemberRegistrationFormComponent {
       phoneNumber: new FormControl(''),
       role: new FormControl(Role.ACCOUNTANT, [Validators.required]),
     });
-
   }
 
   ngOnInit(): void {
     this.formGroup.statusChanges.subscribe(() => {
       this.isButtonDisabled = !this.formGroup.valid;
     });
-    const inputElement = document.querySelector('#phone');
+    this.initializePhoneNumberInput();
+  }
+
+  initializePhoneNumberInput(): void {
+    const inputElement = document.querySelector('#phone') as HTMLInputElement;
     if (inputElement) {
-      intlTelInput(inputElement, {
+      this.phoneNumberInput = intlTelInput(inputElement, {
         initialCountry: 'rs',
         separateDialCode: true,
         utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js'
       });
-
     }
   }
 
   register(): void {
     const selectedRoleOrdinal = RoleOrdinals[this.formGroup.value.role as Role];
+    const fullPhoneNumber = this.phoneNumberInput?.getNumber();
+
     const registration: Registration = {
       name: this.formGroup.value.firstName || '',
       surname: this.formGroup.value.lastName || '',
       email: this.formGroup.value.email || '',
-      phoneNumber: this.formGroup.value.phoneNumber || '',
+      phoneNumber: fullPhoneNumber || '',
       role: selectedRoleOrdinal,
     };
 

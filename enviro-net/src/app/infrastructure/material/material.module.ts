@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatFormFieldModule, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -28,12 +28,13 @@ import { MatOption, MatOptionModule } from '@angular/material/core';
     MatPaginatorModule,
     MatSortModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
   ],
   exports: [
     MatToolbar,
     MatButton,
     MatFormField,
+    MatHint,
     MatLabel,
     MatInput,
     MatIconButton,
