@@ -1,0 +1,22 @@
+<div class="form-container">
+    <h1>Finish registration process</h1>
+    <form [formGroup]="formGroup" (ngSubmit)="verify()">
+        <div class="form">
+            <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" type="password" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Confirm password</mat-label>
+                <input matInput formControlName="passwordConfirmation" type="password" />
+                <mat-hint color="warn">{{ passwordMessage }}</mat-hint>
+            </mat-form-field>
+            <button color="primary" type="submit" mat-raised-button
+                [disabled]="!formGroup.valid || !passwordsMatch()">Submit</button>
+        </div>
+    </form>
+</div>
