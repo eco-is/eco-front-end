@@ -16,10 +16,10 @@
                 <label for="email">Email:</label>
                 <input type="text" id="city" formControlName="email">
             </div>
-            <button type="submit">
+            <button mat-icon-button color="primary" type="submit">
                 <mat-icon>search</mat-icon>
             </button>
-            <button type="button"(click)="clearAll()">
+            <button mat-icon-button color="primary" type="button" (click)="clearAll()">
                 <mat-icon>clear_all</mat-icon>
             </button>
         </form>
@@ -27,7 +27,6 @@
 
     <table mat-table [dataSource]="dataSource" matSort>
 
-        <!-- TODO narrow and grayer -->
         <ng-container matColumnDef="number">
             <th mat-header-cell *matHeaderCellDef>#</th>
             <td mat-cell *matCellDef="let memberIndex = index">{{ (page * size) + memberIndex + 1 }}</td>
@@ -57,7 +56,7 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let member">
                 <button mat-icon-button color="warn" (click)="removeMember(member)">
-                    <mat-icon>delete</mat-icon>
+                    <mat-icon>close</mat-icon>
                 </button>
             </td>
         </ng-container>

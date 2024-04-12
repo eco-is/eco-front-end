@@ -1,8 +1,10 @@
-<h1 *ngIf="user && user.username !== ''">Hello {{user.username}}</h1>
-<section class="landing-section">
-    <img src="../../../../assets/images/background.png" alt="EnviroNet">
-</section>
+<div class="home-container"
+    [ngStyle]="{'background-image': (user && user.username !== '') ? 
+    'url(\'../../../../assets/images/background.png\')' : 
+    'url(\'../../../../assets/images/landing_page.png\')'}">
+    <h1 *ngIf="user && user.username !== ''">Hello {{user.username}}!</h1>
+</div>
 
 <footer>
-    <p><a href="mailto:environet.eco@gmail.com">Join the Green Movement: environet.eco@gmail.com</a></p>
+    <p>Join the Green Movement: <a href="mailto:environet.eco@gmail.com">environet.eco@gmail.com</a></p>
 </footer>

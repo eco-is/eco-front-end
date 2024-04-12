@@ -102,7 +102,12 @@ export class MembersListComponent {
   }
 
   clearAll() {
-    this.searchForm.reset();
+    this.searchForm.reset({
+      name: '',
+      surname: '',
+      email: ''
+    });    
+
     this.searchMembers();
   }
 }
