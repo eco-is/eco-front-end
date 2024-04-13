@@ -61,7 +61,6 @@ export class EditProfileComponent  implements OnInit {
           });
           this.phoneNumberField.setNumber(this.userInfo!.phoneNumber); // Set the formatted phone number in the input field
           this.selectedCountryData = "+" + this.phoneNumberField.getSelectedCountryData().dialCode; // Get the selected country dial code
-          console.log("Dial code:", this.selectedCountryData);
         }
 
         this.formGroup.patchValue({
@@ -73,8 +72,6 @@ export class EditProfileComponent  implements OnInit {
           gender: this.userInfo!.gender,
           dateOfBirth: formattedDateOfBirth,
         });
-        // console.log(this.user);
-        // console.log(this.userInfo);
       }, 
       (error) => {
         let errorMessage = 'Error fetching user. Please try again.';
@@ -120,13 +117,20 @@ export class EditProfileComponent  implements OnInit {
     } else {
       console.error("invalid date of birth value in user");
     }
-        
 
-    // TODO fix // PhoneNumber
+    // PhoneNumber
     this.userInfo!.phoneNumber = this.formGroup.value.phoneNumber!.replace(/\s/g, "");
     if (!this.userInfo?.phoneNumber.startsWith('+')){
       this.userInfo!.phoneNumber = this.selectedCountryData + this.userInfo!.phoneNumber;
     } 
+    let updatedPhoneNumber = this.userInfo!.phoneNumber;
+    // Check if the selected country code is different from the original one
+    // If country code is different, update the phone number accordingly
+    const newCountryCode = "+" + this.phoneNumberField.getSelectedCountryData().dialCode;
+    if (newCountryCode !== this.selectedCountryData) {
+      updatedPhoneNumber = updatedPhoneNumber.replace(this.selectedCountryData, newCountryCode);
+    }
+    this.userInfo!.phoneNumber = updatedPhoneNumber;
     console.log(this.userInfo!.phoneNumber)
    
     this.service.updateUser(this.userInfo!).subscribe(
