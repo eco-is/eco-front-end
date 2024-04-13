@@ -1,0 +1,163 @@
+#edit-profile {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 100px);
+   
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+}
+
+h1 {
+    text-align: left;
+    margin-left: 40px;
+    margin-top: 40px;
+}
+
+#profile-info-div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+h3 {
+    font-size: small;
+    margin-left: 40px;
+    margin-top: -5px;
+}
+
+#picture-div {
+    width: 25%;
+    display: flex;
+    align-items: center;
+    margin: 25px;
+    
+    img {
+        width: 350px;
+        height: 350px;
+        min-width: 150px;
+        min-height: 150px;
+        object-fit: cover;
+
+        border: 1px;
+        border-radius: 100%;
+        border-collapse: collapse;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+    }
+}
+
+#info-div {
+    width: 65%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    
+    .form {
+        height: fit-content;
+        width: 80%;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        max-height: calc(100% - 50px); /* Adjusted max-height to fit within reduced height */
+        overflow-y: auto;
+    }
+    
+    h1 {
+        font-weight: bolder;
+        color: #476c2a;
+        text-align: left;
+        margin-left: 0px;
+    }
+
+    h2 {
+        width: 150px;
+        min-width: 100px;
+        font-size: x-large;
+    }
+
+    .phone-input-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-top: -20px;
+        border-bottom: 1px solid #2d4f16; 
+
+        div {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            padding-top: 5px;
+            
+            border-color: #2d4f16;
+            border: 1px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-collapse: collapse;
+        }
+
+        label {
+            margin-bottom: 5px; 
+            font-size: 12px;
+            color: #2d4f16;
+            margin-left: 16px;
+        }
+
+        input {
+            border: 1px solid #ccc;
+            border-radius: 4px; 
+            padding: 10px; 
+            font-size: 16px;
+            outline: none;
+        }
+        
+        input:focus {
+            border-color: #719255; 
+        }
+        
+        input::placeholder {
+            color: #ccc; 
+        }
+
+        .phone-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 5px;
+            margin: 0;
+            line-height: inherit;
+        }
+    }
+
+    .one-row{
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+        gap: 5%;
+    }
+
+    .math-field-one-row {
+        width: 50%;
+        min-width: 25%;
+    }
+
+    button {
+        height: 35px;
+        width: 20%;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-top: 0px;
+        margin-bottom: 30px;
+        background-color: #cee2a3;
+        
+        border: 1px;
+        border-radius: 10px;
+        border-collapse: collapse;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+    }
+}

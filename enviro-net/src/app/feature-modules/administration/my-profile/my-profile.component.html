@@ -7,34 +7,32 @@
         </div>
     
         <div *ngIf="user && user.username !== ''" id="info-div">
-            <!-- TODO - fetch user data -->
-            <h1>Pera Peric</h1>
-            <h3>{{user.role}}</h3>
+            <h1>{{userInfo?.name}} {{userInfo?.surname}}</h1>
+            <h3>{{userInfo?.role}}</h3>
             
             <div class="one-row">
                 <label>Username </label>
-                <label class="info-label">{{user.username}}</label>
+                <label class="info-label">{{userInfo?.username}}</label>
             </div>
 
-            <!-- TODO - fetch user data -->
             <div class="one-row">
                 <label>Email </label>
-                <label class="info-label">peric.mail@gmail.com</label>
+                <label class="info-label">{{userInfo?.email}}</label>
             </div> 
 
             <div class="one-row">
                 <label>Phone Number </label>
-                <label class="info-label">+381 65 123 1234</label>
+                <label class="info-label">{{userInfo?.phoneNumber}}</label>
             </div>
 
             <div class="one-row">
                 <label>Birthday </label>
-                <label class="info-label">1st January 1998</label>
+                <label class="info-label">{{userInfo?.dateOfBirth | date:'dd MMM yyyy' }}</label>
             </div>
 
             <div class="one-row">
                 <label>Gender </label>
-                <label class="info-label">Male</label>
+                <label class="info-label">{{userInfo?.gender}}</label>
             </div>
         </div>
     </div>
