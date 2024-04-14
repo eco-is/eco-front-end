@@ -6,7 +6,7 @@ import { Login } from '../model/login.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'xp-login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -39,9 +39,11 @@ export class LoginComponent {
       });
     }
   }
+
   private openSnackBar(message: string): void {
     this.snackBar.open(message, 'Close', {
-      duration: 30000,
+      duration: 3000,
+      panelClass: ['green-snackbar']
     });
   }
 }
