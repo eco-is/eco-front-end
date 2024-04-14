@@ -24,10 +24,38 @@ export class MyProfileComponent implements OnInit {
     ) {
       this.authService.user$.subscribe((user) => {
         this.user = user;
+        this.getUser();
       });
     }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      let token = params['token'] || null;
+      let email = params['email'] || null;
+      if (!token || !email) {
+        this.router.navigate(['/my-profile']);
+      } else {
+        this.service.updateUserEmail(token, email).subscribe(
+          (result) => {
+            this.snackBar.open('Email updated successfully. New email address: ' + result.email, 'Close', { panelClass: 'green-snackbar' });
+            this.router.navigate(['/my-profile']);
+          },
+          (error) => {
+            let errorMessage = 'Error updating email. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+            this.router.navigate(['/my-profile']);
+          }
+        );
+      }
+    });
+
+    this.getUser();
+  }
+
+  getUser(): void {
     if (this.user) {
       this.service.getUser(this.user.id).subscribe((result) => {
         this.userInfo = result;
@@ -39,29 +67,6 @@ export class MyProfileComponent implements OnInit {
         }
       });
     }
-
-    this.route.queryParams.subscribe(params => {
-      let token = params['token'] || null;
-      let email = params['email'] || null;
-      if (!token || !email) {
-        this.router.navigate(['/my-profile']);
-      } else {
-        this.service.updateUserEmail(token, email).subscribe(
-          (result) => {
-            this.snackBar.open('Email updated successfully. New email address: ' + result.email, 'Close');
-            this.router.navigate(['/my-profile']);
-          },
-          (error) => {
-            let errorMessage = 'Error updating email. Please try again.';
-            if (error.error && error.error.message) {
-              errorMessage = error.error.message;
-            }
-            this.snackBar.open(errorMessage, 'Close');
-            this.router.navigate(['/my-profile']);
-          }
-        );
-      }
-    });    
   }
 
   profileUpdate(): void {

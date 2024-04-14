@@ -55,6 +55,19 @@ h3 {
     height: auto;
     display: flex;
     flex-direction: column;
+
+    h1 {
+        font-weight: bolder;
+        color: #476c2a;
+        text-align: left;
+        margin-left: 0px;
+        margin-top: -10px;
+    }
+
+    h3 {
+        font-size: small;
+        margin-left: 2px;
+    }
     
     .form {
         height: fit-content;
@@ -144,6 +157,13 @@ h3 {
     .math-field-one-row {
         width: 50%;
         min-width: 25%;
+    }
+
+    .password-label {
+        margin: 0px;
+        font-size: 12px;
+        color: #ff8b01;
+        margin-left: 16px;
     }
 
     button {

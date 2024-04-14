@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { UserInfo, Gender } from '../model/user-info.model';
 import { AdministrationService } from '../administration.service';
+import { Login } from 'src/app/infrastructure/auth/model/login.model';
 
 @Component({
   selector: 'app-edit-profile',
@@ -24,11 +25,11 @@ export class EditProfileComponent  implements OnInit {
   selectedCountryData: string = '+381';
 
   formGroup = new FormGroup({
-    username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     name: new FormControl('', [Validators.required]),
     surname: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl(''),
+    oldPassword: new FormControl(''),
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
     gender: new FormControl(''),
@@ -64,7 +65,6 @@ export class EditProfileComponent  implements OnInit {
         }
 
         this.formGroup.patchValue({
-          username: this.userInfo!.username,
           name: this.userInfo!.name,
           surname: this.userInfo!.surname,
           email: this.userInfo!.email,
@@ -93,17 +93,9 @@ export class EditProfileComponent  implements OnInit {
     });
   }
 
-  passwordsMatch(): boolean {
-    const password = this.formGroup.get('password')?.value;
-    const confirmPassword = this.formGroup.get('confirmPassword')?.value;
-    this.passwordMessage = password === confirmPassword ? 'Passwords match' : 'Passwords do not match';
-    console.log(this.passwordMessage)
-
-    return password === confirmPassword;
-  }
-
   profileUpdate(): void {
     this.userInfo!.email = this.formGroup.value.email!;
+    this.passwordChange();
 
     this.userInfo!.name = this.formGroup.value.name!;
     this.userInfo!.surname = this.formGroup.value.surname!;
@@ -134,9 +126,11 @@ export class EditProfileComponent  implements OnInit {
     }
     this.userInfo!.phoneNumber = updatedPhoneNumber;
    
+    const loadingSnackbar = this.snackBar.open('User updating...', '', { panelClass: 'green-snackbar' });
     this.service.updateUser(this.userInfo!).subscribe(
       (updatedUser) => {
-        console.log('User information updated successfully!');
+        loadingSnackbar.dismiss();
+        this.snackBar.open('User information updated successfully!', 'Close' , { panelClass: 'green-snackbar' });
         this.router.navigate(['my-profile']);
       }, 
       (error) => {
@@ -146,5 +140,71 @@ export class EditProfileComponent  implements OnInit {
         }
       }
     );
+  }
+
+  passwordsMatch(): boolean {
+    const password = this.formGroup.get('password')?.value;
+    const confirmPassword = this.formGroup.get('confirmPassword')?.value;
+    this.passwordMessage = password === confirmPassword ? 'Passwords match' : 'Passwords do not match';
+    console.log(this.passwordMessage)
+    
+    return password === confirmPassword;
+  }
+  
+  canPasswordChange(): boolean {
+    if (this.passwordsMatch() && 
+        this.formGroup.value.oldPassword !== '' &&
+        this.formGroup.value.password !== '' &&    
+        this.formGroup.value.confirmPassword !== '') {
+      this.isButtonDisabled = false;
+      return true;
+    } else {
+      this.isButtonDisabled = true;
+      return false;
+    }
+  }
+
+  passwordChange(): void {
+    if (this.canPasswordChange()) {
+      let oldPassword: Login = {
+        username: this.user!.username,
+        password: this.formGroup.value.oldPassword!
+      }
+      this.authService.checkOldPassword(oldPassword).subscribe(
+        (isValid) => {
+          if (!isValid) {
+            this.snackBar.open('Old user password incorrect! Password couldn\'t update. Try again', 'Close');
+          } else {
+            let request: Login = {
+              username: this.user!.username,
+              password: this.formGroup.value.password!,
+            }
+            const loadingSnackbar = this.snackBar.open('User password updating...', '', { panelClass: 'green-snackbar' });
+            this.authService.changePassword(request).subscribe(
+              (result) => {
+                loadingSnackbar.dismiss();
+                this.snackBar.open('User password changed! Login with new password!', 'Close', { panelClass: 'green-snackbar' });
+                this.authService.logout();
+                this.router.navigate(['login']);
+              },
+              (error) => {
+                this.snackBar.open('Error while updating user password', 'Close', { panelClass: 'green-snackbar' });
+                let errorMessage = 'Error while updating user password. Please try again.';
+                if (error.error && error.error.message) {
+                  errorMessage = error.error.message;
+                }
+              }
+            );
+          }
+        },
+        (error) => {
+          let errorMessage = 'Error in old password input. Please try again.';
+          console.error(errorMessage);
+          this.snackBar.open(errorMessage, 'Close' , { panelClass: 'green-snackbar' });
+      });
+    }
+    else {
+      this.snackBar.open('Please check your input!', 'Close' , { panelClass: 'green-snackbar' });      
+    }
   }
 }
