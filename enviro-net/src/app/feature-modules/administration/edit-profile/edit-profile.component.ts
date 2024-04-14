@@ -103,6 +103,8 @@ export class EditProfileComponent  implements OnInit {
   }
 
   profileUpdate(): void {
+    this.userInfo!.email = this.formGroup.value.email!;
+
     this.userInfo!.name = this.formGroup.value.name!;
     this.userInfo!.surname = this.formGroup.value.surname!;
     // Gender
@@ -131,7 +133,6 @@ export class EditProfileComponent  implements OnInit {
       updatedPhoneNumber = updatedPhoneNumber.replace(this.selectedCountryData, newCountryCode);
     }
     this.userInfo!.phoneNumber = updatedPhoneNumber;
-    console.log(this.userInfo!.phoneNumber)
    
     this.service.updateUser(this.userInfo!).subscribe(
       (updatedUser) => {

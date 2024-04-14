@@ -19,4 +19,10 @@ export class AdministrationService {
       const options = {  headers: new HttpHeaders() };
       return this.http.put<UserInfo>(environment.apiHost + 'users/update-user/' + userInfo.id, userInfo, options);
     }
+
+    updateUserEmail(token: string, newEmail: string): Observable<any> {
+      const options = { headers: new HttpHeaders() };
+      const params = new HttpParams().set('token', token);
+      return this.http.put<UserInfo>(environment.apiHost + 'users/update-email/' + newEmail, {}, { params });
+    }
 }

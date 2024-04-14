@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { AdministrationService } from '../administration.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
@@ -17,14 +18,17 @@ export class MyProfileComponent implements OnInit {
   constructor(
     private authService: AuthService, 
     private service: AdministrationService, 
-    private router: Router) {
+    private route: ActivatedRoute,
+    private router: Router, 
+    private snackBar: MatSnackBar
+    ) {
       this.authService.user$.subscribe((user) => {
         this.user = user;
-       }); 
+      });
     }
 
   ngOnInit(): void {
-     if (this.user) {
+    if (this.user) {
       this.service.getUser(this.user.id).subscribe((result) => {
         this.userInfo = result;
       }, 
@@ -35,6 +39,29 @@ export class MyProfileComponent implements OnInit {
         }
       });
     }
+
+    this.route.queryParams.subscribe(params => {
+      let token = params['token'] || null;
+      let email = params['email'] || null;
+      if (!token || !email) {
+        this.router.navigate(['/my-profile']);
+      } else {
+        this.service.updateUserEmail(token, email).subscribe(
+          (result) => {
+            this.snackBar.open('Email updated successfully. New email address: ' + result.email, 'Close');
+            this.router.navigate(['/my-profile']);
+          },
+          (error) => {
+            let errorMessage = 'Error updating email. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close');
+            this.router.navigate(['/my-profile']);
+          }
+        );
+      }
+    });    
   }
 
   profileUpdate(): void {
