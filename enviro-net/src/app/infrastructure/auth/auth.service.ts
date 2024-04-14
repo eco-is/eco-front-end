@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-// import { Registration } from './model/registration.model';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthenticationResponse } from './model/authentication-response.model';
 import { environment } from 'src/env/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Login } from './model/login.model';
 import { TokenStorage } from './jwt/token.service';
 import { Router } from '@angular/router';
@@ -78,9 +77,13 @@ export class AuthService {
     });
   }
 
-  getPasswordChanged(id: number): Observable<Boolean> {
-    return this.http.get<Boolean>(
-      environment.apiHost + 'users/password-change/' + id
-    );
+  checkOldPassword(changeRequest: Login): Observable<boolean> {
+    return this.http.post<boolean>(environment.apiHost + 'auth/check-old-password', changeRequest);
+  }
+
+  changePassword(changeRequest: Login): Observable<Login> {
+    const token = this.tokenStorage.getAccessToken() || '';
+    const params = new HttpParams().set('token', token);
+    return this.http.put<Login>(environment.apiHost + 'auth/change-password', changeRequest, { params });
   }
 }

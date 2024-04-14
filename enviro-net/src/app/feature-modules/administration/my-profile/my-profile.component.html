@@ -1,0 +1,41 @@
+<div id="my-profile">
+    <h1>My Profile</h1>
+    
+    <div id="profile-info-div">
+        <div id="picture-div">
+            <img src="../../../../assets/images/profile.jpg" alt="profile picture">
+        </div>
+    
+        <div *ngIf="user && user.username !== ''" id="info-div">
+            <h1>{{userInfo?.name}} {{userInfo?.surname}}</h1>
+            <h3>{{userInfo?.role}}</h3>
+            
+            <div class="one-row">
+                <label>Username </label>
+                <label class="info-label">{{userInfo?.username}}</label>
+            </div>
+
+            <div class="one-row">
+                <label>Email </label>
+                <label class="info-label">{{userInfo?.email}}</label>
+            </div> 
+
+            <div class="one-row">
+                <label>Phone Number </label>
+                <label class="info-label">{{userInfo?.phoneNumber}}</label>
+            </div>
+
+            <div class="one-row">
+                <label>Birthday </label>
+                <label class="info-label">{{userInfo?.dateOfBirth | date:'dd MMM yyyy' }}</label>
+            </div>
+
+            <div class="one-row">
+                <label>Gender </label>
+                <label class="info-label">{{userInfo?.gender}}</label>
+            </div>
+        </div>
+    </div>
+    
+    <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" (click)="profileUpdate()">Edit Profile</button>
+</div>
