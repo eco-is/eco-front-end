@@ -1,38 +1,40 @@
-<form [formGroup]="formGroup" (ngSubmit)="register()">
-    <div class="form">
-        <mat-form-field>
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" type="text" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName" type="text" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" type="text" />
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" type="password" />
-        </mat-form-field>
-        <div class="phoneInput" >
-            <input matInput formControlName="phoneNumber" type="tel" id="phone" />
+<div id="register">
+    <form [formGroup]="formGroup" (ngSubmit)="register()">
+        <div class="form">
+            <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lastName" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username" type="text" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" type="password" />
+            </mat-form-field>
+            <div class="phoneInput" >
+                <input matInput formControlName="phoneNumber" type="tel" id="phone" />
+            </div>
+            <mat-form-field>
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender" placeholder="Select Gender">
+                    <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Date of Birth</mat-label>
+                <input matInput formControlName="dateOfBirth" type="date" />
+            </mat-form-field>
+            <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
         </div>
-        <mat-form-field>
-            <mat-label>Gender</mat-label>
-            <mat-select formControlName="gender" placeholder="Select Gender">
-                <mat-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Date of Birth</mat-label>
-            <input matInput formControlName="dateOfBirth" type="date" />
-        </mat-form-field>
-        <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid">Register</button>
-    </div>
-</form>
+    </form>    
+</div>

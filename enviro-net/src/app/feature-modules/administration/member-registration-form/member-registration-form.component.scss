@@ -4,14 +4,16 @@
 
 .form-container {
     height: 100%;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('../../../../assets/images/background.png');
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
     padding: 20px;
     box-sizing: border-box;
 
