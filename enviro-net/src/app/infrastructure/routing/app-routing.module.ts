@@ -9,6 +9,7 @@ import { MembersListComponent } from 'src/app/feature-modules/administration/mem
 import { MemberRegistrationFormComponent } from 'src/app/feature-modules/administration/member-registration-form/member-registration-form.component';
 import { MemberVerificationFormComponent } from 'src/app/feature-modules/administration/member-verification-form/member-verification-form.component';
 import { MyLecturesComponent } from 'src/app/feature-modules/education/my-lectures/my-lectures.component';
+import { BrowseLecturesComponent } from 'src/app/feature-modules/education/browse-lectures/browse-lectures.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'admin/members', component: MembersListComponent },
   { path: 'confirm-email', component: MemberVerificationFormComponent },
   { path: 'my-lectures', component: MyLecturesComponent },
+  { path: 'browse-lectures', component: BrowseLecturesComponent },
 ];
 
 @NgModule({

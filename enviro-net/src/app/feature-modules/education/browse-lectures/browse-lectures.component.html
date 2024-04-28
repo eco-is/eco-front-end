@@ -1,0 +1,31 @@
+<div class="title">
+    <h1>Browse Lectures</h1>
+</div>
+<div class="content-wrapper">
+    <div class="search-and-filter">
+        <mat-form-field id="search-field">
+            <mat-label>
+                <mat-icon fontIcon="search"></mat-icon>
+                Search
+            </mat-label>
+            <input matInput [(ngModel)]="searchText" (input)="onSearchInput()" placeholder="Type name...">
+        </mat-form-field>
+        <app-chips-with-input [autofillOptions]="unselectedCategories" id="categories-field" label="Categories" placeholder="Add category..." (itemsChangedEvent)="updateCategories($event)"></app-chips-with-input>
+        <div class="age-difficulty-wrapper">
+            <mat-form-field id="age-field">
+                <mat-label>Age</mat-label>
+                <input [(ngModel)]="selectedAge" (input)="onAgeInput()" type="number" min="0" max="150" matInput>
+            </mat-form-field>
+            <mat-form-field id="difficulty-field">
+                <mat-label>Difficulty</mat-label>
+                <mat-select (selectionChange)="onDifficultyChange()" [(value)]="selectedDifficulty">
+                    <mat-option value="">None</mat-option>
+                    <mat-option value="EASY">Easy</mat-option>
+                    <mat-option value="MEDIUM">Medium</mat-option>
+                    <mat-option value="HARD">Hard</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <app-table [dataSource]="lecturesForDisplay" [displayedColumns]="displayedColumns" [showViewCol]="true" (itemViewEvent)="onViewLecture($event)" (itemDeleteEvent)="onDeleteLecture($event)"></app-table>
+</div>
