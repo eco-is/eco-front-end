@@ -8,11 +8,10 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { AdministrationModule } from './feature-modules/administration/administration.module';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
+import { EducationModule } from './feature-modules/education/education.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -20,7 +19,8 @@ import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
     AppRoutingModule,
     AuthModule,
     LayoutModule,
-    AdministrationModule
+    AdministrationModule,
+    EducationModule,
   ],
   providers: [
     {
@@ -29,6 +29,6 @@ import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
       multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
