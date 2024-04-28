@@ -1,0 +1,29 @@
+<div id="budget-plan-details">
+    <div class="content">
+        <button *ngIf="user!.id === plan.author.id && plan.status==='DRAFT'" mat-icon-button color="warn" (click)="editBudgetPlan()" matTooltip="Edit Budget Plan">
+            <mat-icon>edited</mat-icon>
+        </button>
+        
+        <h1> {{ plan!.name }} </h1>
+        <h2 class="h2-fiscal-period"> Fiscal Period:  {{ plan!.fiscalDateRange.startDate | date:'dd MMM yyyy'}}  -  {{ plan!.fiscalDateRange.endDate | date:'dd MMM yyyy'}} </h2>
+        <h2> Created by {{ plan!.author.name }} {{ plan!.author.surname }} </h2>
+        <h3> Last edited on {{ plan!.lastUpdatedOnDate | date:'dd MMM yyyy' }} </h3>
+        <div class="hower-expand-container">
+            <div class="hower-expand-content" [ngClass]="{'expanded': isHovered}" (mouseover)="toggleHover(true)" (mouseout)="toggleHover(false)">
+                Description:  {{ plan.description }}
+            </div>
+        </div>
+
+        <!-- TODO - Organization goals tags -->
+        <div id="organization-goals">
+            <h1>Organization goals</h1>
+            <div class="tags">
+                <span class="tag">Goal 1</span>
+                <span class="tag">Goal 2</span>
+                <span class="tag">Goal 3</span>
+                <span class="tag">Goal 4</span>
+                <span class="tag">Goal 5</span>
+            </div>
+        </div>
+    </div>
+</div>

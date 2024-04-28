@@ -7,6 +7,7 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { AdministrationModule } from './feature-modules/administration/administration.module';
+import { FinanceModule } from './feature-modules/finance/finance.module';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
 import { EducationModule } from './feature-modules/education/education.module';
 
@@ -21,6 +22,7 @@ import { EducationModule } from './feature-modules/education/education.module';
     LayoutModule,
     AdministrationModule,
     EducationModule,
+    FinanceModule,
   ],
   providers: [
     {

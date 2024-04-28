@@ -1,0 +1,54 @@
+<div id="budget-plan-details-edit">
+    <div class="content">
+        <button mat-icon-button color="warn" 
+            (click)="saveChanges()" [disabled]="!formGroup.valid" 
+            [matTooltip]="formGroup.valid ? 'Save changes to Budget Plan' : 'Please check your input'" [matTooltipDisabled]="false">
+            <mat-icon>save</mat-icon>
+        </button>
+
+        <form [formGroup]="formGroup">
+            <mat-form-field>
+                <mat-label>Budget Name</mat-label>
+                <input class="form-name" matInput formControlName="name" type="text" />
+                <mat-error *ngIf="formGroup.value.name === ''">* Budget Name is required!</mat-error>
+            </mat-form-field>
+
+            <div class="one-row">
+                <h2 class="h2-fiscal-period"> Fiscal Period:  </h2>
+                <mat-form-field>
+                    <mat-label>Start date</mat-label>
+                    <input formControlName="startDate" [matDatepicker]="startPicker" matInput />
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+                <h2 class="h2-fiscal-period"> - </h2>
+                <mat-form-field>
+                    <mat-label>End date</mat-label>
+                    <input formControlName="endDate" [matDatepicker]="endPicker" matInput />
+                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+                <label *ngIf="!isValidDate()" class="date-label">* Invalid date input. Please check again!</label>
+            </div>
+            
+            <h2 *ngIf="plan !== undefined"> Created by {{ plan!.author.name }} {{ plan!.author.surname }} </h2>
+
+            <mat-form-field>
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="4"></textarea>
+            </mat-form-field>
+        </form>
+        
+        <!-- TODO - Organization goals tags -->
+        <div id="organization-goals">
+            <h1>Organization goals</h1>
+            <div class="tags">
+                <span class="tag">Goal 1</span>
+                <span class="tag">Goal 2</span>
+                <span class="tag">Goal 3</span>
+                <span class="tag">Goal 4</span>
+                <span class="tag">Goal 5</span>
+            </div>
+        </div>
+    </div>
+</div>
