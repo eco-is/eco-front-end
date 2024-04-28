@@ -1,9 +1,11 @@
+:host {
+    padding: 0;
+}
+
 mat-toolbar {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    position: fixed;
-    top: 0%;
     box-sizing: border-box;
 
     #logo {

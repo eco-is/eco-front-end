@@ -17,6 +17,12 @@
         <!-- ACCOUNTANT -->
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['budget-plans']">Budget Plans</button>
 
+        <!-- EDUCATOR -->
+        <button mat-raised-button color="accent" *ngIf="user && user.role === 'EDUCATOR'" [routerLink]="['/my-lectures']">My lectures</button>
+
+        <!-- REGISTERED USER -->
+        <button mat-raised-button color="accent" *ngIf="user && user.role === 'REGISTERED_USER'" [routerLink]="['/browse-lectures']">Browse lectures</button>
+
         <!--ALL USERS-->
         <button mat-raised-button color="accent" *ngIf="user && user.username !== ''" [routerLink]="['/my-profile']">My Profile</button>
         <button mat-raised-button color="accent" *ngIf="user && user.username === ''" [routerLink]="['/login']">Login</button>

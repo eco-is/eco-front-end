@@ -11,16 +11,21 @@ import { MemberVerificationFormComponent } from 'src/app/feature-modules/adminis
 import { BudgetPlansListComponent } from 'src/app/feature-modules/finance/budget-plans-list/budget-plans-list.component';
 import { BudgetPlanDetailsComponent } from 'src/app/feature-modules/finance/budget-plan-details/budget-plan-details.component';
 import { BudgetPlanDetailsEditComponent } from 'src/app/feature-modules/finance/budget-plan-details-edit/budget-plan-details-edit.component';
+import { MyLecturesComponent } from 'src/app/feature-modules/education/my-lectures/my-lectures.component';
+import { BrowseLecturesComponent } from 'src/app/feature-modules/education/browse-lectures/browse-lectures.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'register', component: RegistrationComponent},
+  { path: 'register', component: RegistrationComponent },
   { path: 'my-profile', component: MyProfileComponent },
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin/register', component:  MemberRegistrationFormComponent},
+  { path: 'admin/register', component: MemberRegistrationFormComponent },
   { path: 'admin/members', component: MembersListComponent },
   { path: 'confirm-email', component: MemberVerificationFormComponent },
+  //EDUCATION
+  { path: 'my-lectures', component: MyLecturesComponent },
+  { path: 'browse-lectures', component: BrowseLecturesComponent },
 
   //FINANCE
   { path: 'budget-plans', component: BudgetPlansListComponent },

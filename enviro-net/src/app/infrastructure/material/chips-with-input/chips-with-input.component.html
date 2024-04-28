@@ -1,0 +1,28 @@
+<mat-form-field class="example-chip-list">
+    <mat-label>{{label}}</mat-label>
+    <mat-chip-grid #chipGrid>
+        <div *ngFor="let item of items">
+            <mat-chip-row
+                (removed)="remove(item)"
+                [editable]="true"
+                (edited)="edit(item, $event)"
+                [aria-description]="'press enter to edit ' + item">
+                {{item}}
+                <button matChipRemove [attr.aria-label]="'remove ' + item">
+                <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+        </div>
+        <input #itemInputField placeholder="{{placeholder}}"
+                [matChipInputFor]="chipGrid"
+                [matAutocomplete]="auto"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"/>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <div *ngFor="let option of autofillOptions">
+                <mat-option [value]="option">{{option}}</mat-option>
+            </div>
+        </mat-autocomplete>
+    </mat-chip-grid>
+</mat-form-field>
