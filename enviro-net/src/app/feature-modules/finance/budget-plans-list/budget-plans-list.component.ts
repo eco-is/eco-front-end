@@ -75,6 +75,7 @@ export class BudgetPlansListComponent {
 
   loadBudgetPlans(): void {
     this.financeService.getAllBudgetPlans(
+      this.user!.id,
       this.name,
       this.statuses,
       this.page,

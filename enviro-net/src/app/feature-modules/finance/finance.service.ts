@@ -16,13 +16,14 @@ export class FinanceService {
         return this.http.post<BudgetPlan>(environment.apiHost + `budget-plan/create`, newPlan);
     }
     
-    getAllBudgetPlans(name: string, statuses : string[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<BudgetPlan>> {
-        const params = this.buildParams(name, statuses, page, size, sortBy, sortDirection);
+    getAllBudgetPlans(id : number, name: string, statuses : string[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<BudgetPlan>> {
+        const params = this.buildParams(id, name, statuses, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<BudgetPlan>>(environment.apiHost + 'budget-plan/all-plans', { params });
     }
 
-    private buildParams(name : string, statuses : string[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    private buildParams(id : number, name : string, statuses : string[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
         let params = new HttpParams()
+          .set('id', id)
           .set('name', name)
           .set('page', page.toString())
           .set('size', size.toString())
