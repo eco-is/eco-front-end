@@ -1,0 +1,73 @@
+.mat-elevation-z8 {
+    padding: 20px;
+    margin: 20px;
+    margin-top: 65px;
+    border-radius: 5px;
+    position: relative;
+
+    .search-header {
+        font-weight: bold;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        transition: height 0.3s ease-in-out;
+        align-items: flex-end;
+        align-items: center;
+    }
+
+    .filter-form {
+        margin-top: 20px;
+
+        mat-form-field{
+            height: 75px;
+        }
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    input {
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #d3e5ab;
+        border-radius: 4px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #d3e5ab; 
+            width: 33%;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 50px;
+        }
+
+        tr:nth-child(even) td {
+            background-color: lighten(#d3e5ab, 20%); 
+        }
+
+        tr:not(th):hover td {
+            background-color: lighten(#d3e5ab, 10%); 
+        }
+    }
+}

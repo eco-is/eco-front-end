@@ -8,6 +8,7 @@ import { LoginComponent } from '../auth/login/login.component';
 import { MembersListComponent } from 'src/app/feature-modules/administration/members-list/members-list.component';
 import { MemberRegistrationFormComponent } from 'src/app/feature-modules/administration/member-registration-form/member-registration-form.component';
 import { MemberVerificationFormComponent } from 'src/app/feature-modules/administration/member-verification-form/member-verification-form.component';
+import { BudgetPlansListComponent } from 'src/app/feature-modules/finance/budget-plans-list/budget-plans-list.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,9 @@ const routes: Routes = [
   { path: 'admin/register', component:  MemberRegistrationFormComponent},
   { path: 'admin/members', component: MembersListComponent },
   { path: 'confirm-email', component: MemberVerificationFormComponent },
+
+  //FINANCE
+  { path: 'budget-plans', component: BudgetPlansListComponent },
 ];
 
 @NgModule({
