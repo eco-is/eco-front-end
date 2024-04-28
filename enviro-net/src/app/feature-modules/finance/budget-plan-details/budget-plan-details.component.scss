@@ -1,0 +1,107 @@
+#budget-plan-details {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    max-height: calc(100% - 65px);
+    height: 100%;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+
+    .content {
+        padding: 20px;
+        margin: 20px;
+        border-radius: 5px;
+        position: relative;
+        background-color: rgba(216, 233, 179, 0.65);
+    }
+
+    h1 {
+        font-weight: bolder;
+        text-align: left;
+        //color: #476c2a;
+    }
+
+    button {
+        position: absolute;
+        top: 5px;
+        right: 5px; 
+        background-color: #476c2a;//3d6223;
+    }
+
+    h2 {
+        text-align: left;
+        font-size: 22px;
+    }
+    .h2-fiscal-period {
+        text-align: left;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    h3 {
+        text-align: left;
+        font-size: 18px;
+    }
+
+    label {
+        font-size: 20px;
+    }
+
+    .hower-expand-container {
+        margin-bottom: 20px;
+        overflow: hidden;
+        width: 95%;
+        min-height: 20px;
+        max-height: fit-content;
+        transition: max-height 0.3s ease;
+    }
+    .hower-expand-content {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        font-size: 20px;
+        margin-left: 2px;
+    }  
+    .hower-expand-content.expanded {
+        white-space: normal;
+        max-height: none;
+    }
+
+    #organization-goals {
+        margin-top: 20px;
+
+        h1 {
+            text-align: left;
+            font-size: 25px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    
+        .tag {
+            background-color: #2d4f16;
+            //color: #acbf9b; 
+            //color: #ffb304;
+            color: #eef5dd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    
+        .tag:hover {
+            background-color: #3d6223;
+        }
+    }
+}

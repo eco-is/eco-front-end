@@ -1,81 +1,94 @@
-<div class="mat-elevation-z8">
-    <mat-expansion-panel class="search-header" [expanded]="showFilter">
-        <mat-expansion-panel-header>
-            <mat-panel-title>Search</mat-panel-title>
-        </mat-expansion-panel-header>
-        <form [formGroup]="searchForm" (ngSubmit)="searchPlans()">
-            <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" formControlName="name">
-            </div>
-            <div class="filter-form">
-                <mat-form-field appearance="fill">
-                    <mat-label>Status:</mat-label>
-                    <mat-select formControlName="statuses" multiple>
-                        <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-
-            <button mat-icon-button color="primary" type="submit" matTooltip="Search">
-                <mat-icon>search</mat-icon>
+<div id="budget-plans">
+    <div class="mat-elevation-z8">
+        <div class="header-div">
+            <button class="new-button" *ngIf="user!.id" mat-icon-button color="warn" (click)="newBudgetPlan()" matTooltip="Create New Budget Plan">
+                <mat-icon>add</mat-icon>
             </button>
-            <button mat-icon-button color="primary" type="button" (click)="clearAll()" matTooltip="Clear all">
-                <mat-icon>clear_all</mat-icon>
-            </button>
-        </form>
-    </mat-expansion-panel>
+            <mat-expansion-panel class="search-header" [expanded]="showFilter">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Search</mat-panel-title>
+                </mat-expansion-panel-header>
+                <form [formGroup]="searchForm" (ngSubmit)="searchPlans()">
+                    <div>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" formControlName="name">
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Status:</mat-label>
+                            <mat-select formControlName="statuses" multiple>
+                                <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+    
+                    <button mat-icon-button color="primary" type="submit" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" type="button" (click)="clearAll()" matTooltip="Clear all">
+                        <mat-icon>clear_all</mat-icon>
+                    </button>
+                </form>
+            </mat-expansion-panel>
+        </div>
 
-    <table mat-table [dataSource]="dataSource" matSort>
+        <table mat-table [dataSource]="dataSource" matSort>
 
-        <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>#</th>
-            <td mat-cell *matCellDef="let planIndex = index">{{ (page * size) + planIndex + 1 }}</td>
-        </ng-container>
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let planIndex = index">{{ (page * size) + planIndex + 1 }}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Budget Plan</th>
-            <td mat-cell *matCellDef="let plan">{{ plan.name }}</td>
-        </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Budget Plan</th>
+                <td mat-cell *matCellDef="let plan">{{ plan.name }}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="fiscalPeriod">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fiscal Period</th>
-            <td mat-cell *matCellDef="let plan">
-                {{ plan.fiscalDateRange.startDate | date:'dd MMM yyyy' }} - 
-                <div> {{ plan.fiscalDateRange.endDate | date:'dd MMM yyyy' }} </div>
-            </td>
-        </ng-container>
+            <ng-container matColumnDef="fiscalPeriod">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fiscal Period</th>
+                <td mat-cell *matCellDef="let plan">
+                    {{ plan.fiscalDateRange.startDate | date:'dd MMM yyyy' }} - 
+                    <div> {{ plan.fiscalDateRange.endDate | date:'dd MMM yyyy' }} </div>
+                </td>
+            </ng-container>
 
-        <ng-container matColumnDef="updated">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last updated</th>
-            <td mat-cell *matCellDef="let plan">
-                {{ plan.author.name }} {{ plan.author.surname }}
-                <div> {{ plan.lastUpdatedOnDate | date:'dd MMM yyyy' }} </div>
-            </td>
-        </ng-container>
+            <ng-container matColumnDef="updated">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Last updated</th>
+                <td mat-cell *matCellDef="let plan">
+                    {{ plan.author.name }} {{ plan.author.surname }}
+                    <div> {{ plan.lastUpdatedOnDate | date:'dd MMM yyyy' }} </div>
+                </td>
+            </ng-container>
 
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let plan">{{ plan.status }}</td>
-        </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let plan">{{ plan.status }}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let plan">
-                <button *ngIf="user!.id === plan.author.id && plan.status==='DRAFT' " mat-icon-button color="warn" (click)="closeBudgetPlan(plan)" matTooltip="Close Budget Plan">
-                    <mat-icon>close</mat-icon>
-                </button>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let plan">
+                    <div class="one-row">
+                        <button mat-icon-button color="warn" (click)="viewDetails(plan)" matTooltip="View details">
+                            <mat-icon>info</mat-icon>
+                        </button>
+    
+                        <button *ngIf="user!.id === plan.author.id && plan.status==='DRAFT'" mat-icon-button color="warn" (click)="closeBudgetPlan(plan)" matTooltip="Close Budget Plan">
+                            <mat-icon>close</mat-icon>
+                        </button>
+    
+                        <button *ngIf="user!.id === plan.author.id && (plan.status ==='REJECTED' || plan.status ==='APPROVED')" mat-icon-button color="warn" (click)="archiveBudgetPlan(plan)" matTooltip="Archive Budget Plan">
+                            <mat-icon>archive</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
 
-                <button *ngIf="user!.id === plan.author.id && (plan.status ==='REJECTED' || plan.status ==='APPROVED')" mat-icon-button color="warn" (click)="archiveBudgetPlan(plan)" matTooltip="Archive Budget Plan">
-                    <mat-icon>archive</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalPlans" showFirstLastButtons
-        (page)="onPageChange($event)"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalPlans" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
 </div>

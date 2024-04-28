@@ -9,6 +9,8 @@ import { MembersListComponent } from 'src/app/feature-modules/administration/mem
 import { MemberRegistrationFormComponent } from 'src/app/feature-modules/administration/member-registration-form/member-registration-form.component';
 import { MemberVerificationFormComponent } from 'src/app/feature-modules/administration/member-verification-form/member-verification-form.component';
 import { BudgetPlansListComponent } from 'src/app/feature-modules/finance/budget-plans-list/budget-plans-list.component';
+import { BudgetPlanDetailsComponent } from 'src/app/feature-modules/finance/budget-plan-details/budget-plan-details.component';
+import { BudgetPlanDetailsEditComponent } from 'src/app/feature-modules/finance/budget-plan-details-edit/budget-plan-details-edit.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +24,9 @@ const routes: Routes = [
 
   //FINANCE
   { path: 'budget-plans', component: BudgetPlansListComponent },
+  { path: 'budget-plan-details/:id', component: BudgetPlanDetailsComponent },
+  { path: 'edit-budget-plan-details/:id', component: BudgetPlanDetailsEditComponent },
+  { path: 'edit-budget-plan-details', component: BudgetPlanDetailsEditComponent },
 ];
 
 @NgModule({
