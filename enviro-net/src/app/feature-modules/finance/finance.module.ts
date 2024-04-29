@@ -13,12 +13,16 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { BudgetPlansListComponent } from './budget-plans-list/budget-plans-list.component';
 import { BudgetPlanDetailsComponent } from './budget-plan-details/budget-plan-details.component';
 import { BudgetPlanDetailsEditComponent } from './budget-plan-details-edit/budget-plan-details-edit.component';
+import { OrganizationGoalsHistoryComponent } from './organization-goals-history/organization-goals-history.component';
+import { OrganizationGoalsEditComponent } from './organization-goals-edit/organization-goals-edit.component';
 
 @NgModule({
     declarations: [
       BudgetPlansListComponent,
       BudgetPlanDetailsComponent,
-      BudgetPlanDetailsEditComponent
+      BudgetPlanDetailsEditComponent,
+      OrganizationGoalsHistoryComponent,
+      OrganizationGoalsEditComponent
   ],
     imports: [
       CommonModule,

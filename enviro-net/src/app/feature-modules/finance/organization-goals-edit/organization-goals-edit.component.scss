@@ -1,0 +1,73 @@
+#goals-edit {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    max-height: calc(100% - 65px);
+    height: 100%;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+
+    .content {
+        padding: 20px;
+        margin: 20px;
+        border-radius: 5px;
+        position: relative;
+        background-color: rgba(216, 233, 179, 0.65);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+    }
+
+    .form-name {
+        font-weight: bolder;
+        text-align: left;
+        font-size: 32px;
+    }
+
+    .one-row {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        width: 100%;
+        align-items: center;
+    }
+    .date-label {
+        margin-left: 20px;
+        font-size: 12px;
+        color: #ff8b01;
+    }
+
+    h1 {
+        font-weight: bolder;
+        text-align: left;
+        //color: #476c2a;
+    }
+
+    button {
+        position: absolute;
+        top: 5px;
+        right: 5px; 
+        background-color: #476c2a;//3d6223;
+    }
+
+    h2 {
+        text-align: left;
+        font-size: 22px;
+    }
+    .h2-fiscal-period {
+        text-align: left;
+        font-size: 22px;
+        font-weight: bold;
+    }
+}
