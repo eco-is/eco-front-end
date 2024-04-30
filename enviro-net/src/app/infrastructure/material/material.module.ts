@@ -29,6 +29,7 @@ import {
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
 import { TableComponent } from './table/table.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ChipsWithInputComponent, TableComponent],
@@ -48,6 +49,7 @@ import { TableComponent } from './table/table.component';
     MatChipsModule,
     MatTableModule,
     MatAutocompleteModule,
+    ReactiveFormsModule,
   ],
   exports: [
     MatToolbar,

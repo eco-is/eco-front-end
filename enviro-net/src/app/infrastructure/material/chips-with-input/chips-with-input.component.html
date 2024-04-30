@@ -14,13 +14,14 @@
             </mat-chip-row>
         </div>
         <input #itemInputField placeholder="{{placeholder}}"
+                [formControl]="formControl"
                 [matChipInputFor]="chipGrid"
                 [matAutocomplete]="auto"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="addOnBlur"
                 (matChipInputTokenEnd)="add($event)"/>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-            <div *ngFor="let option of autofillOptions">
+            <div *ngFor="let option of filteredAutofillOptions | async">
                 <mat-option [value]="option">{{option}}</mat-option>
             </div>
         </mat-autocomplete>
