@@ -77,17 +77,6 @@ export class BrowseLecturesComponent implements OnInit {
     console.log(lecture);
   }
 
-  onDeleteLecture(lecture: LectureForTable) {
-    this.service.deleteLecture(lecture.id).subscribe({
-      next: () => {
-        this.lecturesForDisplay = this.lecturesForDisplay.filter(
-          (l) => l.id !== lecture.id
-        );
-      },
-      error: () => {},
-    });
-  }
-
   onSearchInput() {
     this._filter();
   }
