@@ -10,6 +10,7 @@ import { AdministrationModule } from './feature-modules/administration/administr
 import { FinanceModule } from './feature-modules/finance/finance.module';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
 import { EducationModule } from './feature-modules/education/education.module';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { EducationModule } from './feature-modules/education/education.module';
     AdministrationModule,
     EducationModule,
     FinanceModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {

@@ -8,6 +8,7 @@ import {
   MatIconButton,
 } from '@angular/material/button';
 import {
+  MatError,
   MatFormField,
   MatFormFieldModule,
   MatHint,
@@ -50,6 +51,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatTableModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
   ],
   exports: [
     MatToolbar,
@@ -71,6 +74,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFabButton,
     TableComponent,
     MatAutocomplete,
+    MatError,
   ],
 })
 export class MaterialModule {}

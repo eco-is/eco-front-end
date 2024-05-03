@@ -5,6 +5,7 @@ import { Lecture } from './model/lecture';
 import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Category } from './model/category';
+import { LectureCreationRequest } from './model/lectureCreationRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +31,9 @@ export class EducationService {
 
   deleteLecture(id: number): Observable<void> {
     return this.http.delete<void>(environment.apiHost + 'lecture/' + id);
+  }
+
+  createLecture(lecture: LectureCreationRequest): Observable<Lecture> {
+    return this.http.post<Lecture>(environment.apiHost + 'lecture', lecture);
   }
 }

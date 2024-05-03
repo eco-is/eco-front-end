@@ -13,6 +13,9 @@ import { BudgetPlanDetailsComponent } from 'src/app/feature-modules/finance/budg
 import { BudgetPlanDetailsEditComponent } from 'src/app/feature-modules/finance/budget-plan-details-edit/budget-plan-details-edit.component';
 import { MyLecturesComponent } from 'src/app/feature-modules/education/my-lectures/my-lectures.component';
 import { BrowseLecturesComponent } from 'src/app/feature-modules/education/browse-lectures/browse-lectures.component';
+import { CreateLectureComponent } from 'src/app/feature-modules/education/create-lecture/create-lecture.component';
+import { AuthGuard } from '../auth/auth.guard';
+import { Role } from 'src/app/feature-modules/administration/model/role.model';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,14 +27,42 @@ const routes: Routes = [
   { path: 'admin/members', component: MembersListComponent },
   { path: 'confirm-email', component: MemberVerificationFormComponent },
   //EDUCATION
-  { path: 'my-lectures', component: MyLecturesComponent },
-  { path: 'browse-lectures', component: BrowseLecturesComponent },
+  {
+    path: 'my-lectures',
+    component: MyLecturesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'EDUCATOR',
+    },
+  },
+  {
+    path: 'browse-lectures',
+    component: BrowseLecturesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'REGISTERED_USER',
+    },
+  },
+  {
+    path: 'create-lecture',
+    component: CreateLectureComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'EDUCATOR',
+    },
+  },
 
   //FINANCE
   { path: 'budget-plans', component: BudgetPlansListComponent },
   { path: 'budget-plan-details/:id', component: BudgetPlanDetailsComponent },
-  { path: 'edit-budget-plan-details/:id', component: BudgetPlanDetailsEditComponent },
-  { path: 'edit-budget-plan-details', component: BudgetPlanDetailsEditComponent },
+  {
+    path: 'edit-budget-plan-details/:id',
+    component: BudgetPlanDetailsEditComponent,
+  },
+  {
+    path: 'edit-budget-plan-details',
+    component: BudgetPlanDetailsEditComponent,
+  },
 ];
 
 @NgModule({

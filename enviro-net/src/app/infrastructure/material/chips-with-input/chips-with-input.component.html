@@ -1,6 +1,6 @@
 <mat-form-field class="example-chip-list">
     <mat-label>{{label}}</mat-label>
-    <mat-chip-grid #chipGrid>
+    <mat-chip-grid #chipGrid [formControl]="chipsControl">
         <div *ngFor="let item of items">
             <mat-chip-row
                 (removed)="remove(item)"
@@ -26,4 +26,5 @@
             </div>
         </mat-autocomplete>
     </mat-chip-grid>
+    <mat-error>{{getErrorMessage()}}</mat-error>
 </mat-form-field>

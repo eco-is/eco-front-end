@@ -13,7 +13,7 @@ import {
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 
 @Component({
@@ -26,9 +26,11 @@ export class ChipsWithInputComponent implements OnChanges {
   @Input() placeholder: string = '';
   @Input() autofillOptions: string[] = [];
   @Input() addOnBlur: boolean = false;
+  @Input() required: boolean = false;
   @Output() itemsChangedEvent = new EventEmitter<string[]>();
   @ViewChild('itemInputField') inputField!: ElementRef<HTMLInputElement>;
   formControl = new FormControl('');
+  chipsControl = new FormControl('');
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   items: string[] = [];
   filteredAutofillOptions: Observable<string[]> | undefined;
@@ -47,6 +49,10 @@ export class ChipsWithInputComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['autofillOptions']) {
       this.formControl.setValue(null);
+    }
+    if (changes['required'] && this.required) {
+      this.chipsControl.addValidators([Validators.required]);
+      this.chipsControl.updateValueAndValidity();
     }
   }
 
@@ -98,6 +104,13 @@ export class ChipsWithInputComponent implements OnChanges {
     this.items.push(event.option.viewValue);
     this.inputField.nativeElement.value = '';
     this.itemsChangedEvent.emit(this.items);
+  }
+
+  getErrorMessage() {
+    if (this.chipsControl.hasError('required')) {
+      return 'You must add at least 1 category';
+    }
+    return null;
   }
 
   private _filter(value: string): string[] {
