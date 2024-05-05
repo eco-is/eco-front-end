@@ -7,6 +7,8 @@ import { LectureCreationRequest } from '../model/lectureCreationRequest';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { TestCreationModalComponent } from '../test-creation-modal/test-creation-modal.component';
 
 @Component({
   selector: 'app-create-lecture',
@@ -41,7 +43,8 @@ export class CreateLectureComponent implements OnInit {
   constructor(
     private service: EducationService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.minAgeValidator = this.minAgeValidator.bind(this);
     this.maxAgeValidator = this.maxAgeValidator.bind(this);
@@ -145,8 +148,24 @@ export class CreateLectureComponent implements OnInit {
       creatorId: this.user!.id,
     };
     this.service.createLecture(lecture).subscribe({
-      next: () => {
-        this.router.navigate(['my-lectures']);
+      next: (result: Lecture) => {
+        this.openDialog('250ms', '250ms', result.id);
+      },
+    });
+  }
+
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    lectureId: number
+  ): void {
+    this.dialog.open(TestCreationModalComponent, {
+      width: '450px',
+      height: '200px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        lectureId,
       },
     });
   }

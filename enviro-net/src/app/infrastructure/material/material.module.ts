@@ -31,6 +31,11 @@ import {
 } from '@angular/material/autocomplete';
 import { TableComponent } from './table/table.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogModule,
+} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [ChipsWithInputComponent, TableComponent],
@@ -53,6 +58,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
+    MatDialogModule,
   ],
   exports: [
     MatToolbar,
@@ -75,6 +81,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     TableComponent,
     MatAutocomplete,
     MatError,
+    MatDialogActions,
+    MatDialogClose,
   ],
 })
 export class MaterialModule {}

@@ -16,6 +16,7 @@ import { BrowseLecturesComponent } from 'src/app/feature-modules/education/brows
 import { CreateLectureComponent } from 'src/app/feature-modules/education/create-lecture/create-lecture.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from 'src/app/feature-modules/administration/model/role.model';
+import { CreateTestComponent } from 'src/app/feature-modules/education/create-test/create-test.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -46,6 +47,14 @@ const routes: Routes = [
   {
     path: 'create-lecture',
     component: CreateLectureComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'EDUCATOR',
+    },
+  },
+  {
+    path: 'create-test/:id',
+    component: CreateTestComponent,
     canActivate: [AuthGuard],
     data: {
       role: 'EDUCATOR',
