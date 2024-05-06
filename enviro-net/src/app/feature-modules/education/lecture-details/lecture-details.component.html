@@ -1,0 +1,3 @@
+<h1>{{ lecture!.name }}</h1>
+<markdown [data]="lecture!.content"></markdown>
+<button mat-flat-button color="primary" (click)="onViewTest()">{{ user!.role === 'EDUCATOR' ? 'View test' : 'Take test' }}</button>

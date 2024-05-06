@@ -8,6 +8,9 @@ import { CreateLectureComponent } from './create-lecture/create-lecture.componen
 import { MarkdownModule } from 'ngx-markdown';
 import { TestCreationModalComponent } from './test-creation-modal/test-creation-modal.component';
 import { CreateTestComponent } from './create-test/create-test.component';
+import { LectureDetailsComponent } from './lecture-details/lecture-details.component';
+import { TestDetailsComponent } from './test-details/test-details.component';
+import { TakeTestComponent } from './take-test/take-test.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { CreateTestComponent } from './create-test/create-test.component';
     CreateLectureComponent,
     TestCreationModalComponent,
     CreateTestComponent,
+    LectureDetailsComponent,
+    TestDetailsComponent,
+    TakeTestComponent,
   ],
   imports: [
     CommonModule,

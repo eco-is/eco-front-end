@@ -44,4 +44,16 @@ export class EducationService {
       question
     );
   }
+
+  getLectureById(id: number): Observable<Lecture> {
+    return this.http.get<Lecture>(environment.apiHost + 'lecture/' + id);
+  }
+
+  getAllQuestionsByLectureId(
+    lectureId: number
+  ): Observable<EducatorQuestion[]> {
+    return this.http.get<EducatorQuestion[]>(
+      environment.apiHost + 'question/educator/lecture?lectureId=' + lectureId
+    );
+  }
 }
