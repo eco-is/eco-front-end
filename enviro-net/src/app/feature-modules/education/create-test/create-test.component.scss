@@ -1,0 +1,191 @@
+:host {
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#radio-question-creation-wrapper {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+    mat-radio-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 22px;
+
+        div {
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            gap: 16px;
+
+            mat-form-field {
+                flex-grow: 1;
+            }
+
+            button, mat-radio-button {
+                margin-bottom: 22px;
+            }
+        }
+    }
+
+    #add-answer-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .question-buttons {
+        display: flex;
+        justify-content: space-around;
+        padding-bottom: 22px;
+    }
+}
+
+#add-question-button {
+    margin-top: 40px;
+}
+
+.questions-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+
+    mat-radio-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        mat-radio-button {
+            width: 100%;
+            border: 2px solid black;
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        .green-border {
+            border: 4px solid #8aa573;
+        }
+    }
+
+    #checkbox-question-display {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        mat-checkbox {
+            width: 100%;
+            border: 2px solid black;
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        .green-border {
+            border: 4px solid #8aa573;
+        }
+    }
+
+    #fill-in-question-display {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        .green-border {
+            border: 4px solid #8aa573;
+            width: 100%;
+            border-radius: 25px;
+            padding: 8px;
+        }
+    }
+}
+
+#questions-border {
+    width: 50%;
+    border: 5px solid #8aa573;
+    border-radius: 25px;
+    margin-bottom: 22px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#checkbox-question-creation-wrapper {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+    #checkbox-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 22px;
+
+        div {
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            gap: 16px;
+
+            mat-form-field {
+                flex-grow: 1;
+            }
+
+            button, mat-checkbox {
+                margin-bottom: 22px;
+            }
+        }
+    }
+
+    #add-answer-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .question-buttons {
+        display: flex;
+        justify-content: space-around;
+        padding-bottom: 22px;
+    }
+}
+
+#fill-in-question-creation-wrapper {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+    #fill-in-answer-field {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        width: 85%;
+        margin-top: 22px;
+    }
+
+    .question-buttons {
+        display: flex;
+        justify-content: space-around;
+        padding-bottom: 22px;
+    }
+}
