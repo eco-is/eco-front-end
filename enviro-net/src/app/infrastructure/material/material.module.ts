@@ -12,7 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatOption, MatOptionModule } from '@angular/material/core';
-
+import { MatRadioButton, MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [],
@@ -29,6 +29,7 @@ import { MatOption, MatOptionModule } from '@angular/material/core';
     MatSortModule,
     MatSelectModule,
     MatOptionModule,
+    MatRadioModule
   ],
   exports: [
     MatToolbar,
@@ -45,7 +46,8 @@ import { MatOption, MatOptionModule } from '@angular/material/core';
     MatPaginator,
     MatSortModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatRadioButton
   ]
 })
 export class MaterialModule { }

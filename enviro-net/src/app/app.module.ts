@@ -8,6 +8,7 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { AdministrationModule } from './feature-modules/administration/administration.module';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
+import { ProjectsModule } from './feature-modules/projects/projects.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
     AppRoutingModule,
     AuthModule,
     LayoutModule,
-    AdministrationModule
+    AdministrationModule,
+    ProjectsModule
   ],
   providers: [
     {
