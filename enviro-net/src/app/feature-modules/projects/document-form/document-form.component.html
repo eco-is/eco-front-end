@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="documents-list">
+        <h3>Fetched Documents:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let document of documents; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ document.name }}</td>
+                    <td>{{ document.progress.progress }}%</td>
+                    <td>{{ document.progress.status }}</td>
+                    <td>
+                        <button mat-icon-button color="warn" (click)="remove(document)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="form-container">
+        <form [formGroup]="formGroup" (ngSubmit)="upload()">
+            <div class="form">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" type="text" />
+                </mat-form-field>
+                <div *ngIf="formGroup.get('name')?.invalid && formGroup.get('name')?.touched" class="text-danger">
+                    Name is required.
+                </div>
+                <label for="file">Upload File</label>
+                <input type="file" id="file" (change)="onFileSelected($event)" />
+                <div *ngIf="selectedFile" class="selected-file">{{ selectedFile.name }}</div>
+                <button color="primary" type="submit" mat-raised-button
+                    [disabled]="!formGroup.valid || !selectedFile">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="navigation-button">
+        <button mat-raised-button color="primary" (click)="navigateToNextPage()">Next Page</button>
+    </div>
+</div>

@@ -1,11 +1,11 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
 import { Project } from './model/project.model';
 import { ProjectCreation } from './model/project-creation.model';
-import { DocumentCreation } from './model/document-creation.model';
+import { Document } from './model/document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,18 +23,16 @@ export class ProjectsService {
     return this.http.post<Project>(environment.apiHost + 'projects', project);
   }
 
-  createDocument(projectId: number, document: DocumentCreation): Observable<any> {
-    const boundary = 'ngsw-boundary-' + Math.random().toString().substr(2);
-    const headers = new HttpHeaders({
-      'Content-Type': `multipart/form-data; boundary=${boundary}`
-    });
+  createDocument(projectId: number, documentData: FormData): Observable<Document> {
+    return this.http.post<Document>(environment.apiHost + `projects/${projectId}/documents`, documentData);
+  }
 
-    return this.http.post<any>(
-      `${environment.apiHost}projects/${projectId}/documents`,
-      document,
-      { headers: headers }
-    );
-    // TODO fix
+  deleteDocument(projectId: number, documentId: number): Observable<any> {
+    return this.http.delete<any>(environment.apiHost + `projects/${projectId}/documents/${documentId}`);
+  }
+
+  getDocumentsByProject(projectId: number): Observable<Document[]> {
+    return this.http.get<Document[]>(environment.apiHost + `projects/${projectId}/documents`);
   }
 
   private buildParams(name: string, status: string, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
