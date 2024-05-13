@@ -5,6 +5,7 @@ import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
 import { BudgetPlan } from './model/budget-plan.model';
 import { OrganizationGoal } from './model/organization-goal.model';
+import { OrganizationGoalsSet } from './model/organization-goals-set.model';
 
 @Injectable({
     providedIn: 'root'
@@ -62,10 +63,16 @@ export class FinanceService {
         return this.http.post<OrganizationGoal>(environment.apiHost + `goal/create`, goal);
     }
 
-    getAllOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoal>> {
+    getAllOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
         const params = this.buildParamsGoal(page, size, sortBy, sortDirection);
-        return this.http.get<PagedResults<OrganizationGoal>>(environment.apiHost + 'goal/all', { params });
+        return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/all', { params });
     }
+
+    getCurrentOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
+        const params = this.buildParamsGoal(page, size, sortBy, sortDirection);
+        return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/current', { params });
+    }
+
     private buildParamsGoal(page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
         let params = new HttpParams()
           .set('page', page.toString())
@@ -74,9 +81,7 @@ export class FinanceService {
           .set('direction', sortDirection);
         return params;
     }
-
-    // TODO - getCurrentOrganizationGoals
-
+    
     getOrganizationGoal(id : number): Observable<OrganizationGoal> {
         return this.http.get<OrganizationGoal>(environment.apiHost + 'goal/get/' + id);
     }

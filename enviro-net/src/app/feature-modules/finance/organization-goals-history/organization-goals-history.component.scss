@@ -89,7 +89,7 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #d3e5ab; 
-            width: 33%;
+            width: fit-content;
         }
 
         th {
@@ -98,7 +98,17 @@
 
         th:first-child,
         td:first-child {
-            width: 50px;
+            width: 10%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 50%;
+        }
+    
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 30%; 
         }
 
         tr:nth-child(even) td {
@@ -107,6 +117,17 @@
 
         tr:not(th):hover td {
             background-color: lighten(#d3e5ab, 10%); 
+        }
+
+        .tag{
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #e0e0e0;
+            color: #333;
+            border-radius: 20px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
     }
 }

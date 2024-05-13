@@ -53,7 +53,7 @@ export class BudgetPlanDetailsEditComponent {
           name: this.plan.name,
           description: this.plan.description,
           startDate: this.plan.fiscalDateRange.startDate.toString(),
-          endDate: this.plan.fiscalDateRange.endDate.toString(),
+          endDate: this.plan.fiscalDateRange.endDate!.toString(),
         });
       }, 
       (error) => {

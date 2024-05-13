@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { FinanceService } from '../finance.service';
 import { OrganizationGoal } from '../model/organization-goal.model';
+import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
 
 @Component({
   selector: 'app-organization-goals-history',
@@ -16,11 +17,11 @@ import { OrganizationGoal } from '../model/organization-goal.model';
   styleUrls: ['./organization-goals-history.component.scss']
 })
 export class OrganizationGoalsHistoryComponent {
-  displayedColumns: string[] = ['number', 'title', 'validPeriod', 'creator', 'actions'];
-  dataSource: MatTableDataSource<OrganizationGoal>;
+  displayedColumns: string[] = ['number', 'goals', 'validPeriod', 'actions'];
+  dataSource: MatTableDataSource<OrganizationGoalsSet>;
   page: number = 0;
   size: number = 5;
-  totalPlans = 0;
+  totalGoals = 0;
 
   showFilter: boolean = false;
   searchForm: FormGroup;
@@ -44,7 +45,7 @@ export class OrganizationGoalsHistoryComponent {
     this.authService.user$.subscribe(user => {
       this.user = user;
     });
-    this.dataSource = new MatTableDataSource<OrganizationGoal>();
+    this.dataSource = new MatTableDataSource<OrganizationGoalsSet>();
     this.searchForm = this.formBuilder.group({
       title: [''],
       // TODO date filters
@@ -78,9 +79,9 @@ export class OrganizationGoalsHistoryComponent {
       this.sortField,
       this.sortDirection
     ).subscribe(result => {
-      this.dataSource = new MatTableDataSource<OrganizationGoal>();
+      this.dataSource = new MatTableDataSource<OrganizationGoalsSet>();
       this.dataSource.data = result.content;
-      this.totalPlans = result.totalElements;
+      this.totalGoals = result.totalElements;
     });
   }
 
@@ -92,8 +93,9 @@ export class OrganizationGoalsHistoryComponent {
     this.loadOrganizationGoals();
   }
 
-  viewDetails(goal: OrganizationGoal): void {
-    this.router.navigate(['/edit-goals/' + goal.id]);
+  // TODO - view whole set
+  viewDetails(goal: OrganizationGoalsSet): void {
+    this.router.navigate(['/edit-goals/' + goal.goals[0].id]);
   }
 
   deleteOrganizationGoal(goal: OrganizationGoal): void {
@@ -124,6 +126,7 @@ export class OrganizationGoalsHistoryComponent {
     this.searchGoals();
   }
 
+  // TODO - new set
   newOrganizationGoal() : void {
     this.router.navigate(['/edit-goals']);
   }
