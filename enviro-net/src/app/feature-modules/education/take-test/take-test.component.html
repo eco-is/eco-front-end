@@ -1,1 +1,36 @@
-<p>take-test works!</p>
+<h1>Test:</h1>
+<div id="questions-border" *ngIf="questions.length > 0">
+    <div class="questions-wrapper" *ngFor="let question of questions">
+        <h3>{{question.orderInLecture + 1}}. {{question.content}}</h3>
+        <mat-radio-group *ngIf="question.type === 'RADIO'" color="primary" [(ngModel)]="question.selectedRadio">
+                <mat-radio-button 
+                    *ngFor="let answer of question.answers"  
+                    [value]="answer.id">
+                    {{ answer.content }}
+                </mat-radio-button>
+        </mat-radio-group>
+        <div id="checkbox-question-display" *ngIf="question.type === 'CHECKBOX'">
+            <mat-checkbox 
+                color="primary" 
+                *ngFor="let answer of question.answers; let i = index" 
+                [(ngModel)]="question.selectedCheckbox[i]">
+                {{ answer.content }}
+            </mat-checkbox>
+        </div>
+        <div id="fill-in-question-display" *ngIf="question.type === 'FILL_IN'">
+            <mat-form-field>
+                <mat-label>Answer</mat-label>
+                <input type="text" matInput placeholder="Type answer..." [(ngModel)]="question.selectedFillIn">
+                <button
+                     *ngIf="question.selectedFillIn"
+                     matSuffix
+                     mat-icon-button
+                     aria-label="Clear"
+                     (click)="question.selectedFillIn = ''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+    </div>
+</div>
+<button mat-flat-button color="primary" (click)="onFinishTest()">Finish test</button>

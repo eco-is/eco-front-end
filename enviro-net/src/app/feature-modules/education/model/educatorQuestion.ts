@@ -5,6 +5,6 @@ export type EducatorQuestion = {
   orderInLecture: number;
   lectureId: number;
   content: string;
-  type: string;
+  type: 'RADIO' | 'CHECKBOX' | 'FILL_IN';
   answers: EducatorAnswer[];
 };

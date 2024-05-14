@@ -15,11 +15,11 @@ import { MyLecturesComponent } from 'src/app/feature-modules/education/my-lectur
 import { BrowseLecturesComponent } from 'src/app/feature-modules/education/browse-lectures/browse-lectures.component';
 import { CreateLectureComponent } from 'src/app/feature-modules/education/create-lecture/create-lecture.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { Role } from 'src/app/feature-modules/administration/model/role.model';
 import { CreateTestComponent } from 'src/app/feature-modules/education/create-test/create-test.component';
 import { LectureDetailsComponent } from 'src/app/feature-modules/education/lecture-details/lecture-details.component';
 import { TestDetailsComponent } from 'src/app/feature-modules/education/test-details/test-details.component';
 import { TakeTestComponent } from 'src/app/feature-modules/education/take-test/take-test.component';
+import { RankingsComponent } from 'src/app/feature-modules/education/rankings/rankings.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -82,6 +82,14 @@ const routes: Routes = [
   {
     path: 'take-test/:id',
     component: TakeTestComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'REGISTERED_USER',
+    },
+  },
+  {
+    path: 'rankings/:id',
+    component: RankingsComponent,
     canActivate: [AuthGuard],
     data: {
       role: 'REGISTERED_USER',

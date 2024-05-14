@@ -1,7 +1,7 @@
 <h1>Test:</h1>
 <div id="questions-border" *ngIf="questions.length > 0">
     <div class="questions-wrapper" *ngFor="let question of questions">
-        <h3>{{question.orderInLecture}}. {{question.content}}</h3>
+        <h3>{{question.orderInLecture + 1}}. {{question.content}}</h3>
         <mat-radio-group *ngIf="question.type === 'RADIO'" color="primary" [value]="getIndexOfCorrectAnswer(question)">
                 <mat-radio-button 
                     *ngFor="let answer of question.answers; let i = index" 

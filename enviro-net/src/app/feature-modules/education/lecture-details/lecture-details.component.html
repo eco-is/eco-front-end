@@ -1,3 +1,8 @@
-<h1>{{ lecture!.name }}</h1>
+<div>
+    <p *ngIf="pointsEarned" class="invisible">Test score: {{ pointsEarned }}</p>
+    <h1>{{ lecture!.name }}</h1>
+    <p *ngIf="pointsEarned">Test score: {{ pointsEarned }}</p>
+</div>
 <markdown [data]="lecture!.content"></markdown>
-<button mat-flat-button color="primary" (click)="onViewTest()">{{ user!.role === 'EDUCATOR' ? 'View test' : 'Take test' }}</button>
+<button mat-flat-button color="primary" (click)="onViewTest()" [disabled]="otherActiveTest">{{ user!.role === 'EDUCATOR' ? 'View test' : retakeTest ? 'Retake test' : 'Take test' }}</button>
+<p *ngIf="otherActiveTest">You already have an unfinished test</p>

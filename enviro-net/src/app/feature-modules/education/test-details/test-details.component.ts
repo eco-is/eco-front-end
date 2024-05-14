@@ -16,7 +16,9 @@ export class TestDetailsComponent {
     private route: ActivatedRoute
   ) {
     this.service
-      .getAllQuestionsByLectureId(+this.route.snapshot.paramMap.get('id')!)
+      .getAllQuestionsByLectureIdForEducator(
+        +this.route.snapshot.paramMap.get('id')!
+      )
       .subscribe({
         next: (results: EducatorQuestion[]) => {
           this.questions = results;
