@@ -76,7 +76,7 @@ export class MyLecturesComponent implements OnInit {
   }
 
   onViewLecture(lecture: LectureForTable) {
-    console.log(lecture);
+    this.router.navigate(['lecture-details', lecture.id]);
   }
 
   onDeleteLecture(lecture: LectureForTable) {

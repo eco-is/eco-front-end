@@ -19,6 +19,10 @@ import { CreateTestComponent } from 'src/app/feature-modules/education/create-te
 import { ProjectsListComponent } from 'src/app/feature-modules/projects/projects-list/projects-list.component';
 import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-form/project-form.component';
 import { DocumentFormComponent } from 'src/app/feature-modules/projects/document-form/document-form.component';
+import { LectureDetailsComponent } from 'src/app/feature-modules/education/lecture-details/lecture-details.component';
+import { TestDetailsComponent } from 'src/app/feature-modules/education/test-details/test-details.component';
+import { TakeTestComponent } from 'src/app/feature-modules/education/take-test/take-test.component';
+import { RankingsComponent } from 'src/app/feature-modules/education/rankings/rankings.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -62,6 +66,38 @@ const routes: Routes = [
       role: 'EDUCATOR',
     },
   },
+  {
+    path: 'lecture-details/:id',
+    component: LectureDetailsComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: ['EDUCATOR', 'REGISTERED_USER'],
+    },
+  },
+  {
+    path: 'test-details/:id',
+    component: TestDetailsComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'EDUCATOR',
+    },
+  },
+  {
+    path: 'take-test/:id',
+    component: TakeTestComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'REGISTERED_USER',
+    },
+  },
+  {
+    path: 'rankings/:id',
+    component: RankingsComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'REGISTERED_USER',
+    },
+  },
 
   //FINANCE
   { path: 'budget-plans', component: BudgetPlansListComponent },
@@ -76,7 +112,10 @@ const routes: Routes = [
   },
   { path: 'org/projects', component: ProjectsListComponent },
   { path: 'org/projects/form', component: ProjectFormComponent },
-  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  {
+    path: 'org/projects/:projectId/documents',
+    component: DocumentFormComponent,
+  },
 ];
 
 @NgModule({

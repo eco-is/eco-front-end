@@ -1,0 +1,28 @@
+<h1>Test:</h1>
+<div id="questions-border" *ngIf="questions.length > 0">
+    <div class="questions-wrapper" *ngFor="let question of questions">
+        <h3>{{question.orderInLecture + 1}}. {{question.content}}</h3>
+        <mat-radio-group *ngIf="question.type === 'RADIO'" color="primary" [value]="getIndexOfCorrectAnswer(question)">
+                <mat-radio-button 
+                    *ngFor="let answer of question.answers; let i = index" 
+                    [ngClass]="{'green-border': answer.isCorrect}" 
+                    [value]="i">
+                    {{ answer.content }}
+                </mat-radio-button>
+        </mat-radio-group>
+        <div id="checkbox-question-display" *ngIf="question.type === 'CHECKBOX'">
+            <mat-checkbox 
+                color="primary" 
+                *ngFor="let answer of question.answers; let i = index" 
+                [ngClass]="{'green-border': answer.isCorrect}" 
+                [ngModel]="answer.isCorrect">
+                {{ answer.content }}
+            </mat-checkbox>
+        </div>
+        <div id="fill-in-question-display" *ngIf="question.type === 'FILL_IN'">
+            <span class="green-border">
+                {{ question.answers[0].content }}
+            </span>
+        </div>
+    </div>
+</div>
