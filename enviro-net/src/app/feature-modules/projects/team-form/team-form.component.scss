@@ -1,0 +1,37 @@
+:host {
+    flex-grow: 1;
+}
+
+.background-container {
+    height: 100%;
+    display: flex;
+    background-image: url('../../../../assets/images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.team-form-container {
+    flex: 1;
+    /* Adjust the width as needed */
+    padding-right: 20px;
+    /* Add padding for better spacing */
+}
+
+.document-list {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.add-member-button {
+    background-color: #2d4f16;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.add-member-text {
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 20px;
+}

@@ -1,0 +1,51 @@
+.add-team-member-container {
+    background-color: #d3e2b3;
+    display: flex;
+    flex-direction: column;
+    height: 80vh; 
+    padding: 10px;
+    box-sizing: border-box; 
+    h2 {
+        text-align: center;
+    }
+
+    .team-member-list {
+        flex: 1; 
+        overflow-y: auto; 
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            max-height: calc(80vh - 150px); 
+            overflow-y: auto; 
+
+            li {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px;
+                border-bottom: 1px solid #8eb86b;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                button {
+                    margin-left: 10px;
+                }
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    .mat-button {
+        margin-top: auto; 
+        align-self: center; 
+    }
+}

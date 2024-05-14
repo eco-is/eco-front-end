@@ -1,0 +1,16 @@
+.document-container {
+    background-color: #d3e2b3;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+
+    h2 {
+        text-align: center;
+    }
+
+    .mat-button {
+        margin-top: auto;
+        align-self: center;
+    }
+}

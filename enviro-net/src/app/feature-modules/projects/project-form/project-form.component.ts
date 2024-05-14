@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectCreation } from '../model/project-creation.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { ProjectsService } from '../projects.service';
@@ -14,6 +14,7 @@ import { Type } from '../model/type.model';
 })
 export class ProjectFormComponent {
   userId: number;
+  projectId: number | null = null;
   isButtonDisabled = true;
   formGroup: FormGroup;
   types = Object.values(Type);
@@ -23,6 +24,7 @@ export class ProjectFormComponent {
     private projectService: ProjectsService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private route: ActivatedRoute,
     authService: AuthService
   ) {
     this.userId = authService.user$.value.id;
@@ -36,9 +38,30 @@ export class ProjectFormComponent {
   }
 
   ngOnInit(): void {
-    this.formGroup.statusChanges.subscribe(() => {
-      this.isButtonDisabled = !this.formGroup.valid;
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('projectId');
+      if (id) {
+        this.projectId = +id;
+        this.loadProject(this.projectId);
+      }
     });
+  }
+
+  loadProject(projectId: number): void {
+    this.projectService.getProject(projectId).subscribe(
+      (project) => {
+        this.formGroup.patchValue({
+          name: project.name,
+          description: project.description,
+          duration: project.durationMonths,
+          budget: project.budget,
+          type: project.type
+        });
+      },
+      (error) => {
+        console.error('Error loading project details:', error);
+      }
+    );
   }
 
   create(): void {
@@ -52,21 +75,45 @@ export class ProjectFormComponent {
     };
 
     if (this.formGroup.valid) {
-      this.projectService.createProject(project).subscribe(
-        (createdProject) => {
-          this.openSnackBar('Project created successfully!');
-          this.router.navigate(['org/projects', createdProject.id, 'documents']);
-        },
-        (error) => {
-          let errorMessage = 'Error creating project. Please try again.';
-          if (error.error && error.error.message) {
-            errorMessage = error.error.message;
-          }
-          this.openSnackBar(errorMessage);
-          console.error('Error creating project:', error);
-        }
-      );
+      if (this.projectId) {
+        this.updateProject(project);
+      } else {
+        this.createProject(project);
+      }
     }
+  }
+
+  createProject(project: ProjectCreation): void {
+    this.projectService.createProject(project).subscribe(
+      (createdProject) => {
+        this.openSnackBar('Project created successfully!');
+        this.router.navigate(['org/projects', createdProject.id, 'documents']);
+      },
+      (error) => {
+        let errorMessage = 'Error creating project. Please try again.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.openSnackBar(errorMessage);
+        console.error('Error creating project:', error);
+      }
+    );
+  }
+
+  updateProject(project: ProjectCreation): void {
+    this.projectService.updateProject(this.projectId!, project).subscribe(
+      (createdProject) => {
+        this.router.navigate(['org/projects', createdProject.id, 'documents']);
+      },
+      (error) => {
+        let errorMessage = 'Error updating project. Please try again.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.openSnackBar(errorMessage);
+        console.error('Error updating project:', error);
+      }
+    );
   }
 
   private openSnackBar(message: string): void {

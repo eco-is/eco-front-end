@@ -23,6 +23,7 @@ import { LectureDetailsComponent } from 'src/app/feature-modules/education/lectu
 import { TestDetailsComponent } from 'src/app/feature-modules/education/test-details/test-details.component';
 import { TakeTestComponent } from 'src/app/feature-modules/education/take-test/take-test.component';
 import { RankingsComponent } from 'src/app/feature-modules/education/rankings/rankings.component';
+import { TeamFormComponent } from 'src/app/feature-modules/projects/team-form/team-form.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -112,10 +113,10 @@ const routes: Routes = [
   },
   { path: 'org/projects', component: ProjectsListComponent },
   { path: 'org/projects/form', component: ProjectFormComponent },
-  {
-    path: 'org/projects/:projectId/documents',
-    component: DocumentFormComponent,
-  },
+  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  { path: 'org/projects/:projectId/form', component: ProjectFormComponent },
+  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  { path: 'org/projects/:projectId/team', component: TeamFormComponent },
 ];
 
 @NgModule({

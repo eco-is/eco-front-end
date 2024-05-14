@@ -51,6 +51,7 @@ import {
   MatRadioModule,
 } from '@angular/material/radio';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [ChipsWithInputComponent, TableComponent],
@@ -77,7 +78,8 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     MatMenuModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatListModule
   ],
   exports: [
     MatToolbar,
@@ -111,6 +113,8 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     MatPrefix,
     MatMiniFabButton,
     MatCheckbox,
+    MatDialogModule,
+    MatListModule
   ]
 })
 export class MaterialModule {}

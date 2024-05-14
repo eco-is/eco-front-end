@@ -7,6 +7,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { ProjectFormComponent } from './project-form/project-form.component';
 import { DocumentFormComponent } from './document-form/document-form.component';
+import { TeamFormComponent } from './team-form/team-form.component';
+import { AddTeamMemberDialogComponent } from './add-team-member/add-team-member.component';
+import { AssignDocumentDialogComponent } from './assign-document/assign-document.component';
 
 
 
@@ -14,7 +17,10 @@ import { DocumentFormComponent } from './document-form/document-form.component';
   declarations: [
     ProjectsListComponent,
     ProjectFormComponent,
-    DocumentFormComponent
+    DocumentFormComponent,
+    TeamFormComponent,
+    AddTeamMemberDialogComponent,
+    AssignDocumentDialogComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,7 @@
-<div class="container">
+<div class="background-container">
+    <div class="navigation-button">
+        <button mat-raised-button color="primary" (click)="navigateToPreviousPage()">Back</button>
+    </div>
     <div class="documents-list">
         <h3>Fetched Documents:</h3>
         <table>
@@ -33,19 +36,21 @@
                     <mat-label>Name</mat-label>
                     <input matInput formControlName="name" type="text" />
                 </mat-form-field>
-                <div *ngIf="formGroup.get('name')?.invalid && formGroup.get('name')?.touched" class="text-danger">
-                    Name is required.
+                <input type="file" (change)="onFileSelected($event)" class="file-input" #fileUpload />
+                <div class="file-upload">
+                    <button mat-flat-button color="accent" class="upload-btn" (click)="fileUpload.click()">
+                        <mat-icon>attach_file</mat-icon>
+                        <span>Upload</span>
+                    </button>
+                    <span *ngIf="selectedFileName">{{ selectedFileName }}</span> 
                 </div>
-                <label for="file">Upload File</label>
-                <input type="file" id="file" (change)="onFileSelected($event)" />
-                <div *ngIf="selectedFile" class="selected-file">{{ selectedFile.name }}</div>
-                <button color="primary" type="submit" mat-raised-button
-                    [disabled]="!formGroup.valid || !selectedFile">Next</button>
+                <br>
+                <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid || !selectedFile">Submit</button>
             </div>
         </form>
     </div>
 
     <div class="navigation-button">
-        <button mat-raised-button color="primary" (click)="navigateToNextPage()">Next Page</button>
+        <button mat-raised-button color="primary" (click)="navigateToNextPage()">Next</button>
     </div>
 </div>
