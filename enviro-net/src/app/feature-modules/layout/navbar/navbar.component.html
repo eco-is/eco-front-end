@@ -14,6 +14,9 @@
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ADMINISTRATOR'" [routerLink]="['/admin/register']">Register</button>
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ADMINISTRATOR'" [routerLink]="['/admin/members']">Members</button>
 
+        <!-- ORG. MEMBER -->
+        <button mat-raised-button color="accent" *ngIf="user && user.role == 'PROJECT_MANAGER'"[routerLink]="['/org/projects']">Projects</button>
+
         <!-- ACCOUNTANT -->
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['budget-plans']">Budget Plans</button>
 
