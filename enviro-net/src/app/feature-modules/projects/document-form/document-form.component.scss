@@ -1,0 +1,65 @@
+// TODO style ffs and PROGRESS bar for each document
+:host {
+    flex-grow: 1;
+}
+.container {
+    height: 100%;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.documents-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.documents-list table {
+    flex: 1;
+}
+
+.form-container {
+    width: 400px;
+    margin-left: 20px;
+}
+
+.form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.mat-form-field {
+    margin-bottom: 20px;
+}
+
+label[for="file"] {
+    margin-bottom: 10px;
+    font-weight: bold;
+    display: block;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.text-danger {
+    color: red;
+    margin-top: 5px;
+}
+
+button[type="submit"] {
+    align-self: flex-end;
+}

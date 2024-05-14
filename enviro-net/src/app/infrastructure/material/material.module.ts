@@ -77,6 +77,7 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     MatMenuModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatRadioModule
   ],
   exports: [
     MatToolbar,
@@ -110,6 +111,6 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     MatPrefix,
     MatMiniFabButton,
     MatCheckbox,
-  ],
+  ]
 })
 export class MaterialModule {}

@@ -1,0 +1,77 @@
+<div class="background-container">
+    <div class="mat-elevation-z8">
+        <mat-expansion-panel class="search-header" [expanded]="showFilter">
+            <mat-expansion-panel-header>
+                <mat-panel-title>Search</mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="searchForm" (ngSubmit)="searchProjects()">
+                <div class="filter-form-row">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" formControlName="name">
+                </div>
+                <!-- Filter BY STATUS radio button -->
+                <button mat-icon-button color="primary" type="submit">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" type="button" (click)="clearAll()">
+                    <mat-icon>clear_all</mat-icon>
+                </button>
+            </form>
+        </mat-expansion-panel>
+    
+        <!-- TODO add edit and delete buttons and show if they are the manager -->
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let projectIndex = index">{{ (page * size) + projectIndex + 1 }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                <td mat-cell *matCellDef="let project">{{ project.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let project">{{ project.status }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let project">
+                    <button mat-button color="primary" (click)="viewProject(project)"
+                        *ngIf="project.status !== 'DRAFT'">
+                        View
+                    </button>
+                    <button mat-button color="primary" (click)="editProject(project)"
+                        *ngIf="project.status === 'DRAFT'">
+                        Edit
+                    </button>
+                    <button mat-button color="warn" (click)="removeProject(project)" *ngIf="project.status === 'DRAFT'">
+                        Discard
+                    </button>
+                    <button mat-button color="primary" (click)="removeProject(project)"
+                        *ngIf="project.status !== 'DRAFT' && project.status !== 'REJECTED' && project.status !== 'ARCHIVED'">
+                        Archive
+                    </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="createButton">
+                <th mat-header-cell *matHeaderCellDef>
+                    <button mat-icon-button (click)="createProject()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </th>
+                <td mat-cell *matCellDef="let project"></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalProjects" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
+</div>

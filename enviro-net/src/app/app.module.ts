@@ -11,6 +11,7 @@ import { FinanceModule } from './feature-modules/finance/finance.module';
 import { AppRoutingModule } from './infrastructure/routing/app-routing.module';
 import { EducationModule } from './feature-modules/education/education.module';
 import { MarkdownModule } from 'ngx-markdown';
+import { ProjectsModule } from './feature-modules/projects/projects.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,8 @@ import { MarkdownModule } from 'ngx-markdown';
     AdministrationModule,
     EducationModule,
     FinanceModule,
-    MarkdownModule.forRoot(),
+    ProjectsModule,
+    MarkdownModule.forRoot()
   ],
   providers: [
     {

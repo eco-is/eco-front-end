@@ -15,8 +15,10 @@ import { MyLecturesComponent } from 'src/app/feature-modules/education/my-lectur
 import { BrowseLecturesComponent } from 'src/app/feature-modules/education/browse-lectures/browse-lectures.component';
 import { CreateLectureComponent } from 'src/app/feature-modules/education/create-lecture/create-lecture.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { Role } from 'src/app/feature-modules/administration/model/role.model';
 import { CreateTestComponent } from 'src/app/feature-modules/education/create-test/create-test.component';
+import { ProjectsListComponent } from 'src/app/feature-modules/projects/projects-list/projects-list.component';
+import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-form/project-form.component';
+import { DocumentFormComponent } from 'src/app/feature-modules/projects/document-form/document-form.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -72,6 +74,9 @@ const routes: Routes = [
     path: 'edit-budget-plan-details',
     component: BudgetPlanDetailsEditComponent,
   },
+  { path: 'org/projects', component: ProjectsListComponent },
+  { path: 'org/projects/form', component: ProjectFormComponent },
+  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
 ];
 
 @NgModule({

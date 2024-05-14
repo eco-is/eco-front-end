@@ -1,0 +1,47 @@
+:host {
+    flex-grow: 1;
+}
+
+.form-container {
+    height: 100%;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .form {
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .phoneInput {
+            width: 100%;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        mat-form-field:not(.phoneInput) {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+div.form {
+    width: 100%;
+}
