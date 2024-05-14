@@ -19,6 +19,7 @@ import { CreateTestComponent } from 'src/app/feature-modules/education/create-te
 import { ProjectsListComponent } from 'src/app/feature-modules/projects/projects-list/projects-list.component';
 import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-form/project-form.component';
 import { DocumentFormComponent } from 'src/app/feature-modules/projects/document-form/document-form.component';
+import { TeamFormComponent } from 'src/app/feature-modules/projects/team-form/team-form.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -76,7 +77,9 @@ const routes: Routes = [
   },
   { path: 'org/projects', component: ProjectsListComponent },
   { path: 'org/projects/form', component: ProjectFormComponent },
+  { path: 'org/projects/:projectId/form', component: ProjectFormComponent },
   { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  { path: 'org/projects/:projectId/team', component: TeamFormComponent },
 ];
 
 @NgModule({

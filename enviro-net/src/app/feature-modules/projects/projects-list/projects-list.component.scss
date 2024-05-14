@@ -1,16 +1,15 @@
-.background-container {
-    position: fixed;
-    top: 65px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 65px);
-    overflow: auto;
+:host {
+    display: flex;
+    flex-grow: 1;
+}
 
-    background-image: url("../../../../assets/images/background.png");
-    background-color: #f5f9ea;
-    background-position: center;
-    background-repeat: no-repeat;
+.background-container {
+    height: 100%;
+    width: 100%;
+    background-image: url('../../../../assets/images/background.png');
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .mat-elevation-z8 {
@@ -19,6 +18,7 @@
     margin-top: 65px;
     border-radius: 5px;
     position: relative;
+    width: calc(100% - 40px); // Full width minus margin
 
     .search-header {
         font-weight: bold;
@@ -29,7 +29,6 @@
         flex-wrap: wrap;
         gap: 16px;
         transition: height 0.3s ease-in-out;
-        align-items: flex-end;
         align-items: center;
     }
 
@@ -74,7 +73,7 @@
             background-color: lighten(#d3e5ab, 20%);
         }
 
-        tr:not(th):hover td {
+        tr:not(:first-child):hover td {
             background-color: lighten(#d3e5ab, 10%);
         }
 

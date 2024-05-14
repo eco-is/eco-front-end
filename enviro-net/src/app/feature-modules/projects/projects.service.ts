@@ -6,6 +6,9 @@ import { environment } from 'src/env/environment';
 import { Project } from './model/project.model';
 import { ProjectCreation } from './model/project-creation.model';
 import { Document } from './model/document.model';
+import { TeamMember } from './model/team-member.model';
+import { TeamMemberCreation } from './model/team-member-creation.model';
+import { Assignment } from './model/assignment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +22,16 @@ export class ProjectsService {
     return this.http.get<PagedResults<Project>>(environment.apiHost + 'projects', { params });
   }
 
+  getProject(projectId: number): Observable<Project> {
+    return this.http.get<Project>(environment.apiHost + `projects/${projectId}`);
+  }
+
   createProject(project: ProjectCreation): Observable<Project> {
     return this.http.post<Project>(environment.apiHost + 'projects', project);
+  }
+
+  updateProject(projectId: number, project: ProjectCreation): Observable<Project> {
+    return this.http.post<Project>(environment.apiHost + `projects/${projectId}`, project);
   }
 
   createDocument(projectId: number, documentData: FormData): Observable<Document> {
@@ -33,6 +44,26 @@ export class ProjectsService {
 
   getDocumentsByProject(projectId: number): Observable<Document[]> {
     return this.http.get<Document[]>(environment.apiHost + `projects/${projectId}/documents`);
+  }
+
+  getAvailableMembersByProject(projectId: number): Observable<TeamMember[]> {
+    return this.http.get<TeamMember[]>(environment.apiHost + `projects/${projectId}/team/available`);
+  }
+
+  getTeamByProject(projectId: number): Observable<TeamMember[]> {
+    return this.http.get<TeamMember[]>(environment.apiHost + `projects/${projectId}/team`);
+  }
+
+  addTeamMember(projectId: number, teamMember: TeamMemberCreation): Observable<void> {
+    return this.http.post<void>(environment.apiHost + `projects/${projectId}/team`, teamMember);
+  }
+
+  removeTeamMember(projectId: number, memberId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + `projects/${projectId}/team/${memberId}`);
+  }
+
+  assignTeamMembers(projectId: number, assignment: Assignment): Observable<Document> {
+    return this.http.put<Document>(environment.apiHost + `projects/${projectId}/team/assignment`, assignment);
   }
 
   private buildParams(name: string, status: string, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {

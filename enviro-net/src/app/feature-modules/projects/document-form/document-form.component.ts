@@ -13,8 +13,11 @@ export class DocumentFormComponent implements OnInit {
   projectId?: number;
   formGroup: FormGroup;
   selectedFile: File | null = null;
+  selectedFileName: string | null = null;
 
   documents: Document[] = [];
+  
+  // TODO css
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute,
@@ -85,8 +88,17 @@ export class DocumentFormComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name; 
+      this.formGroup.patchValue({ file: this.selectedFile });
+    }
+  }
+
+  navigateToPreviousPage() {
+    this.router.navigate(['org/projects', this.projectId, 'form']);
   }
 
   navigateToNextPage() {
