@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/env/environment';
 import { Category } from './model/category';
 import { LectureCreationRequest } from './model/lectureCreationRequest';
+import { EducatorQuestion } from './model/educatorQuestion';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +36,12 @@ export class EducationService {
 
   createLecture(lecture: LectureCreationRequest): Observable<Lecture> {
     return this.http.post<Lecture>(environment.apiHost + 'lecture', lecture);
+  }
+
+  createQuestion(question: EducatorQuestion): Observable<EducatorQuestion> {
+    return this.http.post<EducatorQuestion>(
+      environment.apiHost + 'question',
+      question
+    );
   }
 }

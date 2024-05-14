@@ -6,12 +6,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowseLecturesComponent } from './browse-lectures/browse-lectures.component';
 import { CreateLectureComponent } from './create-lecture/create-lecture.component';
 import { MarkdownModule } from 'ngx-markdown';
+import { TestCreationModalComponent } from './test-creation-modal/test-creation-modal.component';
+import { CreateTestComponent } from './create-test/create-test.component';
 
 @NgModule({
   declarations: [
     MyLecturesComponent,
     BrowseLecturesComponent,
     CreateLectureComponent,
+    TestCreationModalComponent,
+    CreateTestComponent,
   ],
   imports: [
     CommonModule,

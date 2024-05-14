@@ -1,0 +1,12 @@
+:host {
+    height: 100%;
+    display: block;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.text {
+    padding: 20px;
+}

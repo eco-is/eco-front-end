@@ -17,6 +17,7 @@ import { CreateLectureComponent } from 'src/app/feature-modules/education/create
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from 'src/app/feature-modules/administration/model/role.model';
 import { VolunteerActionPanelComponent } from 'src/app/feature-modules/volunteering/volunteer-action-panel/volunteer-action-panel.component';
+import { CreateTestComponent } from 'src/app/feature-modules/education/create-test/create-test.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -47,6 +48,14 @@ const routes: Routes = [
   {
     path: 'create-lecture',
     component: CreateLectureComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'EDUCATOR',
+    },
+  },
+  {
+    path: 'create-test/:id',
+    component: CreateTestComponent,
     canActivate: [AuthGuard],
     data: {
       role: 'EDUCATOR',
