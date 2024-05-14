@@ -104,7 +104,8 @@ export class RegistrationComponent {
           });
         },
         (error) => {
-          this.openSnackBar('Error registering user: ' + error);
+          this.openSnackBar('Username or email already taken.');
+          //this.openSnackBar('Error registering user: ' + error);
         }
       );
     }
