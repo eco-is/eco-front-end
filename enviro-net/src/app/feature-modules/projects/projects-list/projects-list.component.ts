@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Project } from '../model/project.model';
 import { ProjectsService } from '../projects.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'app-projects-list',
@@ -13,6 +14,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./projects-list.component.scss']
 })
 export class ProjectsListComponent {
+  userId: number;
+
   displayedColumns: string[] = ['number', 'name', 'status', 'actions', 'createButton'];
   dataSource: MatTableDataSource<Project>;
   page: number = 0;
@@ -33,8 +36,11 @@ export class ProjectsListComponent {
     private projectService: ProjectsService,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    authService: AuthService
   ) {
+    this.userId = authService.user$.value.id;
+    console.log(this.userId)
     this.dataSource = new MatTableDataSource<Project>();
     this.searchForm = this.formBuilder.group({
       name: [''],
@@ -56,7 +62,55 @@ export class ProjectsListComponent {
     this.cdr.detectChanges();
     this.loadProjects();
   }
+  
+  isManager(project: Project): boolean {
+    return this.userId === project.manager.id;
+  }
 
+  create(): void {
+    this.router.navigate(['org/projects/form']);
+  }
+
+  // TODO: go to project by clicking on the row(after it's done)
+  view(project: Project): void {
+    // this.projectService.removeProject(project.id).subscribe(
+    //   () => {
+    //     this.loadProjects();
+    //   },
+    //   (error) => {
+    //     console.error('Error removing project:', error);
+    //   }
+    // );
+  }
+
+  edit(project: Project): void {
+    this.router.navigate(['org/projects', project.id, 'form']);
+  }
+
+  discard(project: Project): void {
+    const confirmed = window.confirm('Are you sure you want to discard this project?');
+    if (confirmed) {
+      this.remove(project);
+    }
+  }
+
+  archive(project: Project): void {
+    const confirmed = window.confirm('Are you sure you want to archive this project?');
+    if (confirmed) {
+      this.remove(project);
+    }
+  }
+
+  remove(project: Project) {
+    this.projectService.removeProject(project.id).subscribe(
+      () => {
+        this.loadProjects();
+      },
+      (error) => {
+        console.error('Error removing project:', error);
+      }
+    );
+  }
 
   loadProjects(): void {
     this.projectService.getProjects(
@@ -85,43 +139,6 @@ export class ProjectsListComponent {
     this.size = event.pageSize;
     this.page = event.pageIndex;
     this.loadProjects();
-  }
-
-  createProject(): void {
-    this.router.navigate(['org/projects/form']);
-  }
-
-  viewProject(project: Project): void {
-    // this.projectService.removeProject(project.id).subscribe(
-    //   () => {
-    //     this.loadProjects();
-    //   },
-    //   (error) => {
-    //     console.error('Error removing project:', error);
-    //   }
-    // );
-  }
-
-  editProject(project: Project): void {
-    // this.projectService.removeProject(project.id).subscribe(
-    //   () => {
-    //     this.loadProjects();
-    //   },
-    //   (error) => {
-    //     console.error('Error removing project:', error);
-    //   }
-    // );
-  }
-
-  removeProject(project: Project): void {
-    // this.projectService.removeProject(project.id).subscribe(
-    //   () => {
-    //     this.loadProjects();
-    //   },
-    //   (error) => {
-    //     console.error('Error removing project:', error);
-    //   }
-    // );
   }
 
   clearAll() {

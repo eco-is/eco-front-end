@@ -11,16 +11,23 @@
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: first baseline;
+}
+
+.upper-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 .documents-list {
-    flex: 1;
+    margin-top: 60px;
+    width: 65vw;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
+    margin-left: 5%;
 }
 
 .documents-list table {
@@ -28,16 +35,16 @@
 }
 
 .form-container {
-    width: 400px;
-    margin-left: 20px;
+    margin-top: 120px;
+    width: 20vw;
+    margin-right: 5%;
 }
 
 .form {
     width: 100%;
     max-width: 400px;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #8aa573;
 }
 
 .mat-form-field {
@@ -54,11 +61,6 @@ input[type="file"] {
     margin-bottom: 10px;
 }
 
-.text-danger {
-    color: red;
-    margin-top: 5px;
-}
-
 button[type="submit"] {
     align-self: flex-end;
 }
@@ -67,8 +69,24 @@ button[type="submit"] {
     display: none;
 }
 
-.upload-btn {
-    background-color: #ffac03;
-    color: white;
-    height: 30px;
+.file-upload {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.upload-button,
+.submit-button {
+    margin-right: 10px;
+}
+
+.name-field {
+    width: 100%;
+}
+
+.navigation-button {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 5%;
 }

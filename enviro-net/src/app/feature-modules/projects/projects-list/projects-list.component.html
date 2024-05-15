@@ -9,7 +9,6 @@
                     <label for="name">Name:</label>
                     <input type="text" id="name" formControlName="name">
                 </div>
-                <!-- Filter BY STATUS radio button -->
                 <button mat-icon-button color="primary" type="submit">
                     <mat-icon>search</mat-icon>
                 </button>
@@ -19,7 +18,6 @@
             </form>
         </mat-expansion-panel>
     
-        <!-- TODO add edit and delete buttons and show if they are the manager -->
         <table mat-table [dataSource]="dataSource" matSort>
 
             <ng-container matColumnDef="number">
@@ -40,27 +38,23 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let project">
-                    <button mat-button color="primary" (click)="viewProject(project)"
-                        *ngIf="project.status !== 'DRAFT'">
-                        View
+                    <button mat-icon-button color="primary" (click)="edit(project)"
+                        *ngIf="isManager(project) && project.status === 'DRAFT'">
+                        <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-button color="primary" (click)="editProject(project)"
-                        *ngIf="project.status === 'DRAFT'">
-                        Edit
+                    <button mat-icon-button color="warn" (click)="discard(project)" *ngIf="isManager(project) && project.status === 'DRAFT'">
+                        <mat-icon>delete</mat-icon>
                     </button>
-                    <button mat-button color="warn" (click)="removeProject(project)" *ngIf="project.status === 'DRAFT'">
-                        Discard
-                    </button>
-                    <button mat-button color="primary" (click)="removeProject(project)"
-                        *ngIf="project.status !== 'DRAFT' && project.status !== 'REJECTED' && project.status !== 'ARCHIVED'">
-                        Archive
+                    <button mat-icon-button color="primary" (click)="archive(project)"
+                        *ngIf="isManager(project) && project.status === 'ONGOING'">
+                        <mat-icon>archive</mat-icon>
                     </button>
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="createButton">
                 <th mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button (click)="createProject()">
+                    <button mat-icon-button (click)="create()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </th>

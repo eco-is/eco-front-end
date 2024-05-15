@@ -17,7 +17,6 @@ export class DocumentFormComponent implements OnInit {
 
   documents: Document[] = [];
   
-  // TODO css
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute,

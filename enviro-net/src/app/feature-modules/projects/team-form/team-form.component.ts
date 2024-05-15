@@ -21,7 +21,6 @@ export class TeamFormComponent implements OnInit {
 
   documents: Document[] = [];
 
-  // TODO css
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute,
@@ -92,6 +91,9 @@ export class TeamFormComponent implements OnInit {
       },
       (error) => {
         console.error('Error removing member:', error);
+        if (error.status === 409) {
+          this.openSnackBar('You cannot remove a team member while they are still assigned to a document.');
+        }
       }
     );
   }

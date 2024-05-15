@@ -19,7 +19,6 @@ export class ProjectFormComponent {
   formGroup: FormGroup;
   types = Object.values(Type);
 
-  // TODO css
   constructor(
     private projectService: ProjectsService,
     private snackBar: MatSnackBar,

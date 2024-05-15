@@ -30,6 +30,10 @@ export class ProjectsService {
     return this.http.post<Project>(environment.apiHost + 'projects', project);
   }
 
+  removeProject(projectId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + `projects/${projectId}`);
+  }
+
   updateProject(projectId: number, project: ProjectCreation): Observable<Project> {
     return this.http.post<Project>(environment.apiHost + `projects/${projectId}`, project);
   }

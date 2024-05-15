@@ -1,53 +1,57 @@
+<!-- TODO: progress bar for each document -->
 <div class="background-container">
-    <div class="navigation-button">
-        <button mat-raised-button color="primary" (click)="navigateToPreviousPage()">Back</button>
-    </div>
-    <div class="documents-list">
-        <h3>Fetched Documents:</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let document of documents; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ document.name }}</td>
-                    <td>{{ document.progress.progress }}%</td>
-                    <td>{{ document.progress.status }}</td>
-                    <td>
-                        <button mat-icon-button color="warn" (click)="remove(document)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="form-container">
-        <form [formGroup]="formGroup" (ngSubmit)="upload()">
-            <div class="form">
-                <mat-form-field>
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name" type="text" />
-                </mat-form-field>
-                <input type="file" (change)="onFileSelected($event)" class="file-input" #fileUpload />
-                <div class="file-upload">
-                    <button mat-flat-button color="accent" class="upload-btn" (click)="fileUpload.click()">
-                        <mat-icon>attach_file</mat-icon>
-                        <span>Upload</span>
-                    </button>
-                    <span *ngIf="selectedFileName">{{ selectedFileName }}</span> 
+    <div class="upper-container">
+        <div class="documents-list">
+            <h3>Documentation:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let document of documents; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ document.name }}</td>
+                        <td>{{ document.progress.progress }}%</td>
+                        <td>{{ document.progress.status }}</td>
+                        <td>
+                            <button mat-icon-button color="warn" (click)="remove(document)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="formGroup" (ngSubmit)="upload()">
+                <div class="form">
+                    <mat-form-field class="name-field">
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name" type="text" />
+                    </mat-form-field>
+                    <input type="file" (change)="onFileSelected($event)" class="file-input" #fileUpload />
+                    <div class="file-upload">
+                        <div class="upload-button">
+                            <button mat-flat-button color="accent" class="upload-btn" (click)="fileUpload.click()">
+                                <mat-icon>attach_file</mat-icon>
+                                <span>Upload</span>
+                            </button>
+                            <span *ngIf="selectedFileName">{{ selectedFileName }}</span>
+                        </div>
+                        <div class="submit-button">
+                            <button color="primary" type="submit" mat-raised-button
+                                [disabled]="!formGroup.valid || !selectedFile">Submit</button>
+                        </div>
+                    </div>
                 </div>
-                <br>
-                <button color="primary" type="submit" mat-raised-button [disabled]="!formGroup.valid || !selectedFile">Submit</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <div class="navigation-button">
