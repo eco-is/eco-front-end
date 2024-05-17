@@ -5,6 +5,11 @@
         <h3 class="valid-period">
             {{ goal!.validPeriod.startDate | date:'dd MMM yyyy' }} - {{ goal!.validPeriod.endDate ? (goal!.validPeriod.endDate | date:'dd MMM yyyy') : 'Now' }}
         </h3>
+
+        <button *ngIf="canPublish" mat-icon-button color="warn" class="publish-button"
+            (click)="publish(goalSet!)" matTooltip="Publish this Organization Goal Set">
+            <mat-icon>publish</mat-icon>
+        </button>
     </div>
     <div class="goalSet-div">
         <button class="tag" *ngFor="let goal of goalSet!.goals" (click)="seeGoal(goal)">{{ goal.title }}</button>

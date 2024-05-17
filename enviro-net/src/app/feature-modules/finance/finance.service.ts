@@ -96,5 +96,10 @@ export class FinanceService {
         return this.http.delete<void>(environment.apiHost + 'goal/delete/' + id);
     }
 
+    publishOrganizationGoalsSet(goalSet : OrganizationGoalsSet): Observable<OrganizationGoalsSet> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<OrganizationGoalsSet>(environment.apiHost + 'goal/publish', goalSet, options);
+    }
+
     //
 }

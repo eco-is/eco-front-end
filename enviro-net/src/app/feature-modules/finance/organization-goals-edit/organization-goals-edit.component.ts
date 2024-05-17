@@ -94,7 +94,6 @@ export class OrganizationGoalsEditComponent {
     } else {
       this.canAddNewGoal = false;
     }
-    console.log(this.canAddNewGoal);
   }
 
   clear() : void{
@@ -170,6 +169,7 @@ export class OrganizationGoalsEditComponent {
             panelClass: 'green-snackbar', 
             duration: 5000 }); // Duration in milliseconds // 5s  
           this.goalSet?.goals.push(this.goal);
+          this.setFlags();  // Update the canAddNewGoal and canPublish flags
           this.getOrganizationGoal(this.goal.id);
         }, 
         (error) => {
@@ -223,5 +223,25 @@ export class OrganizationGoalsEditComponent {
         console.error('Error deleting organization goal:', error);
       }
     );
+  }
+
+  publish(goalSet : OrganizationGoalsSet) : void{
+    this.financeService.publishOrganizationGoalsSet(goalSet).subscribe(
+      (result) => {
+        this.goalSet = result;
+        this.snackBar.open('Goal set published', 'Close', { 
+          panelClass: 'green-snackbar', 
+          duration: 5000 }); // Duration in milliseconds // 5s  
+        this.router.navigate(['/goals']);
+      },
+      (error) => {
+        let errorMessage = 'Error while publishing organization goals set. Please try again.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+        console.error('Error while publishing organization goals set:', error);
+      }
+    )
   }
 }
