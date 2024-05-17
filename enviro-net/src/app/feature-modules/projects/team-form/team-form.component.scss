@@ -1,0 +1,93 @@
+:host {
+    flex-grow: 1;
+}
+
+.background-container {
+    height: 100%;
+    width: 100%;
+    background-image: url('../../../../assets/images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: first baseline;
+}
+
+.upper-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.team-form-container {
+    margin-top: 60px;
+    padding-right: 20px;
+    margin-left: 5%;
+    width: 65vw;
+}
+
+.document-list {
+    margin-top: 60px;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    margin-right: 5%;
+    max-height: 30vh;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.document-item span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.add-member-button {
+    background-color: #2d4f16;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.add-member-text {
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.mat-elevation-z8 th,
+.mat-elevation-z8 td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #d3e5ab;
+    width: 33%;
+}
+
+.mat-elevation-z8 th {
+    font-weight: bold;
+    background-color: lighten(#8aa573, 10%);
+}
+
+.mat-elevation-z8 th:first-child,
+.mat-elevation-z8 td:first-child {
+    width: 50px;
+}
+
+.mat-elevation-z8 tr:nth-child(even) td {
+    background-color: lighten(#d3e5ab, 20%);
+}
+
+.mat-elevation-z8 tr:hover td {
+    background-color: lighten(#d3e5ab, 10%);
+}
+
+.mat-elevation-z8 td:last-child {
+    text-align: right;
+}

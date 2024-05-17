@@ -1,3 +1,18 @@
+.background-container {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 65px);
+    overflow: auto;
+
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .mat-elevation-z8 {
     padding: 20px;
     margin: 20px;
@@ -41,12 +56,13 @@
         td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #d3e5ab; 
+            border-bottom: 1px solid #d3e5ab;
             width: 33%;
         }
 
         th {
             font-weight: bold;
+            background-color: lighten(#8aa573, 10%);
         }
 
         th:first-child,
@@ -55,11 +71,11 @@
         }
 
         tr:nth-child(even) td {
-            background-color: lighten(#d3e5ab, 20%); 
+            background-color: lighten(#d3e5ab, 20%);
         }
 
         tr:not(th):hover td {
-            background-color: lighten(#d3e5ab, 10%); 
+            background-color: lighten(#d3e5ab, 10%);
         }
     }
 }

@@ -1,0 +1,195 @@
+<h1>Test:</h1>
+<div id="questions-border" *ngIf="questions.length > 0">
+    <div class="questions-wrapper" *ngFor="let question of questions">
+        <h3>{{question.orderInLecture + 1}}. {{question.content}}</h3>
+        <mat-radio-group *ngIf="question.type === 'RADIO'" color="primary" [value]="getIndexOfCorrectAnswer(question)">
+                <mat-radio-button 
+                    *ngFor="let answer of question.answers; let i = index" 
+                    [ngClass]="{'green-border': answer.isCorrect}" 
+                    [value]="i">
+                    {{ answer.content }}
+                </mat-radio-button>
+        </mat-radio-group>
+        <div id="checkbox-question-display" *ngIf="question.type === 'CHECKBOX'">
+            <mat-checkbox 
+                color="primary" 
+                *ngFor="let answer of question.answers; let i = index" 
+                [ngClass]="{'green-border': answer.isCorrect}" 
+                [ngModel]="answer.isCorrect">
+                {{ answer.content }}
+            </mat-checkbox>
+        </div>
+        <div id="fill-in-question-display" *ngIf="question.type === 'FILL_IN'">
+            <span class="green-border">
+                {{ question.answers[0].content }}
+            </span>
+        </div>
+    </div>
+</div>
+<div id="radio-question-creation-wrapper" *ngIf="currentlyCreating === 'RADIO'">
+    <mat-form-field>
+        <mat-label>Question</mat-label>
+        <span matPrefix>&nbsp; {{totalQuestions + 1}}. &nbsp;</span>
+        <input type="text" matInput placeholder="Type question..." [formControl]="questionControl">
+        <mat-error *ngIf="questionControl.invalid">Must not be empty</mat-error>
+    </mat-form-field>
+    <mat-radio-group color="primary" aria-label="Select an option" [(ngModel)]="selectedRadioAnswer">
+        <div *ngFor="let i of generateAnswerRange(answersNumber)">
+            <mat-radio-button [value]="i"></mat-radio-button>
+            <mat-form-field>
+                <mat-label>{{selectedRadioAnswer === i ? 'Correct answer' : 'Incorrect answer'}}</mat-label>
+                <input
+                    matInput
+                    placeholder="Type answer..."
+                    type="text"
+                    [formControl]="answerControls[i]">
+                <mat-error *ngIf="answerControls[i].invalid">Must not be empty</mat-error>
+                <button
+                     *ngIf="answerControls[i].value"
+                     matSuffix
+                     mat-icon-button
+                     aria-label="Clear"
+                     (click)="answerControls[i].setValue('')">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            <button
+                mat-mini-fab color="warn" 
+                aria-label="Remove answer" 
+                [disabled]="i < 2"
+                (click)="onRemoveRadioAnswer(i)">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+    </mat-radio-group>
+    <div id="add-answer-button">
+        <button mat-mini-fab color="accent" (click)="onAddRadioAnswer()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="question-buttons">
+        <button mat-fab extended color="primary" (click)="onFinishRadioQuestion()" [disabled]="!canFinishRadioQuestion()">
+            <mat-icon>done</mat-icon>
+            Create
+        </button>
+        <button mat-fab extended color="warn" (click)="onCancelCreation()">
+            <mat-icon>close</mat-icon>
+            Cancel
+        </button>
+    </div>
+</div>
+<div id="checkbox-question-creation-wrapper" *ngIf="currentlyCreating === 'CHECKBOX'">
+    <mat-form-field>
+        <mat-label>Question</mat-label>
+        <span matPrefix>&nbsp; {{totalQuestions + 1}}. &nbsp;</span>
+        <input type="text" matInput placeholder="Type question..." [formControl]="questionControl">
+        <mat-error *ngIf="questionControl.invalid">Must not be empty</mat-error>
+    </mat-form-field>
+    <div id="checkbox-group">
+        <div *ngFor="let i of generateAnswerRange(answersNumber)">
+            <mat-checkbox [(ngModel)]="checkboxStates[i]" color="primary"></mat-checkbox>
+            <mat-form-field>
+                <mat-label>{{checkboxStates[i] ? 'Correct answer' : 'Incorrect answer'}}</mat-label>
+                <input
+                    matInput
+                    placeholder="Type answer..."
+                    type="text"
+                    [formControl]="answerControls[i]">
+                <mat-error *ngIf="answerControls[i].invalid">Must not be empty</mat-error>
+                <button
+                        *ngIf="answerControls[i].value"
+                        matSuffix
+                        mat-icon-button
+                        aria-label="Clear"
+                        (click)="answerControls[i].setValue('')">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            <button
+                mat-mini-fab color="warn"
+                aria-label="Remove answer"
+                [disabled]="i < 2"
+                (click)="onRemoveCheckboxAnswer(i)">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div id="add-answer-button">
+        <button mat-mini-fab color="accent" (click)="onAddCheckboxAnswer()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="question-buttons">
+        <button mat-fab extended color="primary" (click)="onFinishCheckboxQuestion()" [disabled]="!canFinishCheckboxQuestion()">
+            <mat-icon>done</mat-icon>
+            Create
+        </button>
+        <button mat-fab extended color="warn" (click)="onCancelCreation()">
+            <mat-icon>close</mat-icon>
+            Cancel
+        </button>
+    </div>
+</div>
+<div id="fill-in-question-creation-wrapper" *ngIf="currentlyCreating === 'FILL_IN'">
+    <mat-form-field>
+        <mat-label>Question</mat-label>
+        <span matPrefix>&nbsp; {{totalQuestions + 1}}. &nbsp;</span>
+        <input type="text" matInput placeholder="Type question..." [formControl]="questionControl">
+        <mat-error *ngIf="questionControl.invalid">Must not be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field id="fill-in-answer-field">
+        <mat-label>Answer</mat-label>
+        <input
+            matInput
+            placeholder="Type answer..."
+            type="text"
+            [formControl]="answerControls[0]">
+        <mat-error *ngIf="answerControls[0].invalid">Must not be empty</mat-error>
+        <button
+                *ngIf="answerControls[0].value"
+                matSuffix
+                mat-icon-button
+                aria-label="Clear"
+                (click)="answerControls[0].setValue('')">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <div class="question-buttons">
+        <button mat-fab extended color="primary" (click)="onFinishFillInQuestion()" [disabled]="!canFinishFillInQuestion()">
+            <mat-icon>done</mat-icon>
+            Create
+        </button>
+        <button mat-fab extended color="warn" (click)="onCancelCreation()">
+            <mat-icon>close</mat-icon>
+            Cancel
+        </button>
+    </div>
+</div>
+<button id="add-question-button" mat-fab extended color="accent" [matMenuTriggerFor]="menu">
+    <mat-icon>add</mat-icon>
+    Add question
+</button>
+<button 
+    id="add-question-button" 
+    mat-fab 
+    extended 
+    color="primary" 
+    (click)="onSaveTest()"
+    [disabled]="questions.length === 0">
+    <mat-icon>add</mat-icon>
+    Save test
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onStartRadioCreation()">
+        <mat-icon>radio_button_checked</mat-icon>
+        <span>single-choice</span>
+    </button>
+    <button mat-menu-item (click)="onStartCheckboxCreation()">
+        <mat-icon>check_box</mat-icon>
+        <span>multiple-choice</span>
+    </button>
+    <button mat-menu-item (click)="onStartFillInCreation()">
+        <mat-icon>edit</mat-icon>
+        <span>open-ended</span>
+    </button>
+</mat-menu>

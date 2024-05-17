@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { EducationService } from '../education.service';
 import { Category } from '../model/category';
 import { LectureForTable } from '../model/lectureForTable';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-lectures',
@@ -26,7 +27,8 @@ export class MyLecturesComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private service: EducationService
+    private service: EducationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +76,7 @@ export class MyLecturesComponent implements OnInit {
   }
 
   onViewLecture(lecture: LectureForTable) {
-    console.log(lecture);
+    this.router.navigate(['lecture-details', lecture.id]);
   }
 
   onDeleteLecture(lecture: LectureForTable) {
@@ -134,5 +136,9 @@ export class MyLecturesComponent implements OnInit {
     });
 
     this._prepareForDisplay();
+  }
+
+  onCreateLecture() {
+    this.router.navigate(['create-lecture']);
   }
 }
