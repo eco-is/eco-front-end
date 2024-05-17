@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { EducationService } from '../education.service';
 import { Category } from '../model/category';
 import { LectureForTable } from '../model/lectureForTable';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-browse-lectures',
@@ -26,7 +27,8 @@ export class BrowseLecturesComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private service: EducationService
+    private service: EducationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -74,18 +76,7 @@ export class BrowseLecturesComponent implements OnInit {
   }
 
   onViewLecture(lecture: LectureForTable) {
-    console.log(lecture);
-  }
-
-  onDeleteLecture(lecture: LectureForTable) {
-    this.service.deleteLecture(lecture.id).subscribe({
-      next: () => {
-        this.lecturesForDisplay = this.lecturesForDisplay.filter(
-          (l) => l.id !== lecture.id
-        );
-      },
-      error: () => {},
-    });
+    this.router.navigate(['lecture-details', lecture.id]);
   }
 
   onSearchInput() {

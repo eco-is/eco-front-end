@@ -5,30 +5,56 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { FormControl, Validators } from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-chips-with-input',
   templateUrl: './chips-with-input.component.html',
   styleUrls: ['./chips-with-input.component.scss'],
 })
-export class ChipsWithInputComponent {
+export class ChipsWithInputComponent implements OnChanges {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() autofillOptions: string[] = [];
+  @Input() addOnBlur: boolean = false;
+  @Input() required: boolean = false;
   @Output() itemsChangedEvent = new EventEmitter<string[]>();
   @ViewChild('itemInputField') inputField!: ElementRef<HTMLInputElement>;
-  addOnBlur = true;
+  formControl = new FormControl('');
+  chipsControl = new FormControl('');
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   items: string[] = [];
+  filteredAutofillOptions: Observable<string[]> | undefined;
 
   announcer = inject(LiveAnnouncer);
+
+  constructor() {
+    this.filteredAutofillOptions = this.formControl.valueChanges.pipe(
+      startWith(null),
+      map((item: string | null) => {
+        return item ? this._filter(item) : this.autofillOptions.slice();
+      })
+    );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['autofillOptions']) {
+      this.formControl.setValue(null);
+    }
+    if (changes['required'] && this.required) {
+      this.chipsControl.addValidators([Validators.required]);
+      this.chipsControl.updateValueAndValidity();
+    }
+  }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -78,5 +104,20 @@ export class ChipsWithInputComponent {
     this.items.push(event.option.viewValue);
     this.inputField.nativeElement.value = '';
     this.itemsChangedEvent.emit(this.items);
+  }
+
+  getErrorMessage() {
+    if (this.chipsControl.hasError('required')) {
+      return 'You must add at least 1 category';
+    }
+    return null;
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.autofillOptions.filter((item) =>
+      item.toLowerCase().includes(filterValue)
+    );
   }
 }

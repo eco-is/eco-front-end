@@ -1,0 +1,22 @@
+<div class="document-container">
+    <h2>{{ data.document.name }}</h2>
+    <mat-form-field appearance="fill">
+        <mat-label>Select Writers</mat-label>
+        <mat-select [(ngModel)]="selectedWriters" multiple [compareWith]="compareMembers">
+            <mat-option *ngFor="let member of availableTeamMembers" [value]="member">
+                {{ member.firstName }} {{ member.lastName }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Select Reviewers</mat-label>
+        <mat-select [(ngModel)]="selectedReviewers" multiple [compareWith]="compareMembers">
+            <mat-option *ngFor="let member of availableTeamMembers" [value]="member">
+                {{ member.firstName }} {{ member.lastName }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-button color="primary" (click)="onSave()">Save</button>
+</div>

@@ -6,12 +6,16 @@ import {
   MatButtonModule,
   MatFabButton,
   MatIconButton,
+  MatMiniFabButton,
 } from '@angular/material/button';
 import {
+  MatError,
   MatFormField,
   MatFormFieldModule,
   MatHint,
   MatLabel,
+  MatPrefix,
+  MatSuffix,
 } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -29,6 +33,25 @@ import {
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
 import { TableComponent } from './table/table.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import {
+  MatMenu,
+  MatMenuItem,
+  MatMenuModule,
+  MatMenuTrigger,
+} from '@angular/material/menu';
+import {
+  MatRadioButton,
+  MatRadioGroup,
+  MatRadioModule,
+} from '@angular/material/radio';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [ChipsWithInputComponent, TableComponent],
@@ -48,6 +71,15 @@ import { TableComponent } from './table/table.component';
     MatChipsModule,
     MatTableModule,
     MatAutocompleteModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatListModule
   ],
   exports: [
     MatToolbar,
@@ -69,6 +101,20 @@ import { TableComponent } from './table/table.component';
     MatFabButton,
     TableComponent,
     MatAutocomplete,
-  ],
+    MatError,
+    MatDialogActions,
+    MatDialogClose,
+    MatMenu,
+    MatMenuTrigger,
+    MatMenuItem,
+    MatRadioButton,
+    MatRadioGroup,
+    MatSuffix,
+    MatPrefix,
+    MatMiniFabButton,
+    MatCheckbox,
+    MatDialogModule,
+    MatListModule
+  ]
 })
 export class MaterialModule {}

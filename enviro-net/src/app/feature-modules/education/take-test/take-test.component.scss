@@ -1,0 +1,68 @@
+:host {
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.questions-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+
+    mat-radio-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        mat-radio-button {
+            width: 100%;
+            border: 2px solid black;
+            border-radius: 25px;
+        }
+
+        .green-border {
+            border: 4px solid #8aa573;
+        }
+    }
+
+    #checkbox-question-display {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        mat-checkbox {
+            width: 100%;
+            border: 2px solid black;
+            border-radius: 25px;
+        }
+
+        .green-border {
+            border: 4px solid #8aa573;
+        }
+    }
+
+    mat-form-field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 22px;
+        width: 100%;
+        gap: 8px;
+
+        .green-border {
+            border: 4px solid #8aa573;
+            width: 100%;
+            border-radius: 25px;
+            padding: 8px;
+        }
+    }
+}

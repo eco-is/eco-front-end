@@ -1,0 +1,69 @@
+:host {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#grid {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: 
+        "metadata metadata"
+        "input preview"
+        "button button";
+}
+
+.metadata-input {
+    grid-area: metadata;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 44px;
+    padding: 22px 40px 0 40px;
+
+    #categories-field {
+        flex: auto 1 1;
+    }
+
+    .age-field {
+        height: 94px;
+        flex: auto 1 1;
+    }
+
+    #difficulty-field {
+        height: 94px;
+        flex: auto 1 1;
+    }
+}
+
+#content-input {
+    grid-area: input;
+    padding: 22px 22px 0 40px;
+
+    textarea {
+        height: 620px;
+        max-height: 620px;
+    }
+}
+
+#content-preview {
+    grid-area: preview;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 40px 22px 22px;
+
+    markdown {
+        flex-grow: 1;
+        height: 580px;
+        overflow-y: auto;
+    }
+}
+
+#button-wrapper {
+    grid-area: button;
+    text-align: center;
+    padding-bottom: 22px;
+}

@@ -8,4 +8,5 @@ export type Lecture = {
   minRecommendedAge: number;
   maxRecommendedAge: number;
   categories: Category[];
+  creatorId: number;
 };

@@ -1,70 +1,72 @@
-<div class="mat-elevation-z8">
-    <mat-expansion-panel class="search-header" [expanded]="showFilter">
-        <mat-expansion-panel-header>
-            <mat-panel-title>Search</mat-panel-title>
-        </mat-expansion-panel-header>
-        <form [formGroup]="searchForm" (ngSubmit)="searchMembers()">
-            <div class="filter-form-row">
-                <label for="name">Name:</label>
-                <input type="text" id="name" formControlName="name">
-            </div>
-            <div class="filter-form-row">
-                <label for="surname">Surname:</label>
-                <input type="text" id="city" formControlName="surname">
-            </div>
-            <div class="filter-form-row">
-                <label for="email">Email:</label>
-                <input type="text" id="city" formControlName="email">
-            </div>
-            <button mat-icon-button color="primary" type="submit">
-                <mat-icon>search</mat-icon>
-            </button>
-            <button mat-icon-button color="primary" type="button" (click)="clearAll()">
-                <mat-icon>clear_all</mat-icon>
-            </button>
-        </form>
-    </mat-expansion-panel>
-
-    <table mat-table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>#</th>
-            <td mat-cell *matCellDef="let memberIndex = index">{{ (page * size) + memberIndex + 1 }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="surname">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Member</th>
-            <td mat-cell *matCellDef="let member">{{ member.name }} {{ member.surname }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-            <td mat-cell *matCellDef="let member">{{ member.email }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="role">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-            <td mat-cell *matCellDef="let member">{{ member.role }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let member">{{ member.membershipStatus }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let member">
-                <button mat-icon-button color="warn" (click)="removeMember(member)">
-                    <mat-icon>close</mat-icon>
+<div class="background-container">
+    <div class="mat-elevation-z8">
+        <mat-expansion-panel class="search-header" [expanded]="showFilter">
+            <mat-expansion-panel-header>
+                <mat-panel-title>Search</mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="searchForm" (ngSubmit)="searchMembers()">
+                <div class="filter-form-row">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" formControlName="name">
+                </div>
+                <div class="filter-form-row">
+                    <label for="surname">Surname:</label>
+                    <input type="text" id="city" formControlName="surname">
+                </div>
+                <div class="filter-form-row">
+                    <label for="email">Email:</label>
+                    <input type="text" id="city" formControlName="email">
+                </div>
+                <button mat-icon-button color="primary" type="submit">
+                    <mat-icon>search</mat-icon>
                 </button>
-            </td>
-        </ng-container>
-        
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+                <button mat-icon-button color="primary" type="button" (click)="clearAll()">
+                    <mat-icon>clear_all</mat-icon>
+                </button>
+            </form>
+        </mat-expansion-panel>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalMembers" showFirstLastButtons
-        (page)="onPageChange($event)"></mat-paginator>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let memberIndex = index">{{ (page * size) + memberIndex + 1 }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="surname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Member</th>
+                <td mat-cell *matCellDef="let member">{{ member.name }} {{ member.surname }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                <td mat-cell *matCellDef="let member">{{ member.email }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+                <td mat-cell *matCellDef="let member">{{ member.role }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let member">{{ member.membershipStatus }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let member">
+                    <button mat-icon-button color="warn" (click)="removeMember(member)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalMembers" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
 </div>
