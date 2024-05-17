@@ -39,16 +39,9 @@
             </mat-form-field>
         </form>
         
-        <!-- TODO - Organization goals tags -->
         <div id="organization-goals">
-            <h1>Organization goals</h1>
-            <div class="tags">
-                <span class="tag">Goal 1</span>
-                <span class="tag">Goal 2</span>
-                <span class="tag">Goal 3</span>
-                <span class="tag">Goal 4</span>
-                <span class="tag">Goal 5</span>
-            </div>
+            <h1>Current Organization goals</h1>
+            <div class="tag" *ngFor="let goal of goalSet!.goals">{{ goal.title }}</div>
         </div>
     </div>
 </div>

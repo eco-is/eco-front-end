@@ -8,6 +8,7 @@ import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
 import { Accountant } from '../model/accountant.model';
 import { DateRange } from '../model/date-range.model';
+import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
 
 @Component({
   selector: 'app-budget-plan-details-edit',
@@ -17,6 +18,7 @@ import { DateRange } from '../model/date-range.model';
 export class BudgetPlanDetailsEditComponent {
   plan : BudgetPlan | undefined;
   user : User | undefined;
+  goalSet : OrganizationGoalsSet | undefined;
 
   formGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -34,6 +36,7 @@ export class BudgetPlanDetailsEditComponent {
       this.authService.user$.subscribe((user) => {
         this.user = user;
       });
+      this.getCurrentGoals();
       this.route.params.subscribe(params => {
       let id = params['id'] || null;
       if (!id) {
@@ -53,7 +56,7 @@ export class BudgetPlanDetailsEditComponent {
           name: this.plan.name,
           description: this.plan.description,
           startDate: this.plan.fiscalDateRange.startDate.toString(),
-          endDate: this.plan.fiscalDateRange.endDate.toString(),
+          endDate: this.plan.fiscalDateRange.endDate!.toString(),
         });
       }, 
       (error) => {
@@ -142,5 +145,21 @@ export class BudgetPlanDetailsEditComponent {
       return false;
     }
     return true;
+  }
+
+  getCurrentGoals() : void{
+    this.financeService.getCurrentOrganizationGoals().subscribe(
+      (result) => {
+        this.goalSet = result;
+      }, 
+      (error) => {
+        let errorMessage = 'Error fetching current organization goals. Please try again later.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+        console.error('Error fetching current organization goals:', error);
+      }
+    );
   }
 }

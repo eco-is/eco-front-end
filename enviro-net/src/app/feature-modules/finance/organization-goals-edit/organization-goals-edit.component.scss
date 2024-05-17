@@ -1,4 +1,4 @@
-#budget-plan-details-edit {
+#goals-edit {
     position: fixed;
     top: 65px;
     left: 0;
@@ -15,12 +15,58 @@
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover;
 
+    h1 {
+        margin-top: 8px;
+        margin-left: 20px;
+        font-weight: bolder;
+        text-align: left;
+        //color: #476c2a;
+    }
+    .valid-period{
+        margin-left: 20px;
+        margin-bottom: 8px;
+    }
+    .publish-button{
+        position: absolute;
+        top: 25px;
+        right: 25px; 
+    }
+    .goalSet-div{
+        margin: 8px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+    .tag{
+        position: relative;
+        width: fit-content;
+        padding: 4px 8px;
+        background-color: #476c2a;
+        color: #f5f9ea;
+        border: none;
+        border-radius: 20px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
     .content {
         padding: 20px;
         margin: 20px;
         border-radius: 5px;
         position: relative;
         background-color: rgba(216, 233, 179, 0.65);
+    }
+    .buttons-div{
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        top: 5px;
+        right: 5px; 
+        gap: 10px;
+    }
+    button {
+        position: relative;
+        background-color: #476c2a;//3d6223;
     }
 
     form {
@@ -48,55 +94,19 @@
         color: #ff8b01;
     }
 
-    h1 {
+    h2 {
         font-weight: bolder;
         text-align: left;
         //color: #476c2a;
     }
 
-    button {
-        position: absolute;
-        top: 5px;
-        right: 5px; 
-        background-color: #476c2a;//3d6223;
-    }
-
-    h2 {
+    h3 {
         text-align: left;
         font-size: 22px;
     }
-    .h2-fiscal-period {
+    .h3-fiscal-period {
         text-align: left;
         font-size: 22px;
         font-weight: bold;
-    }
-
-    #organization-goals {
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-        margin-top: 20px;
-
-        h1 {
-            text-align: left;
-            font-size: 25px;
-        }
-        
-        .tag {
-            position: relative;
-            width: fit-content;
-            padding: 4px 8px;
-            background-color: #476c2a;
-            color: #f5f9ea;
-            border: none;
-            border-radius: 20px;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-    
-        .tag:hover {
-            background-color: #3d6223;
-        }
     }
 }

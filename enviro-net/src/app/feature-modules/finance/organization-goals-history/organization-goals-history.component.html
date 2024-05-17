@@ -1,0 +1,75 @@
+<div id="goals-history">
+    <div class="mat-elevation-z8">
+        <div class="header-div">
+            <button class="new-button" *ngIf="user!.id" mat-icon-button color="warn" (click)="newOrganizationGoal()" matTooltip="Create New Organization Goal">
+                <mat-icon>add</mat-icon>
+            </button>
+            <mat-expansion-panel class="search-header" [expanded]="showFilter">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Search</mat-panel-title>
+                </mat-expansion-panel-header>
+                <form [formGroup]="searchForm" (ngSubmit)="searchGoals()">
+                    <!-- TODO filters -->
+                    <div>
+                        <label for="name">Tag:</label>
+                        <input type="text" id="title" formControlName="title">
+                    </div>
+                    
+                    <button mat-icon-button color="primary" type="submit" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" type="button" (click)="clearAll()" matTooltip="Clear all">
+                        <mat-icon>clear_all</mat-icon>
+                    </button>
+                </form>
+            </mat-expansion-panel>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let goalIndex = index">{{ (page * size) + goalIndex + 1 }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="validPeriod">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Period</th>
+                <td mat-cell *matCellDef="let goal">
+                    {{ goal.validPeriod.startDate | date:'dd MMM yyyy' }} - 
+                    <div>
+                        {{ goal.validPeriod.endDate ? (goal.validPeriod.endDate | date:'dd MMM yyyy') : 'Now' }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="goals">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Goals</th>
+                <td mat-cell *matCellDef="let goal">
+                    <div class="tag" *ngFor="let goal of goal.goals">{{ goal.title }}</div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let goal">{{ goal.status }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let goal">
+                    <div class="one-row">
+                        <button mat-icon-button color="warn" (click)="viewDetails(goal)" matTooltip="View details">
+                            <mat-icon>info</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalGoals" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
+</div>

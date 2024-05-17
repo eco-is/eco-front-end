@@ -28,7 +28,7 @@ export class AuthGuard {
       user.username === '' ||
       (next.data['role'] && next.data['role'].indexOf(user.role) === -1)
     ) {
-      this.router.navigate(['login']);
+      this.router.navigate(['']);
       return false;
     }
     return true;

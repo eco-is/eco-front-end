@@ -1,0 +1,61 @@
+<div id="goals-edit">
+    <div *ngIf="goalSet">
+        <h1 *ngIf="goalSet.status === 'DRAFT'">Create New Organization goal set</h1>
+        <h1 *ngIf="goalSet.status !== 'DRAFT'">Organization goal set - {{goalSet.status}}</h1>
+        <h3 class="valid-period">
+            {{ goal!.validPeriod.startDate | date:'dd MMM yyyy' }} - {{ goal!.validPeriod.endDate ? (goal!.validPeriod.endDate | date:'dd MMM yyyy') : 'Now' }}
+        </h3>
+
+        <button *ngIf="canPublish" mat-icon-button color="warn" class="publish-button"
+            (click)="publish(goalSet!)" matTooltip="Publish this Organization Goal Set">
+            <mat-icon>publish</mat-icon>
+        </button>
+    </div>
+    <div class="goalSet-div">
+        <button class="tag" *ngFor="let goal of goalSet!.goals" (click)="seeGoal(goal)">{{ goal.title }}</button>
+    </div>
+    <div class="content">
+        <div class="buttons-div">
+            <button *ngIf="canAddNewGoal" mat-icon-button color="warn" 
+                (click)="clear()" matTooltip="Add new Organization Goal">
+                <mat-icon>add</mat-icon>
+            </button>
+            <button *ngIf="goalSet!.status === 'DRAFT'" mat-icon-button color="warn" 
+                (click)="deleteOrganizationGoal(goal!)" [disabled]="!formGroup.valid" 
+                (click)="clear()" matTooltip="Delete Organization Goal draft">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button *ngIf="canEdit" mat-icon-button color="warn" 
+                (click)="saveChanges()" [disabled]="!formGroup.valid" 
+                [matTooltip]="formGroup.valid ? 'Save changes to Organization Goal' : 'Please check your input'" [matTooltipDisabled]="false">
+                <mat-icon>save</mat-icon>
+            </button>
+        </div>
+
+        <h2 *ngIf="goal !== undefined"> Goal {{goal.title}} </h2>
+        <h3 *ngIf="goal !== undefined && goal.creator.name !== ''"> Created on {{ goal!.validPeriod.startDate | date:'dd MMM yyyy' }} by {{ goal!.creator.name }} {{ goal!.creator.surname }} </h3>
+        <form [formGroup]="formGroup">
+            <mat-form-field *ngIf="goal!.status === 'DRAFT'">
+                <mat-label>Goal title</mat-label>
+                <input class="form-name" matInput formControlName="title" type="text" />
+                <mat-error *ngIf="formGroup.value.title === ''">* Goal title is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="4" [readonly]="!canEdit"></textarea>
+                <mat-error *ngIf="formGroup.value.description === ''">* Description is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Rationale</mat-label>
+                <textarea matInput formControlName="rationale" rows="4"  [readonly]="!canEdit"></textarea>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Priority</mat-label>
+                <input matInput formControlName="priority" type="number" [readonly]="!canEdit"/>
+            </mat-form-field>
+        </form>
+    </div>
+</div>
