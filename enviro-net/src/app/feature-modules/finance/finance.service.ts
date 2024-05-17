@@ -68,9 +68,8 @@ export class FinanceService {
         return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/all', { params });
     }
 
-    getCurrentOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
-        const params = this.buildParamsGoal(page, size, sortBy, sortDirection);
-        return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/current', { params });
+    getCurrentOrganizationGoals(): Observable<OrganizationGoalsSet> {
+        return this.http.get<OrganizationGoalsSet>(environment.apiHost + 'goal/current');
     }
 
     private buildParamsGoal(page : number, size : number, sortBy : string, sortDirection : string): HttpParams {

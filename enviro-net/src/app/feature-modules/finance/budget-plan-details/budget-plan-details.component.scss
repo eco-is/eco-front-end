@@ -77,6 +77,9 @@
     }
 
     #organization-goals {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
         margin-top: 20px;
 
         h1 {
@@ -90,14 +93,16 @@
         }
     
         .tag {
-            background-color: #2d4f16;
-            //color: #acbf9b; 
-            //color: #ffb304;
-            color: #eef5dd;
+            position: relative;
+            width: fit-content;
             padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 20px;
-            cursor: pointer;
+            background-color: #476c2a;
+            color: #f5f9ea;
+            border: none;
+            border-radius: 20px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
         }
     
         .tag:hover {

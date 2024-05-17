@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
+import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
 
 @Component({
   selector: 'app-budget-plan-details',
@@ -13,8 +14,8 @@ import { BudgetPlan } from '../model/budget-plan.model';
 })
 export class BudgetPlanDetailsComponent {
   plan! : BudgetPlan;
-
   user : User | undefined;
+  goalSet : OrganizationGoalsSet | undefined;
   
   constructor(
     private authService: AuthService, 
@@ -25,6 +26,7 @@ export class BudgetPlanDetailsComponent {
       this.authService.user$.subscribe((user) => {
         this.user = user;
       });
+      this.getCurrentGoals();
       this.route.params.subscribe(params => {
         let id = params['id'] || null;
         if (!id) {
@@ -61,5 +63,21 @@ export class BudgetPlanDetailsComponent {
   isHovered = false;
   toggleHover(hovered: boolean) {
     this.isHovered = hovered;
+  }
+  
+  getCurrentGoals() : void{
+    this.financeService.getCurrentOrganizationGoals().subscribe(
+      (result) => {
+        this.goalSet = result;
+      }, 
+      (error) => {
+        let errorMessage = 'Error fetching current organization goals. Please try again later.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+        console.error('Error fetching current organization goals:', error);
+      }
+    );
   }
 }
