@@ -8,6 +8,7 @@ import { FinanceService } from '../finance.service';
 import { Accountant } from '../model/accountant.model';
 import { DateRange } from '../model/date-range.model';
 import { OrganizationGoal } from '../model/organization-goal.model';
+import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
 
 
 @Component({
@@ -16,8 +17,12 @@ import { OrganizationGoal } from '../model/organization-goal.model';
   styleUrls: ['./organization-goals-edit.component.scss']
 })
 export class OrganizationGoalsEditComponent {
+  goalSet: OrganizationGoalsSet | undefined;
   goal: OrganizationGoal | undefined;
   user : User | undefined;
+  canEdit : boolean = false; 
+  canPublish : boolean = false;
+  canAddNewGoal : boolean = true;
 
   formGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -35,14 +40,80 @@ export class OrganizationGoalsEditComponent {
       this.authService.user$.subscribe((user) => {
         this.user = user;
       });
-      this.route.params.subscribe(params => {
-      let id = params['id'] || null;
-      if (!id) {
-        this.goal!.creator.id = this.user!.id;
-        this.goal!.creator.username = this.user!.username;
-      } else {
-        this.getOrganizationGoal(id);
+
+      // existing goalSet
+      const navigation = this.router.getCurrentNavigation();
+      if (navigation?.extras.state) {
+        this.goalSet = navigation.extras.state['goalSet'];
+        //console.log(this.goalSet);
+        this.goal! = this.goalSet!.goals[0];
+        this.seeGoal(this.goal);
+      } else { // create new goalSet
+        this.goalSet = {
+          validPeriod: { startDate: new Date(), endDate: undefined },
+          goals: [],
+          status: 'DRAFT'
+        };
+        this.goal = {
+          id: 0,
+          title: '',
+          description: '',
+          rationale: '',
+          priority: 1,
+          status: 'DRAFT',
+          creator: { id: this.user?.id || 0, username: this.user?.username || '', name: '', surname: '', email: '' },
+          validPeriod: { startDate: new Date(), endDate: undefined }
+        };
       }
+      this.setFlags();
+  }
+
+  seeGoal(goal: OrganizationGoal): void {
+    this.goal = goal;
+    this.formGroup.patchValue({
+      title: this.goal.title,
+      description: this.goal.description,
+      rationale: this.goal.rationale,
+      priority: this.goal.priority,
+    });
+  }
+  setFlags() : void{
+    if (this.goalSet?.status === 'ARCHIVED'){
+      this.canEdit = false;
+    } else {
+      this.canEdit = true;
+    }
+    if( this.goalSet?.status === 'DRAFT' &&
+        this.goalSet?.goals.length! >= 3 && this.goalSet?.goals.length! <= 5) {
+      this.canPublish = true;
+    } else {
+      this.canPublish = false;
+    }
+    if(this.goalSet?.status === 'DRAFT' && this.goalSet?.goals.length! < 5) {
+      this.canAddNewGoal = true;
+    } else {
+      this.canAddNewGoal = false;
+    }
+    console.log(this.canAddNewGoal);
+  }
+
+  clear() : void{
+    this.setFlags();
+    this.goal = {
+      id: 0,
+      title: '',
+      description: '',
+      rationale: '',
+      priority: 1,
+      status: 'DRAFT',
+      creator: { id: this.user?.id || 0, username: this.user?.username || '', name: '', surname: '', email: '' },
+      validPeriod: { startDate: new Date(), endDate: undefined }
+    };
+    this.formGroup = new FormGroup({
+      title: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      rationale: new FormControl(''),
+      priority: new FormControl(1)
     });
   }
 
@@ -69,7 +140,7 @@ export class OrganizationGoalsEditComponent {
   }
 
   saveChanges() : void {
-    if (this.goal === undefined) {
+    if (this.goal?.status === 'DRAFT' && this.goal.id === 0) {
       let dateRange : DateRange = {
         startDate: new Date(),
         endDate: new Date(),
@@ -87,6 +158,7 @@ export class OrganizationGoalsEditComponent {
         description: this.formGroup.value.description!,
         rationale: this.formGroup.value.rationale!,
         priority: this.formGroup.value.priority!,
+        status: 'DRAFT',
         creator: user,
         validPeriod: dateRange
       }
@@ -97,7 +169,8 @@ export class OrganizationGoalsEditComponent {
           this.snackBar.open(this.goal!.title + ' created!', '', { 
             panelClass: 'green-snackbar', 
             duration: 5000 }); // Duration in milliseconds // 5s  
-          this.router.navigate(['/goals']);
+          this.goalSet?.goals.push(this.goal);
+          this.getOrganizationGoal(this.goal.id);
         }, 
         (error) => {
           let errorMessage = 'Error creating organization goal. Please try again later.';
@@ -109,12 +182,12 @@ export class OrganizationGoalsEditComponent {
         }
       );
     } else {
+      this.goal!.title = this.formGroup.value.title!;
       this.financeService.updateOrganizationGoal(this.goal!).subscribe(
         () => {
           this.snackBar.open(this.goal!.title + ' updated!', '', { 
             panelClass: 'green-snackbar', 
             duration: 5000 }); // Duration in milliseconds // 5s  
-            this.router.navigate(['/goals']);
         }, 
         (error) => {
           let errorMessage = 'Error updating organization goal. Please try again later.';
@@ -126,5 +199,29 @@ export class OrganizationGoalsEditComponent {
         }
       );
     }
+  }
+  
+  deleteOrganizationGoal(goal: OrganizationGoal): void {
+    this.financeService.deleteOrganizationGoal(goal.id).subscribe(
+      () => {
+        // Remove the goal from the goalSet.goals array
+        const index = this.goalSet?.goals.findIndex(g => g.id === goal.id);
+        if (index !== undefined && index > -1) {
+          this.goalSet?.goals.splice(index, 1);
+        }
+        this.setFlags();  // Update the canAddNewGoal and canPublish flags
+        this.snackBar.open('Goal ' + goal.title + ' deleted.', 'Close', { 
+          panelClass: 'green-snackbar', 
+          duration: 15000 }); // Duration in milliseconds // 15s  
+        },
+      (error) => {
+        let errorMessage = 'Error while deleting organization goal. Please try again.';
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
+        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+        console.error('Error deleting organization goal:', error);
+      }
+    );
   }
 }

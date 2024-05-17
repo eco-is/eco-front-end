@@ -17,7 +17,7 @@ import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
   styleUrls: ['./organization-goals-history.component.scss']
 })
 export class OrganizationGoalsHistoryComponent {
-  displayedColumns: string[] = ['number', 'goals', 'validPeriod', 'actions'];
+  displayedColumns: string[] = ['number', 'goals', 'validPeriod', 'status','actions'];
   dataSource: MatTableDataSource<OrganizationGoalsSet>;
   page: number = 0;
   size: number = 5;
@@ -93,28 +93,8 @@ export class OrganizationGoalsHistoryComponent {
     this.loadOrganizationGoals();
   }
 
-  // TODO - view whole set
-  viewDetails(goal: OrganizationGoalsSet): void {
-    this.router.navigate(['/edit-goals/' + goal.goals[0].id]);
-  }
-
-  deleteOrganizationGoal(goal: OrganizationGoal): void {
-    this.financeService.deleteOrganizationGoal(goal.id).subscribe(
-      () => {
-        this.snackBar.open('Goal ' + goal.title + ' deleted.', 'Close', { 
-          panelClass: 'green-snackbar', 
-          duration: 15000 }); // Duration in milliseconds // 15s  
-        this.loadOrganizationGoals();
-      },
-      (error) => {
-        let errorMessage = 'Error while deleting organization goal. Please try again.';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        }
-        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
-        console.error('Error deleting organization goal:', error);
-      }
-    );
+  viewDetails(goalSet: OrganizationGoalsSet): void {
+    this.router.navigate(['/edit-goals'], { state: { goalSet: goalSet } });
   }
 
   clearAll() {
@@ -126,7 +106,6 @@ export class OrganizationGoalsHistoryComponent {
     this.searchGoals();
   }
 
-  // TODO - new set
   newOrganizationGoal() : void {
     this.router.navigate(['/edit-goals']);
   }

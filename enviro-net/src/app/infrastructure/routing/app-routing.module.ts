@@ -39,7 +39,6 @@ const routes: Routes = [
   { path: 'edit-budget-plan-details', component: BudgetPlanDetailsEditComponent },
   { path: 'goals', component: OrganizationGoalsHistoryComponent },
   { path: 'edit-goals', component: OrganizationGoalsEditComponent },
-  { path: 'edit-goals/:id', component: OrganizationGoalsEditComponent },
 ];
 
 @NgModule({

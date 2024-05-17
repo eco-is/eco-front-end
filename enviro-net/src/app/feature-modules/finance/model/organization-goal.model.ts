@@ -7,6 +7,7 @@ export interface OrganizationGoal {
     description: string;
     rationale: string;
     priority: number;
+    status: string;
     validPeriod: DateRange;
     creator: Accountant;
 }

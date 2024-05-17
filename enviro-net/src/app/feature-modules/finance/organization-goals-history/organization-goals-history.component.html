@@ -49,7 +49,11 @@
                 </td>
             </ng-container>
 
-            <!-- TODO - view whole set -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let goal">{{ goal.status }}</td>
+            </ng-container>
+
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let goal">

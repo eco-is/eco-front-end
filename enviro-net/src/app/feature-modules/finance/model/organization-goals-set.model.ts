@@ -4,4 +4,5 @@ import { OrganizationGoal } from "./organization-goal.model";
 export interface OrganizationGoalsSet {
     validPeriod: DateRange;
     goals: OrganizationGoal[];
+    status: string;
 }
