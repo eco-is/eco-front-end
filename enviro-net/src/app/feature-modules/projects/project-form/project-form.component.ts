@@ -29,9 +29,9 @@ export class ProjectFormComponent {
     this.userId = authService.user$.value.id;
     this.formGroup = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required]),
-      duration: new FormControl(0, [Validators.required]),
-      budget: new FormControl(0, [Validators.required]),
+      description: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
+      duration: new FormControl(0, [Validators.required, Validators.min(0)]),
+      budget: new FormControl(0, [Validators.required, Validators.min(0)]),
       type: new FormControl('', [Validators.required])
     });
   }

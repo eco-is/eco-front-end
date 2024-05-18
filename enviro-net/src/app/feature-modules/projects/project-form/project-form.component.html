@@ -12,18 +12,21 @@
                     <mat-form-field>
                         <mat-label>Description</mat-label>
                         <textarea matInput formControlName="description" rows="4"></textarea>
+                        <mat-error *ngIf="formGroup.get('description')!.hasError('maxlength')">Description cannot exceed 1000 characters</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="right-column">
                     <mat-form-field>
                         <mat-label>Duration</mat-label>
                         <input matInput formControlName="duration" type="number" />
-                        <span matSuffix>months</span>
+                        <span matSuffix class="suffix-margin">months</span>
+                        <mat-error *ngIf="formGroup.get('duration')!.hasError('min')">Must be positive</mat-error>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Budget</mat-label>
                         <input matInput formControlName="budget" type="number" />
-                        <span matSuffix>euros</span>
+                        <span matSuffix class="suffix-margin">€</span>
+                        <mat-error *ngIf="formGroup.get('duration')!.hasError('min')">Must be a positive</mat-error>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>Project Type</mat-label>

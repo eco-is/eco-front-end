@@ -1,8 +1,12 @@
 <div class="add-team-member-container">
     <h2>Add team members</h2>
+    <mat-form-field>
+        <mat-label>Search by name</mat-label>
+        <input matInput [(ngModel)]="searchTerm" placeholder="Type to search" />
+    </mat-form-field>
     <div class="team-member-list">
         <mat-selection-list [(ngModel)]="selectedMembers">
-            <mat-list-option *ngFor="let member of availableMembers" [value]="member">
+            <mat-list-option *ngFor="let member of filteredMembers()" [value]="member">
                 <span>{{ member.firstName }} {{ member.lastName }} ({{ member.role }})</span>
             </mat-list-option>
         </mat-selection-list>
