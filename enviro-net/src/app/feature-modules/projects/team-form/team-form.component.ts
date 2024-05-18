@@ -85,7 +85,7 @@ export class TeamFormComponent implements OnInit {
   }
 
   removeMember(member: TeamMember) {
-    this.projectsService.removeTeamMember(this.projectId!, member.id).subscribe(
+    this.projectsService.removeTeamMember(this.projectId!, member.userId).subscribe(
       () => {
         this.getTeam()
       },

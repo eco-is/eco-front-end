@@ -38,8 +38,8 @@ export class AssignDocumentDialogComponent implements OnInit {
   assign(): void {
     const assignment: Assignment = {
       documentId: this.data.document.documentId,
-      reviewerIds: this.selectedReviewers.map(reviewer => reviewer.id),
-      writerIds: this.selectedWriters.map(writer => writer.id)
+      reviewerIds: this.selectedReviewers.map(reviewer => reviewer.userId),
+      writerIds: this.selectedWriters.map(writer => writer.userId)
     };
 
     this.projectService.assignTeamMembers(this.data.projectId, assignment).subscribe(
@@ -57,6 +57,6 @@ export class AssignDocumentDialogComponent implements OnInit {
   }
 
   compareMembers(member1: TeamMember, member2: TeamMember): boolean {
-    return member1 && member2 ? member1.id === member2.id : member1 === member2;
+    return member1 && member2 ? member1.userId === member2.userId : member1 === member2;
   }
 }

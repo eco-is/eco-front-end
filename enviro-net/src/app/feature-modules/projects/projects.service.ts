@@ -62,8 +62,8 @@ export class ProjectsService {
     return this.http.post<void>(environment.apiHost + `projects/${projectId}/team`, teamMember);
   }
 
-  removeTeamMember(projectId: number, memberId: number): Observable<void> {
-    return this.http.delete<void>(environment.apiHost + `projects/${projectId}/team/${memberId}`);
+  removeTeamMember(projectId: number, userId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + `projects/${projectId}/team/${userId}`);
   }
 
   assignTeamMembers(projectId: number, assignment: Assignment): Observable<Document> {
