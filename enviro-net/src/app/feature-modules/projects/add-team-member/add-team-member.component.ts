@@ -12,6 +12,7 @@ import { TeamMemberCreation } from '../model/team-member-creation.model';
 export class AddTeamMemberDialogComponent implements OnInit {
   availableMembers: TeamMember[] = [];
   selectedMembers: TeamMember[] = [];
+  searchTerm: string = '';
 
   constructor(
     private projectService: ProjectsService,
@@ -47,5 +48,15 @@ export class AddTeamMemberDialogComponent implements OnInit {
   onCancel(): void {
     this.selectedMembers.forEach(member => this.addMember(member));
     this.dialogRef.close();
+  }
+
+  filteredMembers(): TeamMember[] {
+    if (!this.searchTerm) {
+      return this.availableMembers;
+    }
+    const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
+    return this.availableMembers.filter(member =>
+      `${member.firstName} ${member.lastName}`.toLowerCase().includes(lowerCaseSearchTerm)
+    );
   }
 }
