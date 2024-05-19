@@ -15,6 +15,22 @@
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover;
 
+    #navigation-button-next {
+        position: absolute;
+        top: 105%;
+        right: 5px;
+        background-color: #476c2a;
+        margin-bottom: 20px;
+    }
+    
+    #navigation-button-back {
+        position: absolute;
+        top: 105%;
+        left: 5px;
+        background-color: #476c2a;
+        margin-bottom: 20px;
+    }
+
     h1 {
         font-weight: bolder;
         text-align: left;

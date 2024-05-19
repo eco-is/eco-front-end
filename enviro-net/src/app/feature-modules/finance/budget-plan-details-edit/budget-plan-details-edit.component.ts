@@ -7,6 +7,7 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
 import { Accountant } from '../model/accountant.model';
+import { Employee } from '../model/employee.model';
 import { DateRange } from '../model/date-range.model';
 import { OrganizationGoalsSet } from '../model/organization-goals-set.model';
 
@@ -78,12 +79,15 @@ export class BudgetPlanDetailsEditComponent {
         startDate: start,
         endDate: end,
       }
-      let accountant : Accountant = {
+      let accountant : Employee = {
         id: this.user!.id,
         username: this.user!.username,
         name: '',
         surname: "",
-        email: ""
+        email: "",
+        wage: 0, 
+        workingHours: 0,
+        overtimeWage: 0,
       }
       let newPlan : BudgetPlan = {
         id: 0,
@@ -161,5 +165,9 @@ export class BudgetPlanDetailsEditComponent {
         console.error('Error fetching current organization goals:', error);
       }
     );
+  }
+
+  navigateNext() : void {
+    this.router.navigate(['/fixed-expenses-estimate/' + this.plan!.id]);
   }
 }

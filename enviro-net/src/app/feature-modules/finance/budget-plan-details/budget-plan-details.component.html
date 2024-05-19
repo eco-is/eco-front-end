@@ -1,5 +1,14 @@
 <div id="budget-plan-details">
     <div class="content">
+        <button id="navigation-button-back" mat-icon-button color="warn" disabled="true"
+                matTooltip="One step back">
+        <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button id="navigation-button-next" mat-icon-button color="warn" 
+            matTooltip="Next step" (click)="navigateNext()">
+        <mat-icon>arrow_forward</mat-icon>
+        </button>
+        
         <button *ngIf="user!.id === plan.author.id && plan.status==='DRAFT'" mat-icon-button color="warn" (click)="editBudgetPlan()" matTooltip="Edit Budget Plan">
             <mat-icon>edited</mat-icon>
         </button>

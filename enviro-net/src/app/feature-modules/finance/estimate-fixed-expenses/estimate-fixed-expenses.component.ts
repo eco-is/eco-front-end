@@ -74,7 +74,7 @@ export class EstimateFixedExpensesComponent {
       1, 50, 'name', 'asc').subscribe(result => {
         this.employeesOptions = result.content;
         console.log(this.employeesOptions); // TODO
-    })
+    });
     this.dataSource = new MatTableDataSource<FixedExpensesEstimation>();
     this.searchForm = this.formBuilder.group({
       types: [[]],
@@ -243,10 +243,12 @@ export class EstimateFixedExpensesComponent {
     } else {
       // updateFixedExpenseEstimation
       // Update the expense object with values from the edit form
-      expense.fixedExpense.type = this.editForm.value.type!;
-      expense.fixedExpense.amount = this.editForm.value.amount!;
+      if (expense.fixedExpense.type !== 'SALARY') {
+        expense.fixedExpense.type = this.editForm.value.type!;
+        expense.fixedExpense.amount = this.editForm.value.amount!;
+      }
       expense.fixedExpense.description = this.editForm.value.description!;
-        
+      //expense.fixedExpense.overtimeHours = this.editForm.value.overtimeHours!;
       this.financeService.updateFixedExpenseEstimation(expense).subscribe(
         (result) => {
           expense = result;
@@ -266,9 +268,16 @@ export class EstimateFixedExpensesComponent {
     this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
     console.error('Error :', error);
   }
-
   // TODO - save all changes
   saveChanges() : void {
-    
+      
   }
+
+  
+  navigateBack() : void {
+    this.router.navigate(['/edit-budget-plan-details/' + this.budgetPlanId]);
+  }
+  navigateNext() : void {
+    this.router.navigate(['/fixed-expenses-estimate/' + this.budgetPlanId]);
+  }  
 }
