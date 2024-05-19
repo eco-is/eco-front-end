@@ -16,11 +16,12 @@ import { FixedExpenses } from '../model/fixed-expenses.model';
   styleUrls: ['./latest-fixed-expenses.component.scss']
 })
 export class LatestFixedExpensesComponent {
+  typesOptions: string[] = ['RENT', 'INSURANCE', 'UTILITIES', 'OTHER'];
   displayedColumns: string[] = ['number', 'type', 'amount', 'period', 'created', 'description', 'actions'];
   dataSource: MatTableDataSource<FixedExpenses>;
   editStates: { [key: number]: boolean } = {};
   editForm = new FormGroup({
-    //type: [''],
+    type: new FormControl(''),
     amount: new FormControl(0, [Validators.required]),
     description: new FormControl(''),
     wage: new FormControl(0, [Validators.required]),
@@ -114,7 +115,7 @@ export class LatestFixedExpensesComponent {
           workingHours: 0,
           overtimeWage: 0, 
         },
-          overtimeHours: 0 
+        overtimeHours: 0 
     };
     this.dataSource.data.unshift(this.newFixedExpense);
     this.updateDataSource(this.newFixedExpense);
@@ -122,6 +123,11 @@ export class LatestFixedExpensesComponent {
     this.editFixedExpense(this.newFixedExpense);
   }
   saveNewFixedExpense(expense: FixedExpenses): void{
+    // Update the expense object with values from the edit form
+    expense.type = this.editForm.value.type!;
+    expense.amount = this.editForm.value.amount!;
+    expense.description = this.editForm.value.description!;
+    
     this.financeService.createFixedExpense(expense).subscribe(
       (result) => {
         expense = result;
@@ -137,7 +143,7 @@ export class LatestFixedExpensesComponent {
   editFixedExpense(expense: FixedExpenses) : void {
     this.editStates[expense.id] = !this.editStates[expense.id];
     this.editForm.patchValue({
-      //type: expense.type,
+      type: expense.type,
       amount: expense.amount,
       description: expense.description,
       wage: expense.employee.wage,
@@ -172,6 +178,7 @@ export class LatestFixedExpensesComponent {
       } else {
         // updateFixedExpense
         // Update the expense object with values from the edit form
+        expense.type = this.editForm.value.type!;
         expense.amount = this.editForm.value.amount!;
         expense.description = this.editForm.value.description!;
         

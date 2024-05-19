@@ -18,10 +18,20 @@
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef>Type</th>
                 <td mat-cell *matCellDef="let expense">
-                    {{ expense.type }}
-                    <div *ngIf="expense.type === 'SALARY'">
-                        {{ expense.employee.name }} {{ expense.employee.surname }} 
-                    </div>
+                    <ng-container *ngIf="editStates[expense.id] && expense.type !== 'SALARY'; else viewType" [formGroup]="editForm">
+                        <mat-form-field>
+                          <mat-label>Type</mat-label>
+                          <mat-select formControlName="type">
+                            <mat-option *ngFor="let option of typesOptions" [value]="option">{{ option }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </ng-container>
+                      <ng-template #viewType>
+                        {{ expense.type }}
+                        <div *ngIf="expense.type === 'SALARY'">
+                          {{ expense.employee.name }} {{ expense.employee.surname }}
+                        </div>
+                    </ng-template>
                 </td>
             </ng-container>
 
