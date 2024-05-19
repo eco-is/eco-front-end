@@ -101,9 +101,18 @@ export class FinanceService {
     }
 
     // FixedExpenses
-    lastMonthSalaryExpenses(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
-        const params = this.buildParams(page, size, sortBy, sortDirection);
+    lastMonthSalaryExpenses(creatorId : number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
+        const params = this.buildParamsSalaryExpenses(creatorId, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<FixedExpenses>>(environment.apiHost + 'fixed-expenses/salary', { params });
+    }
+    private buildParamsSalaryExpenses(creatorId : number, page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('creatorId', creatorId.toString())
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection);
+        return params;
     }
 
     createFixedExpense(expense : FixedExpenses) : Observable<FixedExpenses> {

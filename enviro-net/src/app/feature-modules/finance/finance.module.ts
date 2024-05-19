@@ -16,6 +16,7 @@ import { BudgetPlanDetailsEditComponent } from './budget-plan-details-edit/budge
 import { OrganizationGoalsHistoryComponent } from './organization-goals-history/organization-goals-history.component';
 import { OrganizationGoalsEditComponent } from './organization-goals-edit/organization-goals-edit.component';
 import { FixedExpensesHistoryComponent } from './fixed-expenses-history/fixed-expenses-history.component';
+import { LatestFixedExpensesComponent } from './latest-fixed-expenses/latest-fixed-expenses.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { FixedExpensesHistoryComponent } from './fixed-expenses-history/fixed-ex
       BudgetPlanDetailsEditComponent,
       OrganizationGoalsHistoryComponent,
       OrganizationGoalsEditComponent,
-      FixedExpensesHistoryComponent
+      FixedExpensesHistoryComponent,
+      LatestFixedExpensesComponent
   ],
     imports: [
       CommonModule,
