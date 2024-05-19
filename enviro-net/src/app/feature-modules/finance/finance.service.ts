@@ -158,9 +158,9 @@ export class FinanceService {
         return this.http.put<FixedExpenses>(environment.apiHost + 'fixed-expenses/update/salary', salary, options);
     }
     
-    updateFixedExpense(salary : FixedExpenses): Observable<FixedExpenses> {
+    updateFixedExpense(expense : FixedExpenses): Observable<FixedExpenses> {
         const options = {  headers: new HttpHeaders() };
-        return this.http.put<FixedExpenses>(environment.apiHost + 'fixed-expenses/update', salary, options);
+        return this.http.put<FixedExpenses>(environment.apiHost + 'fixed-expenses/update', expense, options);
     }
 
     deleteFixedExpense(id: number): Observable<void> {
