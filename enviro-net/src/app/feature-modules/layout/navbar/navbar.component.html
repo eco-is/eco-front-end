@@ -18,10 +18,12 @@
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'PROJECT_MANAGER'" [routerLink]="['/org/projects']">Projects</button>
 
         <!-- ACCOUNTANT -->
+        <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['fixed-expenses']">Fixed Expenses</button>
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['budget-plans']">Budget Plans</button>
         
         <!-- BOARD MEMBER -->
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'BOARD_MEMBER'" [routerLink]="['goals']">Organization Goals</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.role == 'BOARD_MEMBER'" [routerLink]="['fixed-expenses']">Fixed Expenses</button>
 
         <!-- EDUCATOR -->
         <button mat-raised-button color="accent" *ngIf="user && user.role === 'EDUCATOR'" [routerLink]="['/my-lectures']">My lectures</button>
