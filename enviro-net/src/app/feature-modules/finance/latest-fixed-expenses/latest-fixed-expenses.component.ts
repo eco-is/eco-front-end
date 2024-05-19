@@ -38,6 +38,8 @@ export class LatestFixedExpensesComponent {
   user: User | undefined;
   newFixedExpense : FixedExpenses | undefined;
 
+  totalAmount = 0; // TODO calculate
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -87,7 +89,14 @@ export class LatestFixedExpensesComponent {
       this.dataSource = new MatTableDataSource<FixedExpenses>();
       this.dataSource.data = result.content;
       this.totalExpenses = result.totalElements;
-    })
+      
+      this.calculateTotal();
+    });
+  }
+
+  calculateTotal(){
+    // Calculate total amount after loading fixed expenses
+    this.totalAmount = this.dataSource.data.reduce((total, expense) => total + expense.amount, 0);
   }
 
   addNewFixedExpense() : void {
@@ -131,13 +140,11 @@ export class LatestFixedExpensesComponent {
     this.financeService.createFixedExpense(expense).subscribe(
       (result) => {
         expense = result;
-        this.updateDataSource(expense);
       }, (error) => {
         let errorMessage = 'Error while creating new fixed expense. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
       }
     );
-    this.loadFixedExpenses();
   }
 
   editFixedExpense(expense: FixedExpenses) : void {
@@ -156,6 +163,7 @@ export class LatestFixedExpensesComponent {
   saveChangesToExpense(expense: FixedExpenses) : void {
     if (expense.id === 0){
       this.saveNewFixedExpense(expense);
+      this.ngAfterViewInit(); // display new expense
     } else {
       if (expense.type === 'SALARY'){
         // SALARY update
@@ -201,6 +209,7 @@ export class LatestFixedExpensesComponent {
     if (index !== -1) {
         this.dataSource.data[index] = expense;
         this.dataSource._updateChangeSubscription(); // Notify Angular about the change
+        this.calculateTotal();
     }
   }
   errorMessageDisplay(error: any, errorMessage : string) : void{

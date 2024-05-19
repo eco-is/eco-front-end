@@ -30,6 +30,22 @@
         justify-content: space-between; 
         gap: 10px;
     }
+    .total-amount{
+        width: auto;
+        position: absolute;
+        top: 25px;
+        left: 20px; 
+
+        padding: 4px 8px;
+        background-color: #3d6223;
+        color: #f5f9ea;
+        border: none;
+        border-radius: 20px;
+        margin-right: 3px;
+        margin-left: 3px;
+        font-size: 20px;
+        font-weight: bold;
+    }
     .save-button {
         width: auto;
         position: absolute;

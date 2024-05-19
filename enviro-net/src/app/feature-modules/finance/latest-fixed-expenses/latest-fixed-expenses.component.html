@@ -4,6 +4,9 @@
             <!-- <button class="save-button" *ngIf="user!.id" mat-icon-button color="warn" (click)="saveChanges()" matTooltip="Save changes">
                 <mat-icon>save</mat-icon>
             </button> -->
+            <div class="total-amount">
+                Total fixed expenses amount : {{totalAmount}}
+            </div>
             <button class="new-button" *ngIf="user!.id" mat-icon-button color="warn" (click)="addNewFixedExpense()" matTooltip="Add new fixed expense">
                 <mat-icon>add</mat-icon>
             </button>
