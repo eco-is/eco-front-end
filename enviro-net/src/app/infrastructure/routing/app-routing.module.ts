@@ -25,6 +25,7 @@ import { OrganizationGoalsEditComponent } from 'src/app/feature-modules/finance/
 import { CreateLectureComponent } from 'src/app/feature-modules/education/create-lecture/create-lecture.component';
 import { FixedExpensesHistoryComponent } from 'src/app/feature-modules/finance/fixed-expenses-history/fixed-expenses-history.component';
 import { LatestFixedExpensesComponent } from 'src/app/feature-modules/finance/latest-fixed-expenses/latest-fixed-expenses.component';
+import { EstimateFixedExpensesComponent } from 'src/app/feature-modules/finance/estimate-fixed-expenses/estimate-fixed-expenses.component';
 // Projects
 import { ProjectsListComponent } from 'src/app/feature-modules/projects/projects-list/projects-list.component';
 import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-form/project-form.component';
@@ -170,6 +171,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       role: 'ACCOUNTANT',
+    },
+  },
+  { 
+    path: 'fixed-expenses-estimate/:budgetPlanId', 
+    component: EstimateFixedExpensesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: ['BOARD_MEMBER', 'ACCOUNTANT'],
     },
   },
   // Projects

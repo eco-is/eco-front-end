@@ -17,6 +17,7 @@ import { OrganizationGoalsHistoryComponent } from './organization-goals-history/
 import { OrganizationGoalsEditComponent } from './organization-goals-edit/organization-goals-edit.component';
 import { FixedExpensesHistoryComponent } from './fixed-expenses-history/fixed-expenses-history.component';
 import { LatestFixedExpensesComponent } from './latest-fixed-expenses/latest-fixed-expenses.component';
+import { EstimateFixedExpensesComponent } from './estimate-fixed-expenses/estimate-fixed-expenses.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { LatestFixedExpensesComponent } from './latest-fixed-expenses/latest-fix
       OrganizationGoalsHistoryComponent,
       OrganizationGoalsEditComponent,
       FixedExpensesHistoryComponent,
-      LatestFixedExpensesComponent
+      LatestFixedExpensesComponent,
+      EstimateFixedExpensesComponent
   ],
     imports: [
       CommonModule,
