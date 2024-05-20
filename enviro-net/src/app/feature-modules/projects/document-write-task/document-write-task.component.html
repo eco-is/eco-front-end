@@ -1,0 +1,52 @@
+<div class="background-container">
+    <div class="upper-container">
+        <div class="documents-list">
+            <h3>{{ document?.documentName }}</h3>
+            <h4>{{ document?.progress!.status }} ({{ document?.progress!.progress }}%)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let version of document?.versions;">
+                        <td>{{ version }}</td>
+                        <td>
+                            <button mat-icon-button color="primary" (click)="download(version)">
+                                <mat-icon>download</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="formGroup" (ngSubmit)="upload()">
+                <div class="form">
+                    <mat-form-field class="name-field">
+                        <mat-label>Progress</mat-label>
+                        <input matInput formControlName="progress" type="number" />
+                        <mat-error *ngIf="formGroup.get('progress')!.hasError('min') || formGroup.get('progress')!.hasError('max')">
+                            Progress must be between 0%-100%.
+                        </mat-error>
+                    </mat-form-field>
+                    <input type="file" (change)="onFileSelected($event)" class="file-input" #fileUpload />
+                    <div class="file-upload">
+                        <div class="upload-button">
+                            <button mat-flat-button color="accent" class="upload-btn" (click)="fileUpload.click()">
+                                <mat-icon>attach_file</mat-icon>
+                                <span>Upload</span>
+                            </button>
+                            <span *ngIf="selectedFileName">{{ selectedFileName }}</span>
+                        </div>
+                    </div>
+                    <div class="submit-button">
+                        <button color="primary" type="submit" mat-raised-button
+                            [disabled]="!formGroup.valid || !selectedFile">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

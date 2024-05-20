@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
 import { Project } from './model/project.model';
@@ -9,6 +9,9 @@ import { Document } from './model/document.model';
 import { TeamMember } from './model/team-member.model';
 import { TeamMemberCreation } from './model/team-member-creation.model';
 import { Assignment } from './model/assignment.model';
+import { DocumentTask } from './model/document-task.model';
+import { DocumentVersions } from './model/document-versions.model';
+import { saveAs } from 'file-saver'
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +71,36 @@ export class ProjectsService {
 
   assignTeamMembers(projectId: number, assignment: Assignment): Observable<Document> {
     return this.http.put<Document>(environment.apiHost + `projects/${projectId}/team/assignment`, assignment);
+  }
+
+  getAssignedDocuments(userId: number): Observable<DocumentTask[]> {
+    const params = new HttpParams().set('userId', userId.toString());
+
+    return this.http.get<DocumentTask[]>(environment.apiHost + 'projects/assignments', { params });
+  }
+
+  getDocumentVersions(projectId: number, documentId: number): Observable<DocumentVersions> {
+    return this.http.get<DocumentVersions>(environment.apiHost + `projects/${projectId}/documents/${documentId}/versions`);
+  }
+
+  uploadDocument(projectId: number, documentId: number, documentData: FormData): Observable<Document> {
+    return this.http.put<Document>(environment.apiHost + `projects/${projectId}/documents/${documentId}`, documentData);
+  }
+
+  downloadDocument(projectId: number, documentId: number, version: number): Observable<void> {
+    return this.http.get(environment.apiHost + `projects/${projectId}/documents/${documentId}/versions/${version}`, { responseType: 'blob', observe: 'response' })
+      .pipe(
+        map((response: HttpResponse<Blob>) => {
+          const contentDisposition = response.headers.get('Content-Disposition');
+          const matches = contentDisposition?.match(/filename="([^"]+)"/);
+          const filename = matches ? matches[1] : 'document';
+
+          const contentType = response.headers.get('Content-Type') || 'application/octet-stream';
+          const blob = new Blob([response.body!], { type: contentType });
+          saveAs(blob, filename);
+          return;
+        })
+      );
   }
 
   private buildParams(name: string, status: string, page: number, size: number, sortBy: string, sortDirection: string): HttpParams {
