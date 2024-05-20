@@ -32,6 +32,7 @@ import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-f
 import { DocumentFormComponent } from 'src/app/feature-modules/projects/document-form/document-form.component';
 import { RankingsComponent } from 'src/app/feature-modules/education/rankings/rankings.component';
 import { TeamFormComponent } from 'src/app/feature-modules/projects/team-form/team-form.component';
+import { GlobalRankingsComponent } from 'src/app/feature-modules/education/global-rankings/global-rankings.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -42,7 +43,7 @@ const routes: Routes = [
   { path: 'admin/register', component: MemberRegistrationFormComponent },
   { path: 'admin/members', component: MembersListComponent },
   { path: 'confirm-email', component: MemberVerificationFormComponent },
-  
+
   // Education
   {
     path: 'my-lectures',
@@ -108,18 +109,26 @@ const routes: Routes = [
       role: 'REGISTERED_USER',
     },
   },
+  {
+    path: 'global-rankings',
+    component: GlobalRankingsComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: 'REGISTERED_USER',
+    },
+  },
 
   // Finance
-  { 
-    path: 'budget-plans', 
+  {
+    path: 'budget-plans',
     component: BudgetPlansListComponent,
     canActivate: [AuthGuard],
     data: {
       role: ['BOARD_MEMBER', 'ACCOUNTANT'],
     },
   },
-  { 
-    path: 'budget-plan-details/:id', 
+  {
+    path: 'budget-plan-details/:id',
     component: BudgetPlanDetailsComponent,
     canActivate: [AuthGuard],
     data: {
@@ -142,39 +151,40 @@ const routes: Routes = [
       role: 'ACCOUNTANT',
     },
   },
-  { 
-    path: 'goals', 
+  {
+    path: 'goals',
     component: OrganizationGoalsHistoryComponent,
     canActivate: [AuthGuard],
     data: {
       role: ['BOARD_MEMBER', 'ACCOUNTANT'],
     },
   },
-  { 
-    path: 'edit-goals', component: OrganizationGoalsEditComponent,
+  {
+    path: 'edit-goals',
+    component: OrganizationGoalsEditComponent,
     canActivate: [AuthGuard],
     data: {
       role: 'BOARD_MEMBER',
     },
   },
-  { 
-    path: 'fixed-expenses', 
+  {
+    path: 'fixed-expenses',
     component: FixedExpensesHistoryComponent,
     canActivate: [AuthGuard],
     data: {
       role: ['BOARD_MEMBER', 'ACCOUNTANT'],
     },
   },
-  { 
-    path: 'fixed-expenses/latest', 
+  {
+    path: 'fixed-expenses/latest',
     component: LatestFixedExpensesComponent,
     canActivate: [AuthGuard],
     data: {
       role: 'ACCOUNTANT',
     },
   },
-  { 
-    path: 'fixed-expenses-estimate/:budgetPlanId', 
+  {
+    path: 'fixed-expenses-estimate/:budgetPlanId',
     component: EstimateFixedExpensesComponent,
     canActivate: [AuthGuard],
     data: {
@@ -184,11 +194,16 @@ const routes: Routes = [
   // Projects
   { path: 'org/projects', component: ProjectsListComponent },
   { path: 'org/projects/form', component: ProjectFormComponent },
-  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  {
+    path: 'org/projects/:projectId/documents',
+    component: DocumentFormComponent,
+  },
   { path: 'org/projects/:projectId/form', component: ProjectFormComponent },
-  { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
+  {
+    path: 'org/projects/:projectId/documents',
+    component: DocumentFormComponent,
+  },
   { path: 'org/projects/:projectId/team', component: TeamFormComponent },
-  
 ];
 
 @NgModule({

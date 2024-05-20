@@ -12,6 +12,7 @@ import { LectureDetailsComponent } from './lecture-details/lecture-details.compo
 import { TestDetailsComponent } from './test-details/test-details.component';
 import { TakeTestComponent } from './take-test/take-test.component';
 import { RankingsComponent } from './rankings/rankings.component';
+import { GlobalRankingsComponent } from './global-rankings/global-rankings.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { RankingsComponent } from './rankings/rankings.component';
     TestDetailsComponent,
     TakeTestComponent,
     RankingsComponent,
+    GlobalRankingsComponent,
   ],
   imports: [
     CommonModule,

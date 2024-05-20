@@ -30,6 +30,7 @@
 
         <!-- REGISTERED USER -->
         <button mat-raised-button color="accent" *ngIf="user && user.role === 'REGISTERED_USER'" [routerLink]="['/browse-lectures']">Browse lectures</button>
+        <button mat-raised-button color="accent" *ngIf="user && user.role === 'REGISTERED_USER'" [routerLink]="['/global-rankings']">Global rankings</button>
 
         <!--ALL USERS-->
         <button mat-raised-button color="accent" *ngIf="user && user.username !== '' && user.role !== 'ADMIN'" [routerLink]="['/my-profile']">My Profile</button>

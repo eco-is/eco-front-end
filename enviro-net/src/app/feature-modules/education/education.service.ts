@@ -112,4 +112,10 @@ export class EducationService {
       environment.apiHost + 'users/get-user/' + id
     );
   }
+
+  getAllFinishedTestExecutions(): Observable<TestExecution[]> {
+    return this.http.get<TestExecution[]>(
+      environment.apiHost + 'test-execution/finished'
+    );
+  }
 }
