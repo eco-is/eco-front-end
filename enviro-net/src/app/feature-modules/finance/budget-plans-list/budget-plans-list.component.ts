@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { Member } from '../../administration/model/member.model';
+import { AdministrationService } from '../../administration/administration.service';
 import { FinanceService } from '../finance.service';
+import { DateRange } from '../model/date-range.model';
 import { BudgetPlan } from '../model/budget-plan.model';
 
 @Component({
@@ -18,6 +21,7 @@ import { BudgetPlan } from '../model/budget-plan.model';
 export class BudgetPlansListComponent {
   statusOptions: string[] = ['DRAFT', 'PENDING', 'REJECTED', 'APPROVED', 'ARCHIVED'];
   displayedColumns: string[] = ['number', 'name', 'fiscalPeriod', 'updated', 'status', 'actions'];
+  authorsOptions!: Member[];
   dataSource: MatTableDataSource<BudgetPlan>;
   page: number = 0;
   size: number = 5;
@@ -27,6 +31,8 @@ export class BudgetPlansListComponent {
   searchForm: FormGroup;
   name: string = '';
   statuses: string[] = [];
+  period : DateRange | undefined;
+  authors: number[] = [];
   sortField: string = 'name';
   sortDirection: string = 'asc';
 
@@ -37,6 +43,7 @@ export class BudgetPlansListComponent {
 
   constructor(
     private authService: AuthService,
+    private administrationService : AdministrationService,
     private financeService: FinanceService,
     private router: Router, 
     private snackBar: MatSnackBar,
@@ -46,10 +53,21 @@ export class BudgetPlansListComponent {
     this.authService.user$.subscribe(user => {
       this.user = user;
     });
+    this.administrationService.getUserByRoles(['ACCOUNTANT']).subscribe(
+      (result) => {
+        this.authorsOptions = result; 
+      }, (error) => {
+        let errorMessage = 'Error while fetching creators. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      }
+    );
     this.dataSource = new MatTableDataSource<BudgetPlan>();
     this.searchForm = this.formBuilder.group({
       name: [''],
       statuses: [[]],
+      startDate: [],
+      endDate: [],
+      authors: [[]],
     });
   }
 
@@ -77,7 +95,9 @@ export class BudgetPlansListComponent {
     this.financeService.getAllBudgetPlans(
       this.user!.id,
       this.name,
+      this.period!,
       this.statuses,
+      this.authors,
       this.page,
       this.size,
       this.sortField,
@@ -93,7 +113,33 @@ export class BudgetPlansListComponent {
     this.page = 0;
     this.name = this.searchForm.get('name')?.value;
     this.statuses = this.searchForm.get('statuses')?.value;
+    this.period = {
+      startDate: this.searchForm.get('startDate')?.value,
+      endDate: this.searchForm.get('endDate')?.value,
+    };
+    if (this.period.startDate) {
+      this.period.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.period.endDate) {
+      this.period.endDate.setHours(23, 59, 59, 999);
+    }
+    this.authors = this.searchForm.get('authors')?.value;
 
+    this.paginator.firstPage();
+    this.loadBudgetPlans();
+  }
+  
+  clearAll() {
+    this.searchForm.reset({
+      name: '',
+      statuses: [[]],
+      startDate: null,
+      endDate: null,
+      authors: [[]],
+    });    
+    this.statuses = [];
+    this.period = undefined;
+    this.authors = [];
     this.paginator.firstPage();
     this.loadBudgetPlans();
   }
@@ -112,11 +158,7 @@ export class BudgetPlansListComponent {
       },
       (error) => {
         let errorMessage = 'Error while closing budget plan. Please try again.';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        }
-        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
-        console.error('Error closing budget plan:', error);
+        this.errorMessageDisplay(error, errorMessage);
       }
     );
   }
@@ -131,24 +173,19 @@ export class BudgetPlansListComponent {
       },
       (error) => {
         let errorMessage = 'Error while archiving budget plan. Please try again.';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        }
-        this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
-        console.error('Error archiving budget plan:', error);
+        this.errorMessageDisplay(error, errorMessage);
       }
     );
   }
   
-  clearAll() {
-    this.searchForm.reset({
-      name: '',
-      statuses: [[]],
-    });    
-
-    this.searchPlans();
+  errorMessageDisplay(error: any, errorMessage : string) : void{
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    }
+    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+    console.error('Error :', error);
   }
-
+  
   newBudgetPlan() : void {
     this.router.navigate(['/edit-budget-plan-details']);
   }

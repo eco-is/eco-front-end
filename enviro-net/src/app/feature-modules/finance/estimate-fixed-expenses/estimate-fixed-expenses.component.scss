@@ -103,22 +103,29 @@
         margin-top: 20px;
 
         mat-form-field{
-            height: 75px;
+            height: auto;
+            max-height: fit-content;
+        }
+
+        .date-picker-field {
+            height: auto;
+            max-height: fit-content;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            padding: 0%;
+            width: 200px;
+
+            input {
+                margin-bottom: 0px;
+                margin-top: 0px;
+                padding: 0%;
+            }
         }
     }
 
     label {
         font-weight: bold;
         margin-bottom: 8px;
-    }
-
-    input {
-        padding: 10px;
-        width: 100%;
-        border: 1px solid #d3e5ab;
-        border-radius: 4px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
     }
 
     table {

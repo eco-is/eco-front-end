@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
+import { DateRange } from './model/date-range.model';
 import { BudgetPlan } from './model/budget-plan.model';
 import { OrganizationGoal } from './model/organization-goal.model';
 import { OrganizationGoalsSet } from './model/organization-goals-set.model';
@@ -20,21 +21,29 @@ export class FinanceService {
         return this.http.post<BudgetPlan>(environment.apiHost + `budget-plan/create`, newPlan);
     }
     
-    getAllBudgetPlans(id : number, name: string, statuses : string[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<BudgetPlan>> {
-        const params = this.buildParamsBudgetPlans(id, name, statuses, page, size, sortBy, sortDirection);
+    getAllBudgetPlans(id : number, name: string, period: DateRange, statuses : string[], authors : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<BudgetPlan>> {
+        const params = this.buildParamsBudgetPlans(id, name, period, statuses, authors, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<BudgetPlan>>(environment.apiHost + 'budget-plan/all-plans', { params });
     }
-    private buildParamsBudgetPlans(id : number, name : string, statuses : string[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    private buildParamsBudgetPlans(id : number, name : string, period: DateRange, statuses : string[], authors : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+
         let params = new HttpParams()
           .set('id', id)
           .set('name', name)
           .set('page', page.toString())
           .set('size', size.toString())
           .set('sort', sortBy)
-          .set('direction', sortDirection);
+          .set('direction', sortDirection)
+          .set('period', JSON.stringify(period));
+          console.log(JSON.stringify(period))
         if (statuses && statuses.length > 0) {
             statuses.forEach(status => {
               params = params.append('statuses', status);
+            });
+        }
+        if (authors && authors.length > 0) {
+            authors.forEach(author => {
+              params = params.append('authors', author);
             });
         }
     
@@ -120,17 +129,18 @@ export class FinanceService {
         return this.http.post<FixedExpenses>(environment.apiHost + 'fixed-expenses/create', expense);
     }
 
-    getAllFixedExpenses(types : string[], employees : number[], creators : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
-        const params = this.buildParamsFixedExpenses(types, employees, creators, page, size, sortBy, sortDirection);
+    getAllFixedExpenses(period : DateRange, types : string[], employees : number[], creators : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
+        const params = this.buildParamsFixedExpenses(period, types, employees, creators, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<FixedExpenses>>(environment.apiHost + 'fixed-expenses/all', { params });
     }
 
-    private buildParamsFixedExpenses(types : string[], employees : number[], creators : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    private buildParamsFixedExpenses(period : DateRange, types : string[], employees : number[], creators : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
         let params = new HttpParams()
           .set('page', page.toString())
           .set('size', size.toString())
           .set('sort', sortBy)
-          .set('direction', sortDirection);
+          .set('direction', sortDirection)
+          .set('period', JSON.stringify(period));
         if (types && types.length > 0) {
             types.forEach(type => {
               params = params.append('types', type);
@@ -141,12 +151,12 @@ export class FinanceService {
               params = params.append('employees', employee);
             });
         }
-        if (creators && creators.length > 0) {
-            employees.forEach(creator => {
+        if (creators.length > 0) {
+            creators.forEach(creator => {
               params = params.append('creators', creator);
             });
         }
-    
+        
         return params;
     }
 
@@ -179,18 +189,19 @@ export class FinanceService {
         return this.http.post<FixedExpensesEstimation>(environment.apiHost + 'fixed-expenses-estimation/create', expense);
     }
 
-    getAllFixedExpensesEstimations(budgetPlanId : number, types : string[], employees : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpensesEstimation>> {
-        const params = this.buildParamsFixedExpensesEstimation(budgetPlanId, types, employees, page, size, sortBy, sortDirection);
+    getAllFixedExpensesEstimations(budgetPlanId : number, period : DateRange, types : string[], employees : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpensesEstimation>> {
+        const params = this.buildParamsFixedExpensesEstimation(budgetPlanId, period, types, employees, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<FixedExpensesEstimation>>(environment.apiHost + 'fixed-expenses-estimation/all', { params });
     }
 
-    private buildParamsFixedExpensesEstimation(budgetPlanId : number, types : string[], employees : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    private buildParamsFixedExpensesEstimation(budgetPlanId : number, period : DateRange, types : string[], employees : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
         let params = new HttpParams()
           .set('page', page.toString())
           .set('size', size.toString())
           .set('sort', sortBy)
           .set('direction', sortDirection)
-          .set('budgetPlanId', budgetPlanId.toString());
+          .set('budgetPlanId', budgetPlanId.toString())
+          .set('period', JSON.stringify(period));
         if (types && types.length > 0) {
             types.forEach(type => {
               params = params.append('types', type);

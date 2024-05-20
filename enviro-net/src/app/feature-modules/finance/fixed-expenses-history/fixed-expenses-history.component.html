@@ -17,12 +17,32 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <!-- TODO fix filters -->
+                    <!-- Date Range filter -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- TODO use chips-wtih-input -->
                     <div class="filter-form">
                         <mat-form-field appearance="fill">
                             <mat-label>Employee:</mat-label>
                             <mat-select formControlName="employees" multiple>
-                                <mat-option *ngFor="let member of memberDataSource.data" [value]="member">{{ member.name }}</mat-option>
+                                <mat-option *ngFor="let member of employeesOptions" [value]="member.id">{{ member.name }} {{ member.surname }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -30,7 +50,7 @@
                         <mat-form-field appearance="fill">
                             <mat-label>Creator:</mat-label>
                             <mat-select formControlName="creators" multiple>
-                                <mat-option *ngFor="let creator of memberDataSource.data" [value]="creator">{{ creator.name }}</mat-option>
+                                <mat-option *ngFor="let creator of creatorsOptions" [value]="creator.id">{{ creator.name }} {{ creator.surname }}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -53,7 +73,11 @@
 
             <ng-container matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef>Type</th>
-                <td mat-cell *matCellDef="let expense">{{ expense.type }}</td>
+                <td mat-cell *matCellDef="let expense">{{ expense.type }}
+                    <div *ngIf="expense.type === 'SALARY'">
+                        {{ expense.employee.name }} {{ expense.employee.surname }}
+                    </div>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="amount">

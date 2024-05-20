@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Member } from '../../administration/model/member.model';
 import { AdministrationService } from 'src/app/feature-modules/administration/administration.service'
+import { DateRange } from '../model/date-range.model';
 import { FinanceService } from '../finance.service';
 import { FixedExpenses } from '../model/fixed-expenses.model';
 
@@ -19,11 +20,10 @@ import { FixedExpenses } from '../model/fixed-expenses.model';
 })
 export class FixedExpensesHistoryComponent {
   typesOptions: string[] = ['SALARY', 'RENT', 'INSURANCE', 'UTILITIES', 'OTHER'];
-  employeesOptions: Member[] = [];
+  employeesOptions!: Member[];
   creatorsOptions: Member[] = [];
   displayedColumns: string[] = ['number', 'type', 'amount', 'period', 'created', 'description'];
   dataSource: MatTableDataSource<FixedExpenses>;
-  memberDataSource: MatTableDataSource<Member> = new MatTableDataSource<Member>();
   page: number = 0;
   size: number = 5;
   totalExpenses = 0;
@@ -31,6 +31,7 @@ export class FixedExpensesHistoryComponent {
   showFilter: boolean = false;
   searchForm: FormGroup;
   types: string[] = [];
+  period : DateRange | undefined;
   employees: number[] = [];
   creators: number[] = [];
   sortField: string = 'type';
@@ -43,7 +44,7 @@ export class FixedExpensesHistoryComponent {
 
   constructor(
     private authService: AuthService,
-    private administrationService : AdministrationService, // get Employees and Creators
+    private administrationService : AdministrationService,
     private financeService: FinanceService,
     private router: Router, 
     private snackBar: MatSnackBar,
@@ -53,16 +54,27 @@ export class FixedExpensesHistoryComponent {
     this.authService.user$.subscribe(user => {
       this.user = user;
     });
-    // TODO 
-    this.administrationService.getOrganizationMembers(
-      '','','',
-      1, 50, 'name', 'asc').subscribe(result => {
+    this.administrationService.getOrganizationMembers('','','', 0, 50, 'surname', 'asc').subscribe(
+      (result) => {
         this.employeesOptions = result.content;
-        console.log(this.employeesOptions); // TODO
-    })
+      }, (error) => {
+        let errorMessage = 'Error while fetching organization members. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      }
+    );
+    this.administrationService.getUserByRoles(['ACCOUNTANT']).subscribe(
+      (result) => {
+        this.creatorsOptions = result; 
+      }, (error) => {
+        let errorMessage = 'Error while fetching creators. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      }
+    );
     this.dataSource = new MatTableDataSource<FixedExpenses>();
     this.searchForm = this.formBuilder.group({
       types: [[]],
+      startDate: [],
+      endDate: [],
       employees: [[]],
       creators: [[]],
     });
@@ -90,6 +102,7 @@ export class FixedExpensesHistoryComponent {
 
   loadFixedExpenses(): void {
     this.financeService.getAllFixedExpenses(
+      this.period!,
       this.types,
       this.employees,
       this.creators,
@@ -106,10 +119,21 @@ export class FixedExpensesHistoryComponent {
 
   searchExpenses(): void {
     this.page = 0;
+    this.creators = this.searchForm.get('creators')?.value;
     this.types = this.searchForm.get('types')?.value;
-    // TODO
-    //this.employees = this.searchForm.get()
-    //this.creators = this.searchForm.get()
+    
+    this.period = {
+      startDate: this.searchForm.get('startDate')?.value,
+      endDate: this.searchForm.get('endDate')?.value,
+    };
+    if (this.period.startDate) {
+      this.period.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.period.endDate) {
+      this.period.endDate.setHours(23, 59, 59, 999);
+    }
+    this.employees = this.searchForm.get('employees')?.value;
+    //this.creators = this.searchForm.get('creators')?.value;
 
     this.paginator.firstPage();
     this.loadFixedExpenses();
@@ -120,12 +144,26 @@ export class FixedExpensesHistoryComponent {
       types: [[]],
       employees: [[]],
       creators: [[]],
-    });    
-
-    this.searchExpenses();
+      startDate: null,
+      endDate: null,
+    });
+    this.types = [];
+    this.period = undefined;
+    this.employees = [];
+    this.creators = [];
+    this.paginator.firstPage();
+    this.loadFixedExpenses();
   }
 
   lastMonthFixedExpenses() : void {
     this.router.navigate(['fixed-expenses/latest']);
+  }
+
+  errorMessageDisplay(error: any, errorMessage : string) : void{
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    }
+    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+    console.error('Error :', error);
   }
 }
