@@ -15,6 +15,9 @@ import { BudgetPlanDetailsComponent } from './budget-plan-details/budget-plan-de
 import { BudgetPlanDetailsEditComponent } from './budget-plan-details-edit/budget-plan-details-edit.component';
 import { OrganizationGoalsHistoryComponent } from './organization-goals-history/organization-goals-history.component';
 import { OrganizationGoalsEditComponent } from './organization-goals-edit/organization-goals-edit.component';
+import { FixedExpensesHistoryComponent } from './fixed-expenses-history/fixed-expenses-history.component';
+import { LatestFixedExpensesComponent } from './latest-fixed-expenses/latest-fixed-expenses.component';
+import { EstimateFixedExpensesComponent } from './estimate-fixed-expenses/estimate-fixed-expenses.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +25,10 @@ import { OrganizationGoalsEditComponent } from './organization-goals-edit/organi
       BudgetPlanDetailsComponent,
       BudgetPlanDetailsEditComponent,
       OrganizationGoalsHistoryComponent,
-      OrganizationGoalsEditComponent
+      OrganizationGoalsEditComponent,
+      FixedExpensesHistoryComponent,
+      LatestFixedExpensesComponent,
+      EstimateFixedExpensesComponent
   ],
     imports: [
       CommonModule,

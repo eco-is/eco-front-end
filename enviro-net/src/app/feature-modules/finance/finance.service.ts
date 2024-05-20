@@ -6,6 +6,8 @@ import { environment } from 'src/env/environment';
 import { BudgetPlan } from './model/budget-plan.model';
 import { OrganizationGoal } from './model/organization-goal.model';
 import { OrganizationGoalsSet } from './model/organization-goals-set.model';
+import { FixedExpenses } from './model/fixed-expenses.model';
+import { FixedExpensesEstimation } from './model/fixed-expenses-estimation.model';
 
 @Injectable({
     providedIn: 'root'
@@ -64,7 +66,7 @@ export class FinanceService {
     }
 
     getAllOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
-        const params = this.buildParamsGoal(page, size, sortBy, sortDirection);
+        const params = this.buildParams(page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/all', { params });
     }
 
@@ -72,7 +74,7 @@ export class FinanceService {
         return this.http.get<OrganizationGoalsSet>(environment.apiHost + 'goal/current');
     }
 
-    private buildParamsGoal(page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    private buildParams(page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
         let params = new HttpParams()
           .set('page', page.toString())
           .set('size', size.toString())
@@ -91,7 +93,6 @@ export class FinanceService {
     }
 
     deleteOrganizationGoal(id : number): Observable<void> {
-        const options = {  headers: new HttpHeaders() };
         return this.http.delete<void>(environment.apiHost + 'goal/delete/' + id);
     }
 
@@ -100,5 +101,122 @@ export class FinanceService {
         return this.http.put<OrganizationGoalsSet>(environment.apiHost + 'goal/publish', goalSet, options);
     }
 
+    // FixedExpenses
+    lastMonthSalaryExpenses(creatorId : number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
+        const params = this.buildParamsSalaryExpenses(creatorId, page, size, sortBy, sortDirection);
+        return this.http.get<PagedResults<FixedExpenses>>(environment.apiHost + 'fixed-expenses/salary', { params });
+    }
+    private buildParamsSalaryExpenses(creatorId : number, page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('creatorId', creatorId.toString())
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection);
+        return params;
+    }
+
+    createFixedExpense(expense : FixedExpenses) : Observable<FixedExpenses> {
+        return this.http.post<FixedExpenses>(environment.apiHost + 'fixed-expenses/create', expense);
+    }
+
+    getAllFixedExpenses(types : string[], employees : number[], creators : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpenses>> {
+        const params = this.buildParamsFixedExpenses(types, employees, creators, page, size, sortBy, sortDirection);
+        return this.http.get<PagedResults<FixedExpenses>>(environment.apiHost + 'fixed-expenses/all', { params });
+    }
+
+    private buildParamsFixedExpenses(types : string[], employees : number[], creators : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection);
+        if (types && types.length > 0) {
+            types.forEach(type => {
+              params = params.append('types', type);
+            });
+        }
+        if (employees && employees.length > 0) {
+            employees.forEach(employee => {
+              params = params.append('employees', employee);
+            });
+        }
+        if (creators && creators.length > 0) {
+            employees.forEach(creator => {
+              params = params.append('creators', creator);
+            });
+        }
+    
+        return params;
+    }
+
+    getFixedExpense(id : number): Observable<FixedExpenses> {
+        return this.http.get<FixedExpenses>(environment.apiHost + 'fixed-expenses/get/' + id);
+    }
+
+    updateSalaryExpense(salary : FixedExpenses): Observable<FixedExpenses> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<FixedExpenses>(environment.apiHost + 'fixed-expenses/update/salary', salary, options);
+    }
+    
+    updateFixedExpense(expense : FixedExpenses): Observable<FixedExpenses> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<FixedExpenses>(environment.apiHost + 'fixed-expenses/update', expense, options);
+    }
+
+    deleteFixedExpense(id: number): Observable<void> {
+        return this.http.delete<void>(environment.apiHost + 'fixed-expenses/delete/' + id);
+    }
+    
+    // FixedExpensesEstimation
+    generateFixedExpensesEstimationsForBudgetPlan(budgetPlanId : number): Observable<FixedExpensesEstimation[]> {
+        let params = new HttpParams()
+          .set('budgetPlanId', budgetPlanId.toString());
+        return this.http.get<FixedExpensesEstimation[]>(environment.apiHost + 'fixed-expenses-estimation/generate', { params });
+    }
+
+    createFixedExpensesEstimation(expense : FixedExpensesEstimation) : Observable<FixedExpensesEstimation> {
+        return this.http.post<FixedExpensesEstimation>(environment.apiHost + 'fixed-expenses-estimation/create', expense);
+    }
+
+    getAllFixedExpensesEstimations(budgetPlanId : number, types : string[], employees : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpensesEstimation>> {
+        const params = this.buildParamsFixedExpensesEstimation(budgetPlanId, types, employees, page, size, sortBy, sortDirection);
+        return this.http.get<PagedResults<FixedExpensesEstimation>>(environment.apiHost + 'fixed-expenses-estimation/all', { params });
+    }
+
+    private buildParamsFixedExpensesEstimation(budgetPlanId : number, types : string[], employees : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection)
+          .set('budgetPlanId', budgetPlanId.toString());
+        if (types && types.length > 0) {
+            types.forEach(type => {
+              params = params.append('types', type);
+            });
+        }
+        if (employees && employees.length > 0) {
+            employees.forEach(employee => {
+              params = params.append('employees', employee);
+            });
+        }
+    
+        return params;
+    }
+
+    getFixedExpenseEstimation(id : number): Observable<FixedExpensesEstimation> {
+        return this.http.get<FixedExpensesEstimation>(environment.apiHost + 'fixed-expenses-estimation/get/' + id);
+    }
+
+    updateFixedExpenseEstimation(expense : FixedExpensesEstimation): Observable<FixedExpensesEstimation> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<FixedExpensesEstimation>(environment.apiHost + 'fixed-expenses-estimation/update', expense, options);
+    }
+
+    deleteFixedExpenseEstimation(id: number): Observable<void> {
+        return this.http.delete<void>(environment.apiHost + 'fixed-expenses-estimation/delete/' + id);
+    }
+    
     //
 }

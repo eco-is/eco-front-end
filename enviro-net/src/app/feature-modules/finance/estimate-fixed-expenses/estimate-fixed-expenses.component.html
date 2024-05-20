@@ -1,0 +1,178 @@
+<div id="fixed-expenses-estimate">
+    <div class="mat-elevation-z8">
+        <button id="navigation-button-back" mat-icon-button color="warn"
+                matTooltip="One step back" (click)="navigateBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button id="navigation-button-next" mat-icon-button color="warn" 
+                matTooltip="Next step" (click)="navigateNext()">
+        <mat-icon>arrow_forward</mat-icon>
+        </button>
+    
+        <div>
+            <h1> {{ budgetPlan.name! }} </h1>
+            <h2 class="h2-fiscal-period"> Fiscal Period:  {{ budgetPlan.fiscalDateRange.startDate | date:'dd MMM yyyy'}}  -  {{ budgetPlan!.fiscalDateRange.endDate | date:'dd MMM yyyy'}} </h2>
+            <h2> Created by {{ budgetPlan.author.name }} {{ budgetPlan.author.surname }} </h2>
+
+            <div class="total-amount">
+                Total fixed expenses amount : {{ totalAmount }}
+            </div>
+        </div>
+        <div class="header-div">
+            <button *ngIf="canEdit" class="new-button" mat-icon-button color="warn" (click)="addNewFixedExpense()" matTooltip="Add new fixed expense">
+                <mat-icon>add</mat-icon>
+            </button>
+
+            <mat-expansion-panel class="search-header" [expanded]="showFilter">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Search</mat-panel-title>
+                </mat-expansion-panel-header>
+                <form [formGroup]="searchForm" (ngSubmit)="searchExpenses()">
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Type:</mat-label>
+                            <mat-select formControlName="types" multiple>
+                                <mat-option *ngFor="let type of typesOptions" [value]="type">{{ type }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- TODO fix filters -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Employee:</mat-label>
+                            <mat-select formControlName="employees" multiple>
+                                <mat-option *ngFor="let member of memberDataSource.data" [value]="member">{{ member.name }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+    
+                    <button mat-icon-button color="primary" type="submit" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" type="button" (click)="clearAll()" matTooltip="Clear all">
+                        <mat-icon>clear_all</mat-icon>
+                    </button>
+                </form>
+            </mat-expansion-panel>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let expenseIndex = index">{{ (page * size) + expenseIndex + 1 }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef>Type</th>
+                <td mat-cell *matCellDef="let expense">
+                    <ng-container *ngIf="editStates[expense.id] && expense.fixedExpense.type !== 'SALARY'; else viewType" [formGroup]="editForm">
+                        <mat-form-field>
+                          <mat-label>Type</mat-label>
+                          <mat-select formControlName="type">
+                            <mat-option *ngFor="let option of typesOptions" [value]="option">{{ option }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </ng-container>
+                      <ng-template #viewType>
+                        {{ expense.fixedExpense.type }}
+                        <div *ngIf="expense.fixedExpense.type === 'SALARY'">
+                          {{ expense.fixedExpense.employee.name }} {{ expense.fixedExpense.employee.surname }}
+                        </div>
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                <td mat-cell *matCellDef="let expense">
+                    <div *ngIf="editStates[expense.id]; else viewAmount" [formGroup]="editForm">
+                        <mat-form-field *ngIf="expense.fixedExpense.type !== 'SALARY'">
+                            <mat-label>Amount: </mat-label>
+                            <input matInput type="number" formControlName="amount"/>
+                        </mat-form-field>
+                        <div *ngIf="expense.fixedExpense.type === 'SALARY'" class="salary-one-row">
+                          <!-- <div class="salary-div">
+                            <mat-form-field>
+                                <mat-label>Wage: </mat-label>
+                                <input matInput type="number" formControlName="wage"/>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Working Hours: </mat-label>
+                                <input matInput type="number" formControlName="workingHours"/>
+                            </mat-form-field>
+                          </div> -->
+
+                          <div class="salary-div">
+                            <!-- <mat-form-field>
+                                <mat-label>Overtime Wage: </mat-label>
+                                <input matInput type="number" formControlName="overtimeWage"/>
+                            </mat-form-field> -->
+                            <mat-form-field>
+                                <mat-label>Overtime Hours: </mat-label>
+                                <input matInput type="number" formControlName="overtimeHours"/>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    <ng-template #viewAmount>
+                        {{ expense.fixedExpense.amount }}
+                        <div *ngIf="expense.fixedExpense.type === 'SALARY'" class="salary-one-row"> 
+                            <div class="salary-div">
+                                <label class="salary-label">wage: {{expense.fixedExpense.employee.wage}}</label>
+                                <label class="salary-label">working hours: {{expense.fixedExpense.employee.workingHours}}</label>
+                            </div>
+                            <div class="salary-div">
+                                <label class="salary-label">overtieme wage: {{expense.fixedExpense.employee.overtimeWage}}</label>
+                                <label class="salary-label">overtime hours: {{expense.fixedExpense.overtimeHours}}</label>
+                            </div>
+                        </div>
+                    </ng-template>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                <td mat-cell *matCellDef="let expense">
+                    <div> {{ expense.fixedExpense.createdOn | date:'dd MMM yyyy' }} </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                <td mat-cell *matCellDef="let expense">
+                    <div *ngIf="editStates[expense.id]; else viewDescription" [formGroup]="editForm">
+                        <mat-form-field>
+                            <mat-label>Description</mat-label>
+                            <textarea matInput formControlName="description" rows="4"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <ng-template #viewDescription>
+                        {{ expense.fixedExpense.description }}
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                <td mat-cell *matCellDef="let expense">
+                    <div class="one-row">
+                        <button *ngIf="canEdit && !editStates[expense.id]"
+                            mat-icon-button color="warn" (click)="editFixedExpense(expense)" matTooltip="Edit fixed expense">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+
+                        <button *ngIf="canEdit && editStates[expense.id]"
+                            mat-icon-button color="warn" (click)="saveChangesToExpense(expense)" matTooltip="Save changes to this fixed expense">
+                            <mat-icon>save</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalExpenses" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
+</div>

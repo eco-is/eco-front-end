@@ -1,5 +1,5 @@
-import { Accountant } from "./accountant.model";
 import { DateRange } from "./date-range.model";
+import { Employee } from "./employee.model";
 
 export interface BudgetPlan {
     id: number;
@@ -8,5 +8,5 @@ export interface BudgetPlan {
     status: string;
     lastUpdatedOnDate: Date;
     fiscalDateRange: DateRange;
-    author: Accountant;
+    author: Employee;
 }

@@ -1,5 +1,15 @@
 <div id="budget-plan-details-edit">
     <div class="content">
+        <button id="navigation-button-back" mat-icon-button color="warn" disabled="true"
+                matTooltip="One step back">
+        <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button id="navigation-button-next" mat-icon-button color="warn" 
+            matTooltip="Next step" (click)="navigateNext()">
+        <mat-icon>arrow_forward</mat-icon>
+        </button>
+        
+
         <button mat-icon-button color="warn" 
             (click)="saveChanges()" [disabled]="!formGroup.valid" 
             [matTooltip]="formGroup.valid ? 'Save changes to Budget Plan' : 'Please check your input'" [matTooltipDisabled]="false">

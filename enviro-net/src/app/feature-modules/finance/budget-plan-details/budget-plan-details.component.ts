@@ -80,4 +80,8 @@ export class BudgetPlanDetailsComponent {
       }
     );
   }
+
+  navigateNext() : void {
+    this.router.navigate(['/fixed-expenses-estimate/' + this.plan!.id]);
+  }
 }

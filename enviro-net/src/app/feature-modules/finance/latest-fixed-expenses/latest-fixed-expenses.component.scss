@@ -1,0 +1,174 @@
+#latest-fixed-expenses {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    max-height: calc(100% - 65px);
+    height: 100%;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+}
+
+.mat-elevation-z8 {
+    padding: 20px;
+    margin: 20px;
+    gap: 10px;
+    border-radius: 5px;
+    position: relative;
+
+    .header-div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between; 
+        gap: 10px;
+    }
+    .total-amount{
+        width: auto;
+        position: absolute;
+        top: 25px;
+        left: 20px; 
+
+        padding: 4px 8px;
+        background-color: #3d6223;
+        color: #f5f9ea;
+        border: none;
+        border-radius: 20px;
+        margin-right: 3px;
+        margin-left: 3px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .save-button {
+        width: auto;
+        position: absolute;
+        top: 20px;
+        right: 90px; 
+        background-color: #476c2a;//3d6223;
+    }
+    .new-button {
+        width: auto;
+        position: absolute;
+        top: 20px;
+        right: 20px; 
+        background-color: #476c2a;//3d6223;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        transition: height 0.3s ease-in-out;
+        align-items: flex-end;
+        align-items: center;
+    }
+
+
+    label {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 65px;
+
+        .one-row {
+            width: 100px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #d3e5ab; 
+            width: auto;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 50px;
+        }
+
+        // amount
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 350px;
+            font-size: large;
+        }
+
+        tr:nth-child(even) td {
+            background-color: lighten(#d3e5ab, 20%); 
+        }
+
+        tr:not(th):hover td {
+            background-color: lighten(#d3e5ab, 10%); 
+        }
+
+        .salary-div{
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        
+            padding: 4px 8px;
+            background-color: #476c2a;
+            color: #f5f9ea;
+            border: none;
+            border-radius: 20px;
+            margin-right: 3px;
+            margin-left: 3px;
+            font-size: 16px;
+        }
+        .salary-one-row{
+            width: fit-content;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        
+            padding: 4px 8px;
+            background-color: #476c2a;
+            color: #f5f9ea;
+            border: none;
+            border-radius: 20px;
+            margin-right: 3px;
+            margin-left: 3px;
+            font-size: 16px;
+        }
+        .salary-label{
+            min-width: 150px;
+            width: 150px;
+            font-weight: normal;
+            margin: 3px;
+        }
+
+        mat-form-field {
+            width: 100%;
+            margin: 10px 0;
+        }
+          
+        textarea .mat-input-element {
+            height: auto; 
+        }
+          
+        mat-cell {
+            padding: 8px;
+        }
+    }
+}
