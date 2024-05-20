@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="header-div">
-            <button class="new-button" *ngIf="user!.id" mat-icon-button color="warn" (click)="addNewFixedExpense()" matTooltip="Add new fixed expense">
+            <button *ngIf="canEdit" class="new-button" mat-icon-button color="warn" (click)="addNewFixedExpense()" matTooltip="Add new fixed expense">
                 <mat-icon>add</mat-icon>
             </button>
 
@@ -155,12 +155,12 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                 <td mat-cell *matCellDef="let expense">
                     <div class="one-row">
-                        <button *ngIf="!editStates[expense.id]"
+                        <button *ngIf="canEdit && !editStates[expense.id]"
                             mat-icon-button color="warn" (click)="editFixedExpense(expense)" matTooltip="Edit fixed expense">
                             <mat-icon>edit</mat-icon>
                         </button>
 
-                        <button *ngIf="editStates[expense.id]"
+                        <button *ngIf="canEdit && editStates[expense.id]"
                             mat-icon-button color="warn" (click)="saveChangesToExpense(expense)" matTooltip="Save changes to this fixed expense">
                             <mat-icon>save</mat-icon>
                         </button>

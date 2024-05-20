@@ -169,18 +169,10 @@ export class FinanceService {
     }
     
     // FixedExpensesEstimation
-    generateFixedExpensesEstimationsForBudgetPlan(budgetPlanId : number, page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<FixedExpensesEstimation>> {
-        const params = this.buildParamsEstimation(budgetPlanId, page, size, sortBy, sortDirection);
-        return this.http.get<PagedResults<FixedExpensesEstimation>>(environment.apiHost + 'fixed-expenses-estimation/generate', { params });
-    }
-    private buildParamsEstimation(budgetPlanId : number, page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+    generateFixedExpensesEstimationsForBudgetPlan(budgetPlanId : number): Observable<FixedExpensesEstimation[]> {
         let params = new HttpParams()
-          .set('budgetPlanId', budgetPlanId.toString())
-          .set('page', page.toString())
-          .set('size', size.toString())
-          .set('sort', sortBy)
-          .set('direction', sortDirection);
-        return params;
+          .set('budgetPlanId', budgetPlanId.toString());
+        return this.http.get<FixedExpensesEstimation[]>(environment.apiHost + 'fixed-expenses-estimation/generate', { params });
     }
 
     createFixedExpensesEstimation(expense : FixedExpensesEstimation) : Observable<FixedExpensesEstimation> {

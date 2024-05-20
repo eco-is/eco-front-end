@@ -12,6 +12,7 @@ import { AdministrationService } from 'src/app/feature-modules/administration/ad
 import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
 import { FixedExpensesEstimation } from '../model/fixed-expenses-estimation.model';
+import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-estimate-fixed-expenses',
@@ -49,6 +50,7 @@ export class EstimateFixedExpensesComponent {
   user: User | undefined;
   budgetPlanId? : number = 0;
   budgetPlan! : BudgetPlan;
+  canEdit : boolean = false;
   newFixedExpense : FixedExpensesEstimation | undefined;
   totalAmount = 0;
 
@@ -85,8 +87,21 @@ export class EstimateFixedExpensesComponent {
     this.budgetPlanId = id !== null ? +id : 0;
     if (this.budgetPlanId){
       this.loadBudgetPlan(this.budgetPlanId);
-      //this.loadFixedExpensesEstimation();
+      this.generateExpensesEstimation();
     }
+  }
+
+  generateExpensesEstimation() : void {
+    this.financeService.generateFixedExpensesEstimationsForBudgetPlan(this.budgetPlanId!).subscribe(
+      result => {
+      this.calculateTotal(result);
+    });
+  }
+  calculateTotal(result : FixedExpensesEstimation[]) : void{
+    // Calculate total amount after loading fixed expenses from result
+    result.forEach(expense => {
+      this.totalAmount += expense.fixedExpense.amount;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -113,6 +128,9 @@ export class EstimateFixedExpensesComponent {
     this.financeService.getBudgetPlan(id).subscribe(
       (result) => {
         this.budgetPlan = result;
+        if (this.budgetPlan.status === 'DRAFT' || this.budgetPlan.status === 'PENDING'){
+          this.canEdit = true;
+        }
       }, (error) => {
         let errorMessage = 'Error while loading budget plan. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
@@ -134,15 +152,11 @@ export class EstimateFixedExpensesComponent {
       this.dataSource.data = result.content;
       this.totalExpenses = result.totalElements;
 
-      this.calculateTotal();
+      //this.generateExpensesEstimation();
     });
   }
 
-  calculateTotal(){
-    // Calculate total amount after loading fixed expenses
-    this.totalAmount = this.dataSource.data.reduce((total, expense) => total + expense.fixedExpense.amount, 0);
-  }
-
+  
   searchExpenses(): void {
     this.page = 0;
     this.types = this.searchForm.get('types')?.value;
@@ -198,6 +212,7 @@ export class EstimateFixedExpensesComponent {
     this.updateDataSource(this.newFixedExpense);
     this.editStates[this.newFixedExpense.id] = !this.editStates[this.newFixedExpense.id];
     this.editFixedExpense(this.newFixedExpense);
+    this.generateExpensesEstimation();
   }
   saveNewFixedExpense(expense: FixedExpensesEstimation): void{
     // Update the expense object with values from the edit form
@@ -220,7 +235,6 @@ export class EstimateFixedExpensesComponent {
     if (index !== -1) {
         this.dataSource.data[index] = expense;
         this.dataSource._updateChangeSubscription(); // Notify Angular about the change
-        this.calculateTotal();
     }
   }
   editFixedExpense(expense: FixedExpensesEstimation) : void {
@@ -253,6 +267,7 @@ export class EstimateFixedExpensesComponent {
         (result) => {
           expense = result;
           this.updateDataSource(expense);
+          this.generateExpensesEstimation();
         }, (error) => {
           let errorMessage = 'Error while updating fixed expense estimation. Please try again.';
           this.errorMessageDisplay(error, errorMessage);
