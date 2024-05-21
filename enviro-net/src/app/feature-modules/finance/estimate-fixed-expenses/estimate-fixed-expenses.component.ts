@@ -21,7 +21,6 @@ import { FixedExpensesEstimation } from '../model/fixed-expenses-estimation.mode
 })
 export class EstimateFixedExpensesComponent {
   typesOptions: string[] = ['SALARY', 'RENT', 'INSURANCE', 'UTILITIES', 'OTHER'];
-  employeesOptions: Member[] = [];
   displayedColumns: string[] = ['number', 'type', 'amount', 'created', 'description', 'actions'];
   dataSource: MatTableDataSource<FixedExpensesEstimation>;
 
@@ -44,6 +43,12 @@ export class EstimateFixedExpensesComponent {
   types: string[] = [];
   period : DateRange | undefined;
   employees: number[] = [];
+  employeesOptions!: Member[];
+  employeeMap: Map<string, number> = new Map();  // Maps name to ID
+  employeeNames: string[] = []; // Holds employee names for autofill
+  selectedEmployeeNames: string[] = []; // Holds selected employee names
+  unselectedEmployeeNames: string[] = []; // Holds unselected employee names
+
   sortField: string = 'type';
   sortDirection: string = 'asc';
 
@@ -72,6 +77,11 @@ export class EstimateFixedExpensesComponent {
     });
     this.administrationService.getOrganizationMembers('', '', '', 0, 50, 'surname', 'asc').subscribe(result => {
         this.employeesOptions = result.content;
+        this.employeeNames = this.employeesOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedEmployeeNames = [...this.employeeNames];
+        this.employeesOptions.forEach(member => {
+          this.employeeMap.set(`${member.name} ${member.surname}`, member.id);
+        });
     }, (error) => {
       let errorMessage = 'Error while fetching organization members. Please try again.';
       this.errorMessageDisplay(error, errorMessage);
@@ -81,7 +91,6 @@ export class EstimateFixedExpensesComponent {
       types: [[]],
       startDate: [],
       endDate: [],
-      employees: [[]],
     });
 
     const id = this.route.snapshot.paramMap.get('budgetPlanId');
@@ -131,6 +140,14 @@ export class EstimateFixedExpensesComponent {
     this.page = event.pageIndex;
     this.loadFixedExpensesEstimation();
   }
+  updateEmployeesByName(employeeNames: string[]) {
+    this.selectedEmployeeNames = employeeNames;
+    this.unselectedEmployeeNames = this.employeeNames.filter(name => !this.selectedEmployeeNames.includes(name));
+    
+    this.employees = employeeNames.map(name => this.employeeMap.get(name)!).filter(id => id !== undefined);
+    this.searchExpenses();
+  }
+
 
   loadBudgetPlan(id:number): void {
     this.financeService.getBudgetPlan(id).subscribe(
@@ -177,7 +194,6 @@ export class EstimateFixedExpensesComponent {
     if (this.period.endDate) {
       this.period.endDate.setHours(23, 59, 59, 999);
     }
-    this.employees = this.searchForm.get('employees')?.value;
 
     this.paginator.firstPage();
     this.loadFixedExpensesEstimation();
@@ -188,7 +204,6 @@ export class EstimateFixedExpensesComponent {
       types: [[]],
       startDate: null,
       endDate: null,
-      employees: [[]],
     });    
     this.types = [];
     this.period = undefined;

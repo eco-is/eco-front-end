@@ -34,7 +34,6 @@ export class FinanceService {
           .set('sort', sortBy)
           .set('direction', sortDirection)
           .set('period', JSON.stringify(period));
-          console.log(JSON.stringify(period))
         if (statuses && statuses.length > 0) {
             statuses.forEach(status => {
               params = params.append('statuses', status);

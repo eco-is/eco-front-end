@@ -20,8 +20,6 @@ import { FixedExpenses } from '../model/fixed-expenses.model';
 })
 export class FixedExpensesHistoryComponent {
   typesOptions: string[] = ['SALARY', 'RENT', 'INSURANCE', 'UTILITIES', 'OTHER'];
-  employeesOptions!: Member[];
-  creatorsOptions: Member[] = [];
   displayedColumns: string[] = ['number', 'type', 'amount', 'period', 'created', 'description'];
   dataSource: MatTableDataSource<FixedExpenses>;
   page: number = 0;
@@ -33,7 +31,18 @@ export class FixedExpensesHistoryComponent {
   types: string[] = [];
   period : DateRange | undefined;
   employees: number[] = [];
+  employeesOptions!: Member[];
+  employeeMap: Map<string, number> = new Map();  // Maps name to ID
+  employeeNames: string[] = []; // Holds employee names for autofill
+  selectedEmployeeNames: string[] = []; // Holds selected employee names
+  unselectedEmployeeNames: string[] = []; // Holds unselected employee names
   creators: number[] = [];
+  creatorsOptions: Member[] = [];
+  creatorMap: Map<string, number> = new Map();  // Maps name to ID
+  creatorNames: string[] = []; // Holds creator names for autofill
+  selectedCreatorNames: string[] = []; // Holds selected creator names
+  unselectedCreatorNames: string[] = []; // Holds unselected creator names
+  
   sortField: string = 'type';
   sortDirection: string = 'asc';
 
@@ -57,6 +66,11 @@ export class FixedExpensesHistoryComponent {
     this.administrationService.getOrganizationMembers('','','', 0, 50, 'surname', 'asc').subscribe(
       (result) => {
         this.employeesOptions = result.content;
+        this.employeeNames = this.employeesOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedEmployeeNames = [...this.employeeNames];
+        this.employeesOptions.forEach(member => {
+          this.employeeMap.set(`${member.name} ${member.surname}`, member.id);
+        });
       }, (error) => {
         let errorMessage = 'Error while fetching organization members. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
@@ -65,6 +79,11 @@ export class FixedExpensesHistoryComponent {
     this.administrationService.getUserByRoles(['ACCOUNTANT']).subscribe(
       (result) => {
         this.creatorsOptions = result; 
+        this.creatorNames = this.creatorsOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedCreatorNames = [...this.creatorNames];
+        this.creatorsOptions.forEach(member => {
+          this.creatorMap.set(`${member.name} ${member.surname}`, member.id);
+        });
       }, (error) => {
         let errorMessage = 'Error while fetching creators. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
@@ -75,8 +94,6 @@ export class FixedExpensesHistoryComponent {
       types: [[]],
       startDate: [],
       endDate: [],
-      employees: [[]],
-      creators: [[]],
     });
   }
 
@@ -99,6 +116,20 @@ export class FixedExpensesHistoryComponent {
     this.page = event.pageIndex;
     this.loadFixedExpenses();
   }
+  updateCreatorsByName(creatorNames: string[]) {
+    this.selectedCreatorNames = creatorNames;
+    this.unselectedCreatorNames = this.creatorNames.filter(name => !this.selectedCreatorNames.includes(name));
+    
+    this.creators = creatorNames.map(name => this.creatorMap.get(name)!).filter(id => id !== undefined);
+    this.searchExpenses();
+  }
+  updateEmployeesByName(employeeNames: string[]) {
+    this.selectedEmployeeNames = employeeNames;
+    this.unselectedEmployeeNames = this.employeeNames.filter(name => !this.selectedEmployeeNames.includes(name));
+    
+    this.employees = employeeNames.map(name => this.employeeMap.get(name)!).filter(id => id !== undefined);
+    this.searchExpenses();
+  }
 
   loadFixedExpenses(): void {
     this.financeService.getAllFixedExpenses(
@@ -119,7 +150,6 @@ export class FixedExpensesHistoryComponent {
 
   searchExpenses(): void {
     this.page = 0;
-    this.creators = this.searchForm.get('creators')?.value;
     this.types = this.searchForm.get('types')?.value;
     
     this.period = {
@@ -132,8 +162,6 @@ export class FixedExpensesHistoryComponent {
     if (this.period.endDate) {
       this.period.endDate.setHours(23, 59, 59, 999);
     }
-    this.employees = this.searchForm.get('employees')?.value;
-    //this.creators = this.searchForm.get('creators')?.value;
 
     this.paginator.firstPage();
     this.loadFixedExpenses();
@@ -142,8 +170,6 @@ export class FixedExpensesHistoryComponent {
   clearAll() {
     this.searchForm.reset({
       types: [[]],
-      employees: [[]],
-      creators: [[]],
       startDate: null,
       endDate: null,
     });

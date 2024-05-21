@@ -37,23 +37,17 @@
                         </mat-form-field>
                     </div>
 
-                    <!-- TODO use chips-wtih-input -->
-                    <div class="filter-form">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Employee:</mat-label>
-                            <mat-select formControlName="employees" multiple>
-                                <mat-option *ngFor="let member of employeesOptions" [value]="member.id">{{ member.name }} {{ member.surname }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="filter-form">
-                        <mat-form-field appearance="fill">
-                            <mat-label>Creator:</mat-label>
-                            <mat-select formControlName="creators" multiple>
-                                <mat-option *ngFor="let creator of creatorsOptions" [value]="creator.id">{{ creator.name }} {{ creator.surname }}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
+                    <app-chips-with-input id="employees-field"
+                        [autofillOptions]="unselectedEmployeeNames" 
+                        label="Employee" placeholder="Add Employees..." 
+                        (itemsChangedEvent)="updateEmployeesByName($event)">
+                    </app-chips-with-input>
+
+                    <app-chips-with-input id="creators-field"
+                        [autofillOptions]="unselectedCreatorNames" 
+                        label="Creator" placeholder="Add Creators..." 
+                        (itemsChangedEvent)="updateCreatorsByName($event)">
+                    </app-chips-with-input>
     
                     <button mat-icon-button color="primary" type="submit" matTooltip="Search">
                         <mat-icon>search</mat-icon>

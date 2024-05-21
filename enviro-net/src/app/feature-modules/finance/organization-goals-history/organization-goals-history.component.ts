@@ -23,7 +23,6 @@ export class OrganizationGoalsHistoryComponent {
   displayedColumns: string[] = ['number', 'goals', 'validPeriod', 'status','actions'];
   dataSource: MatTableDataSource<OrganizationGoalsSet>;
   statusOptions: string[] = ['DRAFT', 'VALID', 'ARCHIVED'];
-  creatorsOptions!: Member[];
   page: number = 0;
   size: number = 5;
   totalGoals = 0;
@@ -34,6 +33,12 @@ export class OrganizationGoalsHistoryComponent {
   statuses: string[] = [];
   period : DateRange | undefined;
   creators: number[] = [];
+  creatorsOptions!: Member[];
+  creatorMap: Map<string, number> = new Map();  // Maps name to ID
+  creatorNames: string[] = []; // Holds creator names for autofill
+  selectedCreatorNames: string[] = []; // Holds selected creator names
+  unselectedCreatorNames: string[] = []; // Holds unselected creator names
+  
   sortField: string = 'title';
   sortDirection: string = 'asc';
 
@@ -57,6 +62,11 @@ export class OrganizationGoalsHistoryComponent {
     this.administrationService.getUserByRoles(['BOARD_MEMBER']).subscribe(
       (result) => {
         this.creatorsOptions = result; 
+        this.creatorNames = this.creatorsOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedCreatorNames = [...this.creatorNames];
+        this.creatorsOptions.forEach(member => {
+          this.creatorMap.set(`${member.name} ${member.surname}`, member.id);
+        });
       }, (error) => {
         let errorMessage = 'Error while fetching creators. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
@@ -68,7 +78,6 @@ export class OrganizationGoalsHistoryComponent {
       statuses: [[]],
       startDate: [],
       endDate: [],
-      creators: [[]],
     });
   }
 
@@ -90,6 +99,13 @@ export class OrganizationGoalsHistoryComponent {
     this.size = event.pageSize;
     this.page = event.pageIndex;
     this.loadOrganizationGoals();
+  }
+  updateCreatorsByName(creatorNames: string[]) {
+    this.selectedCreatorNames = creatorNames;
+    this.unselectedCreatorNames = this.creatorNames.filter(name => !this.selectedCreatorNames.includes(name));
+    
+    this.creators = creatorNames.map(name => this.creatorMap.get(name)!).filter(id => id !== undefined);
+    this.searchGoals();
   }
 
   loadOrganizationGoals(): void {
@@ -123,7 +139,6 @@ export class OrganizationGoalsHistoryComponent {
     if (this.period.endDate) {
       this.period.endDate.setHours(23, 59, 59, 999);
     }
-    this.creators = this.searchForm.get('creators')?.value;
 
     this.paginator.firstPage();
     this.loadOrganizationGoals();
@@ -135,8 +150,7 @@ export class OrganizationGoalsHistoryComponent {
       statuses: [[]],
       startDate: null,
       endDate: null,
-      creators: [[]],
-    });    
+    });
     this.statuses = [];
     this.period = undefined;
     this.creators = [];

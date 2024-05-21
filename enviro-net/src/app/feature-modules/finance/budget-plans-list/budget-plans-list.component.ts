@@ -21,7 +21,6 @@ import { BudgetPlan } from '../model/budget-plan.model';
 export class BudgetPlansListComponent {
   statusOptions: string[] = ['DRAFT', 'PENDING', 'REJECTED', 'APPROVED', 'ARCHIVED'];
   displayedColumns: string[] = ['number', 'name', 'fiscalPeriod', 'updated', 'status', 'actions'];
-  authorsOptions!: Member[];
   dataSource: MatTableDataSource<BudgetPlan>;
   page: number = 0;
   size: number = 5;
@@ -33,6 +32,12 @@ export class BudgetPlansListComponent {
   statuses: string[] = [];
   period : DateRange | undefined;
   authors: number[] = [];
+  authorsOptions!: Member[];
+  authorMap: Map<string, number> = new Map();  // Maps name to ID
+  authorNames: string[] = []; // Holds author names for autofill
+  selectedAuthorNames: string[] = []; // Holds selected author names
+  unselectedAuthorNames: string[] = []; // Holds unselected author names
+
   sortField: string = 'name';
   sortDirection: string = 'asc';
 
@@ -55,7 +60,12 @@ export class BudgetPlansListComponent {
     });
     this.administrationService.getUserByRoles(['ACCOUNTANT']).subscribe(
       (result) => {
-        this.authorsOptions = result; 
+        this.authorsOptions = result;
+        this.authorNames = this.authorsOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedAuthorNames = [...this.authorNames];
+        this.authorsOptions.forEach(member => {
+          this.authorMap.set(`${member.name} ${member.surname}`, member.id);
+        });
       }, (error) => {
         let errorMessage = 'Error while fetching creators. Please try again.';
         this.errorMessageDisplay(error, errorMessage);
@@ -67,7 +77,6 @@ export class BudgetPlansListComponent {
       statuses: [[]],
       startDate: [],
       endDate: [],
-      authors: [[]],
     });
   }
 
@@ -89,6 +98,13 @@ export class BudgetPlansListComponent {
     this.size = event.pageSize;
     this.page = event.pageIndex;
     this.loadBudgetPlans();
+  }
+  updateAuthorsByName(authorNames: string[]) {
+    this.selectedAuthorNames = authorNames;
+    this.unselectedAuthorNames = this.authorNames.filter(name => !this.selectedAuthorNames.includes(name));
+    
+    this.authors = authorNames.map(name => this.authorMap.get(name)!).filter(id => id !== undefined);
+    this.searchPlans();
   }
 
   loadBudgetPlans(): void {
@@ -123,7 +139,6 @@ export class BudgetPlansListComponent {
     if (this.period.endDate) {
       this.period.endDate.setHours(23, 59, 59, 999);
     }
-    this.authors = this.searchForm.get('authors')?.value;
 
     this.paginator.firstPage();
     this.loadBudgetPlans();
@@ -135,7 +150,6 @@ export class BudgetPlansListComponent {
       statuses: [[]],
       startDate: null,
       endDate: null,
-      authors: [[]],
     });    
     this.statuses = [];
     this.period = undefined;
