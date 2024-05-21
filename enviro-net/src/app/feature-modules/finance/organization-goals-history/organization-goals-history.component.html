@@ -9,10 +9,48 @@
                     <mat-panel-title>Search</mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="searchForm" (ngSubmit)="searchGoals()">
-                    <!-- TODO filters -->
-                    <div>
-                        <label for="name">Tag:</label>
-                        <input type="text" id="title" formControlName="title">
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Tag:</mat-label>
+                            <input matInput type="text" id="title" formControlName="title">
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Status:</mat-label>
+                            <mat-select formControlName="statuses" multiple>
+                                <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- Date Range filter -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- TODO use chips-wtih-input -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Creator :</mat-label>
+                            <mat-select formControlName="creators" multiple>
+                                <mat-option *ngFor="let member of creatorsOptions" [value]="member.id">{{ member.name }} {{ member.surname }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     
                     <button mat-icon-button color="primary" type="submit" matTooltip="Search">

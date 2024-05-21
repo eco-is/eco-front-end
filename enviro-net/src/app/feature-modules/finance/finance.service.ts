@@ -26,7 +26,6 @@ export class FinanceService {
         return this.http.get<PagedResults<BudgetPlan>>(environment.apiHost + 'budget-plan/all-plans', { params });
     }
     private buildParamsBudgetPlans(id : number, name : string, period: DateRange, statuses : string[], authors : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
-
         let params = new HttpParams()
           .set('id', id)
           .set('name', name)
@@ -74,22 +73,34 @@ export class FinanceService {
         return this.http.post<OrganizationGoal>(environment.apiHost + `goal/create`, goal);
     }
 
-    getAllOrganizationGoals(page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
-        const params = this.buildParams(page, size, sortBy, sortDirection);
+    getAllOrganizationGoals(title : string, period : DateRange, statuses : string[], creators : number[], page: number, size: number, sortBy: string, sortDirection: string): Observable<PagedResults<OrganizationGoalsSet>> {
+        const params = this.buildParamsOrganizationGoals(title, period, statuses, creators, page, size, sortBy, sortDirection);
         return this.http.get<PagedResults<OrganizationGoalsSet>>(environment.apiHost + 'goal/all', { params });
+    }
+    private buildParamsOrganizationGoals(title : string, period : DateRange, statuses : string[], creators : number[], page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+        .set('title', title)
+        .set('page', page.toString())
+        .set('size', size.toString())
+        .set('sort', sortBy)
+        .set('direction', sortDirection)
+        .set('period', JSON.stringify(period));
+      if (statuses && statuses.length > 0) {
+          statuses.forEach(status => {
+            params = params.append('statuses', status);
+          });
+      }
+      if (creators && creators.length > 0) {
+            creators.forEach(creator => {
+            params = params.append('creators', creator);
+          });
+      }
+  
+      return params;
     }
 
     getCurrentOrganizationGoals(): Observable<OrganizationGoalsSet> {
         return this.http.get<OrganizationGoalsSet>(environment.apiHost + 'goal/current');
-    }
-
-    private buildParams(page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
-        let params = new HttpParams()
-          .set('page', page.toString())
-          .set('size', size.toString())
-          .set('sort', sortBy)
-          .set('direction', sortDirection);
-        return params;
     }
     
     getOrganizationGoal(id : number): Observable<OrganizationGoal> {
