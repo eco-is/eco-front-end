@@ -86,17 +86,20 @@ export class LatestFixedExpensesComponent {
       this.sortField,
       this.sortDirection
     ).subscribe(result => {
-      this.dataSource = new MatTableDataSource<FixedExpenses>();
       this.dataSource.data = result.content;
       this.totalExpenses = result.totalElements;
-      
-      this.calculateTotal();
+      this.calculateTotal(result.content);
     });
   }
 
-  calculateTotal(){
-    // Calculate total amount after loading fixed expenses
-    this.totalAmount = this.dataSource.data.reduce((total, expense) => total + expense.amount, 0);
+  calculateTotal(result : FixedExpenses[]){
+    // Calculate total amount after loading fixed expenses from result
+    result.forEach(expense => {
+      this.totalAmount += expense.amount;
+    });
+    
+    // Round totalAmount to 4 decimal places
+    this.totalAmount = parseFloat(this.totalAmount.toFixed(4));
   }
 
   addNewFixedExpense() : void {
@@ -209,7 +212,7 @@ export class LatestFixedExpensesComponent {
     if (index !== -1) {
         this.dataSource.data[index] = expense;
         this.dataSource._updateChangeSubscription(); // Notify Angular about the change
-        this.calculateTotal();
+        this.loadFixedExpenses();
     }
   }
   errorMessageDisplay(error: any, errorMessage : string) : void{

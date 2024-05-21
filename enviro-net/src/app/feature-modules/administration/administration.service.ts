@@ -20,6 +20,20 @@ export class AdministrationService {
     return this.http.get<PagedResults<Member>>(environment.apiHost + 'users/members', { params });
   }
 
+  getUserByRoles(roles : string[]): Observable<Member[]> {
+    const params = this.buildParamsRoles(roles);
+    return this.http.get<Member[]>(environment.apiHost + 'users/user-roles', { params });
+  }
+  private buildParamsRoles(roles: string[]): HttpParams {
+    let params = new HttpParams();
+    if (roles && roles.length > 0) {
+        roles.forEach(role => {
+          params = params.append('roles', role);
+        });
+    }
+    return params;
+}
+
   removeOrganizationMember(memberId: number): Observable<void> {
     return this.http.delete<void>(environment.apiHost + `users/members/${memberId}`);
   }

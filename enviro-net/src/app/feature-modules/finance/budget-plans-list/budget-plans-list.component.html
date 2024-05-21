@@ -9,9 +9,14 @@
                     <mat-panel-title>Search</mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="searchForm" (ngSubmit)="searchPlans()">
-                    <div>
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" formControlName="name">
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>
+                                <mat-icon fontIcon="search"></mat-icon>
+                                Search
+                            </mat-label>
+                            <input matInput type="text" id="name" formControlName="name">
+                        </mat-form-field>
                     </div>
                     <div class="filter-form">
                         <mat-form-field appearance="fill">
@@ -21,6 +26,31 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
+                    <!-- Date Range filter -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <app-chips-with-input id="authors-field"
+                        [autofillOptions]="unselectedAuthorNames" 
+                        label="Authors" placeholder="Add authors..." 
+                        (itemsChangedEvent)="updateAuthorsByName($event)">
+                    </app-chips-with-input>
     
                     <button mat-icon-button color="primary" type="submit" matTooltip="Search">
                         <mat-icon>search</mat-icon>

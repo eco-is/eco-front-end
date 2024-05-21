@@ -10,9 +10,9 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Member } from '../../administration/model/member.model';
 import { AdministrationService } from 'src/app/feature-modules/administration/administration.service'
 import { FinanceService } from '../finance.service';
+import { DateRange } from '../model/date-range.model';
 import { BudgetPlan } from '../model/budget-plan.model';
 import { FixedExpensesEstimation } from '../model/fixed-expenses-estimation.model';
-import { elementAt } from 'rxjs';
 
 @Component({
   selector: 'app-estimate-fixed-expenses',
@@ -21,10 +21,8 @@ import { elementAt } from 'rxjs';
 })
 export class EstimateFixedExpensesComponent {
   typesOptions: string[] = ['SALARY', 'RENT', 'INSURANCE', 'UTILITIES', 'OTHER'];
-  employeesOptions: Member[] = [];
   displayedColumns: string[] = ['number', 'type', 'amount', 'created', 'description', 'actions'];
   dataSource: MatTableDataSource<FixedExpensesEstimation>;
-  memberDataSource: MatTableDataSource<Member> = new MatTableDataSource<Member>();
 
   editStates: { [key: number]: boolean } = {};
   editForm = new FormGroup({
@@ -43,7 +41,14 @@ export class EstimateFixedExpensesComponent {
   showFilter: boolean = false;
   searchForm: FormGroup;
   types: string[] = [];
+  period : DateRange | undefined;
   employees: number[] = [];
+  employeesOptions!: Member[];
+  employeeMap: Map<string, number> = new Map();  // Maps name to ID
+  employeeNames: string[] = []; // Holds employee names for autofill
+  selectedEmployeeNames: string[] = []; // Holds selected employee names
+  unselectedEmployeeNames: string[] = []; // Holds unselected employee names
+
   sortField: string = 'type';
   sortDirection: string = 'asc';
 
@@ -70,17 +75,22 @@ export class EstimateFixedExpensesComponent {
     this.authService.user$.subscribe(user => {
       this.user = user;
     });
-    // TODO 
-    this.administrationService.getOrganizationMembers(
-      '','','',
-      1, 50, 'name', 'asc').subscribe(result => {
+    this.administrationService.getOrganizationMembers('', '', '', 0, 50, 'surname', 'asc').subscribe(result => {
         this.employeesOptions = result.content;
-        console.log(this.employeesOptions); // TODO
+        this.employeeNames = this.employeesOptions.map(member => `${member.name} ${member.surname}`);
+        this.unselectedEmployeeNames = [...this.employeeNames];
+        this.employeesOptions.forEach(member => {
+          this.employeeMap.set(`${member.name} ${member.surname}`, member.id);
+        });
+    }, (error) => {
+      let errorMessage = 'Error while fetching organization members. Please try again.';
+      this.errorMessageDisplay(error, errorMessage);
     });
     this.dataSource = new MatTableDataSource<FixedExpensesEstimation>();
     this.searchForm = this.formBuilder.group({
       types: [[]],
-      employees: [[]],
+      startDate: [],
+      endDate: [],
     });
 
     const id = this.route.snapshot.paramMap.get('budgetPlanId');
@@ -95,13 +105,20 @@ export class EstimateFixedExpensesComponent {
     this.financeService.generateFixedExpensesEstimationsForBudgetPlan(this.budgetPlanId!).subscribe(
       result => {
       this.calculateTotal(result);
-    });
+      }, (error) => {
+        let errorMessage = 'Error while generating Fixed Expenses Estimation. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      }
+    );
   }
   calculateTotal(result : FixedExpensesEstimation[]) : void{
     // Calculate total amount after loading fixed expenses from result
     result.forEach(expense => {
       this.totalAmount += expense.fixedExpense.amount;
     });
+    
+    // Round totalAmount to 4 decimal places
+    this.totalAmount = parseFloat(this.totalAmount.toFixed(4));
   }
 
   ngAfterViewInit(): void {
@@ -123,6 +140,14 @@ export class EstimateFixedExpensesComponent {
     this.page = event.pageIndex;
     this.loadFixedExpensesEstimation();
   }
+  updateEmployeesByName(employeeNames: string[]) {
+    this.selectedEmployeeNames = employeeNames;
+    this.unselectedEmployeeNames = this.employeeNames.filter(name => !this.selectedEmployeeNames.includes(name));
+    
+    this.employees = employeeNames.map(name => this.employeeMap.get(name)!).filter(id => id !== undefined);
+    this.searchExpenses();
+  }
+
 
   loadBudgetPlan(id:number): void {
     this.financeService.getBudgetPlan(id).subscribe(
@@ -141,6 +166,7 @@ export class EstimateFixedExpensesComponent {
   loadFixedExpensesEstimation(): void {
     this.financeService.getAllFixedExpensesEstimations(
       this.budgetPlanId!,
+      this.period!,
       this.types,
       this.employees,
       this.page,
@@ -151,8 +177,6 @@ export class EstimateFixedExpensesComponent {
       this.dataSource = new MatTableDataSource<FixedExpensesEstimation>();
       this.dataSource.data = result.content;
       this.totalExpenses = result.totalElements;
-
-      //this.generateExpensesEstimation();
     });
   }
 
@@ -160,8 +184,16 @@ export class EstimateFixedExpensesComponent {
   searchExpenses(): void {
     this.page = 0;
     this.types = this.searchForm.get('types')?.value;
-    // TODO
-    //this.employees = this.searchForm.get()
+    this.period = {
+      startDate: this.searchForm.get('startDate')?.value,
+      endDate: this.searchForm.get('endDate')?.value,
+    };
+    if (this.period.startDate) {
+      this.period.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.period.endDate) {
+      this.period.endDate.setHours(23, 59, 59, 999);
+    }
 
     this.paginator.firstPage();
     this.loadFixedExpensesEstimation();
@@ -170,10 +202,14 @@ export class EstimateFixedExpensesComponent {
   clearAll() {
     this.searchForm.reset({
       types: [[]],
-      employees: [[]],
+      startDate: null,
+      endDate: null,
     });    
-
-    this.searchExpenses();
+    this.types = [];
+    this.period = undefined;
+    this.employees = [];
+    this.paginator.firstPage();
+    this.loadFixedExpensesEstimation();
   }
 
   addNewFixedExpense():void {
