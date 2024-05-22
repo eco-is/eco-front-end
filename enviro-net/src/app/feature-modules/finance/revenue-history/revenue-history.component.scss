@@ -78,12 +78,10 @@
         border-collapse: collapse;
         margin-top: 16px;
 
-        .one-row {
-            width: 100px;
-            display: flex;
-            flex-direction: row;
+        .details{
+            margin-left: 15px;
         }
-
+       
         th,
         td {
             padding: 12px;
