@@ -1,0 +1,94 @@
+<div id="revenues">
+    <div class="mat-elevation-z8">
+        <div class="header-div">
+            <mat-expansion-panel class="search-header" [expanded]="showFilter">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Search</mat-panel-title>
+                </mat-expansion-panel-header>
+                <form [formGroup]="searchForm" (ngSubmit)="searchRevenue()">
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Type:</mat-label>
+                            <mat-select formControlName="types" multiple>
+                                <mat-option *ngFor="let type of typesOptions" [value]="type">{{ type }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- Date Range filter -->
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill" class="date-picker-field">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Amount from:</mat-label>
+                            <input matInput type="number" min="0" formControlName="aboveAmount">
+                        </mat-form-field>
+                    </div>
+                    <div class="filter-form">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Amount to:</mat-label>
+                            <input matInput type="number" min="0" formControlName="belowAmount">
+                        </mat-form-field>
+                    </div>
+   
+                    <button mat-icon-button color="primary" type="submit" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" type="button" (click)="clearAll()" matTooltip="Clear all">
+                        <mat-icon>clear_all</mat-icon>
+                    </button>
+                </form>
+            </mat-expansion-panel>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                <td mat-cell *matCellDef="let revenueIndex = index">{{ (page * size) + revenueIndex + 1 }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="createdOn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                <td mat-cell *matCellDef="let revenue">
+                    <div> {{ revenue.createdOn | date:'dd MMM yyyy' }} </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                <td mat-cell *matCellDef="let revenue">{{ revenue.type }}
+                    <!-- <div *ngIf="revenue.type === 'PROJECT_REVENUE' || revenue.type === 'PROJECT_DONATION'">
+                        {{ revenue.project.name }}
+                    </div> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                <td mat-cell *matCellDef="let revenue">{{ revenue.amount }}</td>
+            </ng-container>           
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalRevenue" showFirstLastButtons
+            (page)="onPageChange($event)"></mat-paginator>
+    </div>
+</div>
