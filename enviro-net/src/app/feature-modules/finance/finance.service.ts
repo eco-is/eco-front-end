@@ -9,6 +9,7 @@ import { OrganizationGoal } from './model/organization-goal.model';
 import { OrganizationGoalsSet } from './model/organization-goals-set.model';
 import { FixedExpenses } from './model/fixed-expenses.model';
 import { FixedExpensesEstimation } from './model/fixed-expenses-estimation.model';
+import { Revenue } from './model/revenue.mode';
 
 @Injectable({
     providedIn: 'root'
@@ -239,5 +240,44 @@ export class FinanceService {
         return this.http.delete<void>(environment.apiHost + 'fixed-expenses-estimation/delete/' + id);
     }
     
+    // Revenue
+    createRevenue(revenue : Revenue) : Observable<Revenue> {
+        return this.http.post<Revenue>(environment.apiHost + 'revenues/create', revenue);
+    }
+
+    getRevenue(id : number): Observable<Revenue> {
+        return this.http.get<Revenue>(environment.apiHost + 'revenues/get/' + id);
+    }
+
+    getAllRevenues(types : string[], startDate : string, endDate : string, aboveAmount : number, bellowAmount : number, page: number, size : number, sortBy : string, sortDirection : string): Observable<PagedResults<Revenue>> {
+        const params = this.buildParamsRevenue(types, startDate, endDate, aboveAmount, bellowAmount, page, size, sortBy, sortDirection);
+        return this.http.get<PagedResults<Revenue>>(environment.apiHost + 'revenues/all', { params });
+    }
+    
+    private buildParamsRevenue(types : string[], startDate : string, endDate : string, aboveAmount : number, belowAmount : number, page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection)
+          .set('startDate', startDate)
+          .set('endDate', endDate)
+          .set('aboveAmount', aboveAmount)
+          .set('belowAmount', belowAmount);
+        if (types && types.length > 0) {
+            types.forEach(type => {
+              params = params.append('types', type);
+            });
+        }
+        
+        return params;
+    }
+
+    updateRevenue(revenue : Revenue): Observable<Revenue> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<Revenue>(environment.apiHost + 'revenues/update', revenue, options);
+    }
+
     //
+    
 }
