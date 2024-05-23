@@ -1,0 +1,30 @@
+:host {
+    display: flex;
+    flex-grow: 1;
+}
+
+.background-container {
+    height: 100%;
+    width: 100%;
+    background-image: url('../../../../assets/images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: first baseline;
+}
+
+.documents-list {
+    margin-top: 60px;
+    width: 65vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    margin-left: 5%;
+}
+
+.documents-list table {
+    flex: 1;
+}

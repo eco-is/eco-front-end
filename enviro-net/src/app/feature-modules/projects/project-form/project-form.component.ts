@@ -44,6 +44,9 @@ export class ProjectFormComponent {
         this.loadProject(this.projectId);
       }
     });
+    if (this.isEditing()) {
+      this.formGroup.get('type')?.disable();
+    }
   }
 
   loadProject(projectId: number): void {
@@ -74,7 +77,7 @@ export class ProjectFormComponent {
     };
 
     if (this.formGroup.valid) {
-      if (this.projectId) {
+      if (this.isEditing()) {
         this.updateProject(project);
       } else {
         this.createProject(project);
@@ -113,6 +116,10 @@ export class ProjectFormComponent {
         console.error('Error updating project:', error);
       }
     );
+  }
+
+  isEditing(): boolean {
+    return this.projectId != null;
   }
 
   private openSnackBar(message: string): void {

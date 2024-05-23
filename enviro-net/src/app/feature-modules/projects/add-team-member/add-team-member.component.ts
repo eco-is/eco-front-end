@@ -45,8 +45,12 @@ export class AddTeamMemberDialogComponent implements OnInit {
     );
   }
 
-  onCancel(): void {
+  onDone(): void {
     this.selectedMembers.forEach(member => this.addMember(member));
+    this.dialogRef.close();
+  }
+
+  onClose(): void {
     this.dialogRef.close();
   }
 

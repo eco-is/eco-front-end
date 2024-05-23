@@ -1,4 +1,7 @@
 <div class="add-team-member-container">
+    <button mat-icon-button class="close-button" (click)="onClose()" tabindex="-1">
+        <mat-icon>close</mat-icon>
+    </button>
     <h2>Add team members</h2>
     <mat-form-field>
         <mat-label>Search by name</mat-label>
@@ -11,5 +14,5 @@
             </mat-list-option>
         </mat-selection-list>
     </div>
-    <button mat-button (click)="onCancel()">Done</button>
+    <button mat-button (click)="onDone()">Done</button>
 </div>

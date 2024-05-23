@@ -10,8 +10,9 @@ import { DocumentFormComponent } from './document-form/document-form.component';
 import { TeamFormComponent } from './team-form/team-form.component';
 import { AddTeamMemberDialogComponent } from './add-team-member/add-team-member.component';
 import { AssignDocumentDialogComponent } from './assign-document/assign-document.component';
-
-
+import { TaskListComponent } from './task-list/task-list.component';
+import { DocumentVersionsComponent } from './document-versions/document-versions.component';
+import { ReviewFormComponent } from './review-form/review-form.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,10 @@ import { AssignDocumentDialogComponent } from './assign-document/assign-document
     DocumentFormComponent,
     TeamFormComponent,
     AddTeamMemberDialogComponent,
-    AssignDocumentDialogComponent
+    AssignDocumentDialogComponent,
+    TaskListComponent,
+    DocumentVersionsComponent,
+    ReviewFormComponent
   ],
   imports: [
     CommonModule,

@@ -16,7 +16,7 @@
 
         <!-- ORG. MEMBER -->
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'PROJECT_MANAGER'" [routerLink]="['/org/projects']">Projects</button>
-
+        <button mat-raised-button color="accent" *ngIf="user && user.role !== 'ADMINISTRATOR' && user.role !== 'REGISTERED_USER'" [routerLink]="['/org/projects/tasks']">Tasks</button>
         <!-- ACCOUNTANT -->
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['fixed-expenses']">Fixed Expenses</button>
         <button mat-raised-button color="accent" *ngIf="user && user.role == 'ACCOUNTANT'" [routerLink]="['revenues']">Revenues</button>
