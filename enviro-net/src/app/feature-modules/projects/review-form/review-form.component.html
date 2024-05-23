@@ -1,0 +1,33 @@
+<div class="background-container">
+    <button mat-icon-button class="close-button" (click)="onClose()" tabindex="-1">
+        <mat-icon>close</mat-icon>
+    </button>
+    <h2>Review Document</h2>
+    <div mat-dialog-content>
+        <p><strong>Project:</strong> {{ data.document.projectName }}</p>
+        <div class="document-info">
+            <p><strong>Document:</strong> {{ data.document.documentName }} V{{ data.document.version }}</p>
+            <button mat-icon-button #downloadButton (click)="onDownload()">
+                <mat-icon>download</mat-icon>
+            </button>
+        </div>
+        <form [formGroup]="reviewForm">
+            <mat-radio-group formControlName="isApproved">
+                <mat-radio-button [value]="true" color="primary">
+                    <mat-icon>check</mat-icon>
+                </mat-radio-button>
+                <mat-radio-button [value]="false" color="warn">
+                    <mat-icon>close</mat-icon>
+                </mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Comment</mat-label>
+                <textarea matInput formControlName="comment"></textarea>
+                <mat-error *ngIf="reviewForm.get('comment')?.hasError('maxlength')">
+                    Comment cannot exceed 500 characters.
+                </mat-error>
+            </mat-form-field>
+        </form>
+    </div>            
+    <button mat-button color="primary" (click)="onReview()">Submit</button>
+</div>

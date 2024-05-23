@@ -1,12 +1,16 @@
+<!-- TODO style and progress bar for documents -->
 <div class="background-container">
     <div class="upper-container">
         <div class="documents-list">
             <h3>{{ document?.documentName }}</h3>
+            <h4>[{{ document?.projectName }}]</h4>
             <h4>{{ document?.progress!.status }} ({{ document?.progress!.progress }}%)</h4>
             <table>
                 <thead>
                     <tr>
                         <th>Version</th>
+                        <th>Actions</th>                 
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -17,17 +21,24 @@
                                 <mat-icon>download</mat-icon>
                             </button>
                         </td>
+                        <td>
+                            <p *ngIf="!isWriter || isReviewed(version)">{{ getReviewStatus(version) }}</p>
+                            <button *ngIf="isWriter && !isReviewed(version)" mat-button color="accent" (click)="requestReview(version)">
+                                Request Review
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="form-container">
+        <div class="form-container" *ngIf="isWriter">
             <form [formGroup]="formGroup" (ngSubmit)="upload()">
                 <div class="form">
                     <mat-form-field class="name-field">
                         <mat-label>Progress</mat-label>
                         <input matInput formControlName="progress" type="number" />
-                        <mat-error *ngIf="formGroup.get('progress')!.hasError('min') || formGroup.get('progress')!.hasError('max')">
+                        <mat-error
+                            *ngIf="formGroup.get('progress')!.hasError('min') || formGroup.get('progress')!.hasError('max')">
                             Progress must be between 0%-100%.
                         </mat-error>
                     </mat-form-field>
@@ -48,5 +59,24 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div class="reviews-table" *ngIf="(isWriter || isReviewer) && reviews.length > 0">
+        <h3>Reviews</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let review of reviews">
+                    <td>V{{ review.version }} review</td>
+                    <td>{{ review.reviewDate | date }}</td>
+                    <td>{{ review.reviewer.firstName }} {{ review.reviewer.lastName }}</td>
+                    <td>{{ review.comment }}</td>
+                    <td>{{ review.isApproved ? 'Approved' : 'Pending' }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

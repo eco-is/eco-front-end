@@ -1,31 +1,59 @@
-<!-- TODO: progress bar for each document -->
 <div class="background-container">
-    <div class="documents-list">
+    <div class="documents-list" *ngIf="pendingDocuments && pendingDocuments.length > 0">
+        <h3>Pending reviews:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Document</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let document of pendingDocuments; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>[{{ document.projectName }}]<br>{{ document.documentName }} V{{ document.version }}</td>
+                    <td>
+                        <button *ngIf="document.task === Task.REVIEW" mat-icon-button color="primary"
+                            (click)="openReviewForm(document)">
+                            <mat-icon>rate_review</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="documents-list" *ngIf="documents && documents.length > 0">
         <h3>Assigned documents:</h3>
         <table>
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Progress</th>
-                    <th>Status</th>
+                    <th>Project</th>
+                    <th>Document</th>
+                    <th>Task</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let document of documents; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ document.name }}</td>
-                    <td>{{ document.progress.progress }}%</td>
-                    <td>{{ document.progress.status }}</td>
+                    <td>{{ document.projectName }}</td>
+                    <td>{{ document.documentName }}</td>
                     <td>{{ document.task }}</td>
                     <td>
-                        <button mat-icon-button color="primary" (click)="open(document)">
+                        <button *ngIf="document.task === Task.REVIEW" mat-icon-button color="primary" (click)="open(document)">
+                            <mat-icon>zoom_in</mat-icon>
+                        </button>
+                        <button *ngIf="document.task === Task.WRITE" mat-icon-button color="primary" (click)="open(document)">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div *ngIf="!documents || documents.length === 0">
+        <p>No assigned documents!</p>
     </div>
 </div>

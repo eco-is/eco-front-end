@@ -56,6 +56,10 @@ export class AssignDocumentDialogComponent implements OnInit {
     this.dialogRef.close(this.data.document);
   }
 
+  onClose(): void {
+    this.dialogRef.close();
+  }
+  
   compareMembers(member1: TeamMember, member2: TeamMember): boolean {
     return member1 && member2 ? member1.userId === member2.userId : member1 === member2;
   }

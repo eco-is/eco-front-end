@@ -1,4 +1,4 @@
-export enum Type {
+export enum Task {
     WRITE = 'WRITE',
     REVIEW = 'REVIEW'
 }

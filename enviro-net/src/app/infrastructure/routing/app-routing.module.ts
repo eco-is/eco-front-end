@@ -30,7 +30,7 @@ import { DocumentFormComponent } from 'src/app/feature-modules/projects/document
 import { RankingsComponent } from 'src/app/feature-modules/education/rankings/rankings.component';
 import { TeamFormComponent } from 'src/app/feature-modules/projects/team-form/team-form.component';
 import { TaskListComponent } from 'src/app/feature-modules/projects/task-list/task-list.component';
-import { DocumentWriteTaskComponent } from 'src/app/feature-modules/projects/document-write-task/document-write-task.component';
+import { DocumentVersionsComponent } from 'src/app/feature-modules/projects/document-versions/document-versions.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -164,8 +164,7 @@ const routes: Routes = [
   { path: 'org/projects/:projectId/documents', component: DocumentFormComponent },
   { path: 'org/projects/:projectId/team', component: TeamFormComponent },
   { path: 'org/projects/tasks', component: TaskListComponent },
-  { path: 'org/projects/tasks/:projectId/:documentId', component: DocumentWriteTaskComponent },
-  // TODO document review etc
+  { path: 'org/projects/tasks/:projectId/:documentId', component: DocumentVersionsComponent },
 ];
 
 @NgModule({

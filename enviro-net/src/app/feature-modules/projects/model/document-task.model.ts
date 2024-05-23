@@ -1,9 +1,12 @@
 import { DocumentProgress } from "./document-progress.model";
+import { Task } from "./task.model";
 
 export interface DocumentTask {
     documentId: number;
     projectId: number;
-    name: string;
+    version: number;
+    projectName: string;
+    documentName: string;
     progress: DocumentProgress;
-    task: number;
+    task: Task;
 }

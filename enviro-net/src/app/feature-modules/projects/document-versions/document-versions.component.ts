@@ -4,13 +4,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService } from '../projects.service';
 import { DocumentVersions } from '../model/document-versions.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { DocumentReview } from '../model/document-review.model';
+import { DocumentReviewStatus } from '../model/document-review-status.model';
+import { Task } from '../model/task.model';
 
 @Component({
-  selector: 'app-document-write-task',
-  templateUrl: './document-write-task.component.html',
-  styleUrls: ['./document-write-task.component.scss']
+  selector: 'app-document-versions',
+  templateUrl: './document-versions.component.html',
+  styleUrls: ['./document-versions.component.scss']
 })
-export class DocumentWriteTaskComponent implements OnInit {
+export class DocumentVersionsComponent implements OnInit {
   userId?: number;
   projectId?: number;
   documentId?: number;
@@ -18,13 +21,16 @@ export class DocumentWriteTaskComponent implements OnInit {
   formGroup: FormGroup;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
-
+  
+  isWriter: boolean = false;
+  isReviewer: boolean = false;
   document?: DocumentVersions;
+  reviews: DocumentReview[] = [];
+  reviewStatuses: DocumentReviewStatus[] = [];
 
   constructor(
     private projectsService: ProjectsService,
     private route: ActivatedRoute,
-    private router: Router,
     private fb: FormBuilder,
     authService: AuthService
   ) {
@@ -39,7 +45,10 @@ export class DocumentWriteTaskComponent implements OnInit {
       this.projectId = +params.get('projectId')!;
       this.documentId = +params.get('documentId')!;
 
+      this.getTask();
       this.getDocumentVersions();
+      this.getDocumentReviews();
+      this.getDocumentReviewStatuses();
     });
   }
   
@@ -51,6 +60,65 @@ export class DocumentWriteTaskComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching documents:', error);
+      }
+    );
+  }
+
+    getDocumentReviews() {
+    this.projectsService.getDocumentReviews(this.projectId!, this.documentId!).subscribe(
+      (reviews) => {
+        console.log(reviews);
+        this.reviews = reviews;
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
+
+  getDocumentReviewStatuses() {
+    this.projectsService.getDocumentReviewStatuses(this.projectId!, this.documentId!).subscribe(
+      (statuses) => {
+        console.log(statuses);
+        this.reviewStatuses = statuses;
+      },
+      (error) => {
+        console.error('Error fetching review statuses:', error);
+      }
+    );
+  }
+
+  getTask(): void {
+    this.projectsService.getAssignmentTask(this.projectId!, this.documentId!, this.userId!).subscribe(
+      (task) => {
+        if (task === Task.WRITE) this.isWriter = true;
+        else if (task === Task.REVIEW) this.isReviewer = true;
+      },
+      (error) => {
+        console.error('Error fetching task:', error);
+      }
+    );
+  }
+
+  getReviewStatus(version: number): string {
+    if (version === 0) return 'Template';
+
+    const reviewStatus = this.reviewStatuses.find(status => status.version === version);
+    return reviewStatus ? reviewStatus.status : 'Not reviewed yet';
+  }
+
+  isReviewed(version: number): boolean {
+    if (version === 0) return true;
+    return this.reviewStatuses.some(status => status.version === version);
+  }
+
+  requestReview(version: number): void {
+    this.projectsService.createDocumentReviewRequest(this.projectId!, this.documentId!, version).subscribe(
+      () => {
+        this.getDocumentReviewStatuses();
+      },
+      (error) => {
+        console.error('Error requesting review:', error);
       }
     );
   }
@@ -90,7 +158,6 @@ export class DocumentWriteTaskComponent implements OnInit {
         console.error('Error downloading document:', error);
       }
     );
-
   }
 
   onFileSelected(event: Event): void {

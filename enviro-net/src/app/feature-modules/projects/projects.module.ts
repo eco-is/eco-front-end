@@ -11,7 +11,8 @@ import { TeamFormComponent } from './team-form/team-form.component';
 import { AddTeamMemberDialogComponent } from './add-team-member/add-team-member.component';
 import { AssignDocumentDialogComponent } from './assign-document/assign-document.component';
 import { TaskListComponent } from './task-list/task-list.component';
-import { DocumentWriteTaskComponent } from './document-write-task/document-write-task.component';
+import { DocumentVersionsComponent } from './document-versions/document-versions.component';
+import { ReviewFormComponent } from './review-form/review-form.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DocumentWriteTaskComponent } from './document-write-task/document-write
     AddTeamMemberDialogComponent,
     AssignDocumentDialogComponent,
     TaskListComponent,
-    DocumentWriteTaskComponent
+    DocumentVersionsComponent,
+    ReviewFormComponent
   ],
   imports: [
     CommonModule,

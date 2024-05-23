@@ -11,7 +11,11 @@ import { TeamMemberCreation } from './model/team-member-creation.model';
 import { Assignment } from './model/assignment.model';
 import { DocumentTask } from './model/document-task.model';
 import { DocumentVersions } from './model/document-versions.model';
+import { DocumentReview } from './model/document-review.model';
+import { DocumentReviewStatus } from './model/document-review-status.model';
 import { saveAs } from 'file-saver'
+import { DocumentReviewCreation } from './model/document-review-creation.model';
+import { Task } from './model/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +42,7 @@ export class ProjectsService {
   }
 
   updateProject(projectId: number, project: ProjectCreation): Observable<Project> {
-    return this.http.post<Project>(environment.apiHost + `projects/${projectId}`, project);
+    return this.http.put<Project>(environment.apiHost + `projects/${projectId}`, project);
   }
 
   createDocument(projectId: number, documentData: FormData): Observable<Document> {
@@ -79,8 +83,39 @@ export class ProjectsService {
     return this.http.get<DocumentTask[]>(environment.apiHost + 'projects/assignments', { params });
   }
 
+  getPendingDocuments(userId: number): Observable<DocumentTask[]> {
+    const params = new HttpParams().set('userId', userId.toString());
+
+    return this.http.get<DocumentTask[]>(environment.apiHost + 'projects/assignments/unreviewed', { params });
+  }
+
+  getAssignmentTask(projectId: number, documentId: number, userId: number): Observable<Task> {
+    let params = new HttpParams()
+      .set('projectId', projectId)
+      .set('documentId', documentId)
+      .set('userId', userId);;
+    
+    return this.http.get<Task>(environment.apiHost + `projects/assignments/writers`, { params });
+  }
+
   getDocumentVersions(projectId: number, documentId: number): Observable<DocumentVersions> {
     return this.http.get<DocumentVersions>(environment.apiHost + `projects/${projectId}/documents/${documentId}/versions`);
+  }
+
+  getDocumentReviews(projectId: number, documentId: number): Observable<DocumentReview[]> {
+    return this.http.get<DocumentReview[]>(environment.apiHost + `projects/${projectId}/documents/${documentId}/reviews`);
+  }
+
+  getDocumentReviewStatuses(projectId: number, documentId: number): Observable<DocumentReviewStatus[]> {
+    return this.http.get<DocumentReviewStatus[]>(environment.apiHost + `projects/${projectId}/documents/${documentId}/reviews/status`);
+  }
+
+  createDocumentReviewRequest(projectId: number, documentId: number, version: number): Observable<void> {
+    return this.http.post<void>(environment.apiHost + `projects/${projectId}/documents/${documentId}/versions/${version}/request-review`, {});
+  }
+  
+  createDocumentReview(projectId: number, documentId: number, version: number, review: DocumentReviewCreation): Observable<void> {
+    return this.http.post<void>(environment.apiHost + `projects/${projectId}/documents/${documentId}/versions/${version}/review`, review);
   }
 
   uploadDocument(projectId: number, documentId: number, documentData: FormData): Observable<Document> {
