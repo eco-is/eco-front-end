@@ -326,9 +326,9 @@ export class EstimateFixedExpensesComponent {
 
   
   navigateBack() : void {
-    this.router.navigate(['/edit-budget-plan-details/' + this.budgetPlanId]);
+    this.router.navigate(['/budget-plan-details/' + this.budgetPlanId]);
   }
   navigateNext() : void {
-    this.router.navigate(['/fixed-expenses-estimate/' + this.budgetPlanId]);
+    this.router.navigate(['/projects-budgeting/' + this.budgetPlanId]);
   }  
 }

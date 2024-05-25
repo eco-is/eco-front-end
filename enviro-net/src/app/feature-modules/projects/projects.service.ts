@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
 import { Project } from './model/project.model';
+import { RankedProject } from './model/ranked-project.model';
 import { ProjectCreation } from './model/project-creation.model';
 import { Document } from './model/document.model';
 import { TeamMember } from './model/team-member.model';
@@ -43,6 +44,10 @@ export class ProjectsService {
 
   updateProject(projectId: number, project: ProjectCreation): Observable<Project> {
     return this.http.put<Project>(environment.apiHost + `projects/${projectId}`, project);
+  }
+
+  getRankedProjects(): Observable<RankedProject[]> {
+    return this.http.get<RankedProject[]>(environment.apiHost + `ranked-projects`);
   }
 
   createDocument(projectId: number, documentData: FormData): Observable<Document> {

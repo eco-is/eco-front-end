@@ -27,6 +27,7 @@ import { FixedExpensesHistoryComponent } from 'src/app/feature-modules/finance/f
 import { LatestFixedExpensesComponent } from 'src/app/feature-modules/finance/latest-fixed-expenses/latest-fixed-expenses.component';
 import { EstimateFixedExpensesComponent } from 'src/app/feature-modules/finance/estimate-fixed-expenses/estimate-fixed-expenses.component';
 import { RevenueHistoryComponent } from 'src/app/feature-modules/finance/revenue-history/revenue-history.component';
+import { BudgetPlanProjectsComponent } from 'src/app/feature-modules/finance/budget-plan-projects/budget-plan-projects.component';
 // Projects
 import { ProjectsListComponent } from 'src/app/feature-modules/projects/projects-list/projects-list.component';
 import { ProjectFormComponent } from 'src/app/feature-modules/projects/project-form/project-form.component';
@@ -189,6 +190,14 @@ const routes: Routes = [
   {
     path: 'fixed-expenses-estimate/:budgetPlanId',
     component: EstimateFixedExpensesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      role: ['BOARD_MEMBER', 'ACCOUNTANT'],
+    },
+  },
+  {
+    path: 'projects-budgeting/:budgetPlanId',
+    component: BudgetPlanProjectsComponent,
     canActivate: [AuthGuard],
     data: {
       role: ['BOARD_MEMBER', 'ACCOUNTANT'],

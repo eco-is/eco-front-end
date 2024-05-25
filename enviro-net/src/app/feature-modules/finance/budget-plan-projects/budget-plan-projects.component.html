@@ -1,0 +1,71 @@
+<div id="budget-plan-project">
+    <div class="mat-elevation-z8">
+        <button id="navigation-button-back" mat-icon-button color="warn"
+                matTooltip="One step back" (click)="navigateBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button id="navigation-button-next" mat-icon-button color="warn" 
+                matTooltip="Next step" (click)="navigateNext()">
+        <mat-icon>arrow_forward</mat-icon>
+        </button>
+    
+        <div>
+            <h1> {{ budgetPlan.name! }} </h1>
+            <h2 class="h2-fiscal-period"> Fiscal Period:  {{ budgetPlan.fiscalDateRange.startDate | date:'dd MMM yyyy'}}  -  {{ budgetPlan!.fiscalDateRange.endDate | date:'dd MMM yyyy'}} </h2>
+            <h2> Created by {{ budgetPlan.author.name }} {{ budgetPlan.author.surname }} </h2>
+        </div>
+        
+        <div class="one-row">
+            <div class="table-container">
+                <h2>Projects</h2>
+                <table mat-table [dataSource]="ranked" matSort>
+                    <ng-container matColumnDef="number">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let projectIndex = index">{{ (page * size) + projectIndex + 1 }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Projects </th>
+                        <td mat-cell *matCellDef="let project">
+                            <div> {{ project.name }} </div>
+                            <div class="one-row-div"> 
+                                rank: {{project.rank}}  
+                                <div>({{ project.type }} project) </div>
+                            </div>
+                        </td>
+                    </ng-container>
+        
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                        (click)="selectProject(row)" 
+                        [ngClass]="{'selected-project-row': row === selectedProject, 'external-project': row.type === 'EXTERNAL' && row !== selectedProject}">
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="project-content" *ngIf="selectedProject">
+                <div class="one-row-div">
+                    <h1>{{selectedProject!.name}}</h1>
+                    <div class="rank">
+                        <div class="rank-label">Rank</div>
+                        {{selectedProject.rank}} 
+                    </div>
+                </div>
+                <div class="tags">
+                    <div class="tag" *ngFor="let tag of selectedProject.tags"> {{ tag }} </div>
+                </div>
+                <div class="hower-expand-container">
+                    <div class="hower-expand-content" [ngClass]="{'expanded': isHovered}" (mouseover)="toggleHover(true)" (mouseout)="toggleHover(false)">
+                        Description:  {{ selectedProject!.description }}
+                    </div>
+                </div>
+                <label>Duration: {{selectedProject!.durationMonths}} months</label>
+                <label>Manager: {{selectedProject!.manager.username}}</label>
+                <!-- <label>Manager: {{selectedProject!.manager.name}} {{selectedProject!.manager.surname}}</label> -->
+
+                <!-- TODO - project revenue table -->
+                <!-- TODO - project projects table -->
+
+                <button class="save-button">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
