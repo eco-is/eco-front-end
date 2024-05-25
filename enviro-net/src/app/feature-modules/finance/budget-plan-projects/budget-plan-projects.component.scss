@@ -1,0 +1,242 @@
+#budget-plan-project {
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    max-height: calc(100% - 65px);
+    height: 100%;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-image: url("../../../../assets/images/background.png");
+    background-color: #f5f9ea; /* Used if the image is unavailable */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+
+    #navigation-button-next {
+        position: absolute;
+        top: 105%;
+        right: 5px;
+        background-color: #476c2a;
+        margin-bottom: 20px;
+    }
+    
+    #navigation-button-back {
+        position: absolute;
+        top: 105%;
+        left: 5px;
+        background-color: #476c2a;
+        margin-bottom: 20px;
+    }
+    
+    h1 {
+        font-weight: bolder;
+        text-align: left;
+    }
+    h2 {
+        text-align: left;
+        font-size: 22px;
+    }
+    .h2-fiscal-period {
+        text-align: left;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .mat-elevation-z8 {
+        padding: 20px;
+        margin: 20px;
+        gap: 10px;
+        border-radius: 5px;
+        position: relative;
+    
+        .header-div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between; 
+            gap: 10px;
+        }
+    }
+
+    .one-row {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        gap: 10px;
+        border-radius: 5px;
+        position: relative;
+
+        .table-container {
+            width: 25%;
+            max-width: 400px;
+            height: auto;
+            max-height: 400px;
+
+            h2 {
+                font-size: 18px;
+                font-weight: bold;
+                text-align: left;
+                margin-left: 5%;
+            }
+        }
+
+        table {
+            display: block;
+            max-height: 400px;
+            overflow-y: auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+    
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #d3e5ab; 
+                width: auto;
+            }
+            .external-project {
+                font-weight: bold;
+                background-color: #ffe8b4;
+                //#ffbe2a;//lighten(#d3e5ab, 50%); 
+            }
+            .selected-project-row {
+                font-weight: bold;
+                background-color: #acbf9b;
+            }
+
+            tr:not(th):hover td {
+                background-color: lighten(#d3e5ab, 10%); 
+            }
+        }
+        
+        .one-row-div {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            font-weight: 700;
+        }
+        
+        .project-content {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            width: 75%;
+
+            h1 {
+                font-size: 20px;
+                font-weight: bolder;
+                text-align: left;
+            }
+
+            .rank{
+                position: relative;
+                align-self: flex-end;
+                margin-left: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                
+                border-radius: 50px;
+                border-collapse: collapse;
+                border: none;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+                padding: 5px 10px;
+                cursor: default;
+
+                background-color:#719255; 
+                color: #f5f9ea;//color: #ffac03;
+                font-size: 20px;
+                font-weight: bold;
+            }
+            .rank-label{
+                color: #f5f9ea;//color: #ffac03;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .rank:hover {
+                background-color: #3d6223;
+                color: #ffac03;
+                .rank-label{
+                    color: #ffac03;
+                }
+            }
+
+            .tags {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 1%; 
+                margin: 0.5%;
+                margin-top: -1.5%;
+                cursor: default;
+            }
+            .tag {
+                position: relative;
+                padding: 4px 8px;
+                background-color: #719255;
+                color: #f5f9ea;
+                border: none;
+                border-radius: 20px;
+                font-size: 14px;
+            }
+            .tag:hover {
+                background-color: #3d6223;
+            }
+
+            .hower-expand-container {
+                margin-bottom: 20px;
+                overflow: hidden;
+                width: 95%;
+                min-height: 20px;
+                height: auto;
+                max-height: 200px;
+                overflow: auto;
+                overflow-y: auto;
+                transition: max-height 0.3s ease;
+            }
+            .hower-expand-content {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                cursor: pointer;
+                font-size: 18px;
+                margin-left: 2px;
+            }  
+            .hower-expand-content.expanded {
+                white-space: normal;
+                max-height: none;
+            }
+
+           
+           
+            label {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+
+            .save-button{
+                font-size: 22px;
+                width: auto;
+                position: relative;
+                align-self: flex-end;
+                margin-left: auto;
+
+                background-color: #476c2a;
+                color: #d3e5ab;
+                border-radius: 5px;
+                border-collapse: collapse;
+                border: none;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}
