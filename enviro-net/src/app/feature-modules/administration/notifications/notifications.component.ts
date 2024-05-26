@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdministrationService } from '../administration.service';
 import { Notification } from '../model/notification.model';
@@ -22,6 +23,7 @@ export class NotificationsComponent implements OnChanges{
 
   constructor(
     private service: AdministrationService, 
+    private router: Router,
     private snackBar: MatSnackBar) {
       if (this.userId) {
         this.loadNotifications();
@@ -90,12 +92,21 @@ export class NotificationsComponent implements OnChanges{
       (updatedNotifications) => {
         this.notifications = updatedNotifications;
         this.loadNotifications();
+        this.showNotifications = false;
       },
       (error) => {
         let errorMessage = 'Error while marking all notifications as read. Please try again later';
         this.errorMessageDisplay(error, errorMessage);
       }
     );
+  }
+
+  navigateToNotificationLink(notification: Notification): void{
+    this.router.navigate([notification.link])
+      .catch(error => {
+        const errorMessage = 'Oops! Seems like the link is invalid! Please contact customer support for further assistance!';
+        this.errorMessageDisplay(error, errorMessage);
+      });
   }
 
   errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{

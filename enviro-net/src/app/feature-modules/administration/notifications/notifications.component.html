@@ -16,7 +16,7 @@
                     <div class="notification-content">
                         <h1>{{ notification.title }}</h1>
                         <p>{{ notification.description }}</p>
-                        <a *ngIf="notification.link" [href]="notification.link" target="_blank">See details</a>
+                        <a *ngIf="notification.link" href="javascript:void(0)" (click)="navigateToNotificationLink(notification)">See details</a>
                         <div class="notification-actions">
                             <small>{{ notification.createdOn | date: 'short' }}</small>
                             <button *ngIf="!notification.read" mat-button (click)="read(notification)">Mark as Read</button>
