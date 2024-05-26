@@ -37,15 +37,14 @@ export class MyProfileComponent implements OnInit {
       } else {
         this.service.updateUserEmail(token, email).subscribe(
           (result) => {
-            this.snackBar.open('Email updated successfully. New email address: ' + result.email, 'Close', { panelClass: 'green-snackbar' });
+            this.snackBar.open('Email updated successfully. New email address: ' + result.email, 'Close', 
+            { duration: 5000,
+              panelClass: 'green-snackbar' });
             this.router.navigate(['/my-profile']);
           },
           (error) => {
             let errorMessage = 'Error updating email. Please try again.';
-            if (error.error && error.error.message) {
-              errorMessage = error.error.message;
-            }
-            this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+            this.errorMessageDisplay(error, errorMessage);
             this.router.navigate(['/my-profile']);
           }
         );
@@ -62,14 +61,22 @@ export class MyProfileComponent implements OnInit {
       }, 
       (error) => {
         let errorMessage = 'Error fetching user. Please try again.';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        }
+        this.errorMessageDisplay(error, errorMessage);
       });
     }
   }
 
   profileUpdate(): void {
     this.router.navigate(['edit-profile']);
+  }
+
+  errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    }
+    this.snackBar.open(errorMessage, 'Close', { 
+      duration: duration,
+      panelClass: 'green-snackbar' });
+    console.error('Error :', error);
   }
 }

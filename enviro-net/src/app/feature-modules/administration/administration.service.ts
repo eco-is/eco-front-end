@@ -7,6 +7,7 @@ import { Member } from './model/member.model';
 import { Registration } from './model/registration.model';
 import { Verification } from './model/verification.model';
 import { UserInfo } from './model/user-info.model';
+import { Notification } from './model/notification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +73,46 @@ export class AdministrationService {
     const options = { headers: new HttpHeaders() };
     const params = new HttpParams().set('token', token);
     return this.http.put<UserInfo>(environment.apiHost + 'users/update-email/' + newEmail, {}, { params });
+  }
+
+  // Notifications
+  getAllNotifications(userId: number): Observable<Notification[]> {
+    return this.http.get<Notification[]>(environment.apiHost + "notifications/all/" + userId);
+  }
+
+  getUnreadNotifications(userId: number): Observable<Notification[]> {
+    return this.http.get<Notification[]>(environment.apiHost + "notifications/unread/" + userId);
+  }
+
+  sendNotification(notification: Notification): Observable<Notification> {
+    return this.http.post<Notification>(environment.apiHost + "notifications/new", notification, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+
+  sendNotificationAndEmail(notification: Notification): Observable<Notification> {
+    return this.http.post<Notification>(environment.apiHost + "notifications/new/email", notification, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+
+  readNotification(notification: Notification): Observable<Notification> {
+    return this.http.put<Notification>(environment.apiHost + "notifications/read", notification, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+
+  markAsUnread(notification: Notification): Observable<Notification> {
+    return this.http.put<Notification>(environment.apiHost + "notifications/unread", notification, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    });
+  }
+
+  readAllNotifications(userId: number): Observable<Notification[]> {
+    return this.http.get<Notification[]>(environment.apiHost + "notifications/read/all/" + userId);
+  }
+
+  deleteNotification(notificationId: number): Observable<void> {
+    return this.http.delete<void>(environment.apiHost + "notifications/delete/" + notificationId);
   }
 }

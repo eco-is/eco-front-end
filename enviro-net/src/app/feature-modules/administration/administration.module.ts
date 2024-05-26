@@ -5,11 +5,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { MembersListComponent } from './members-list/members-list.component';
 import { MemberRegistrationFormComponent } from './member-registration-form/member-registration-form.component';
 import { MemberVerificationFormComponent } from './member-verification-form/member-verification-form.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 @NgModule({
@@ -18,7 +20,8 @@ import { MemberVerificationFormComponent } from './member-verification-form/memb
     MemberRegistrationFormComponent,
     MemberVerificationFormComponent,
     MyProfileComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    NotificationsComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,7 @@ import { MemberVerificationFormComponent } from './member-verification-form/memb
     HttpClientModule,
     MatSelectModule,
     RouterModule,
+    MatBadgeModule,
   ]
 })
 export class AdministrationModule { }
