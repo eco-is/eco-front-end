@@ -4,11 +4,11 @@
 </button>
 
 <div *ngIf="showNotifications" id="notifications-container">
-    <div class="header-div">
+    <div *ngIf="notifications && notifications.length > 0" class="header-div">
         <h1>Notifications</h1>
         <button (click)="readAll()" mat-button class="read-all">Read all</button>
     </div>    
-    <div *ngIf="notifications; else noNotifications">
+    <div *ngIf="notifications && notifications.length > 0">
         <table mat-table [dataSource]="notifications"  class="notification" >
             <ng-container matColumnDef="number">
                 <th mat-header-cell *matHeaderCellDef></th>
@@ -30,7 +30,7 @@
         </table>
     </div>
     
-    <ng-template #noNotifications>
+    <div *ngIf="!notifications || notifications.length === 0" class="no-notifications">
         <p>No notifications available.</p>
-    </ng-template>
+    </div>
 </div>
