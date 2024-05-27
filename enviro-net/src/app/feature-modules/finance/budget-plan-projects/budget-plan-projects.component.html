@@ -68,9 +68,16 @@
                         <label>Duration: {{selectedProject!.durationMonths}} months</label>
                         <label>Manager: {{selectedProject!.manager.username}}</label>
                         <!-- <label>Manager: {{selectedProject!.manager.name}} {{selectedProject!.manager.surname}}</label> -->
+                        <div *ngIf="!selectedProjectBudget">Requested budget: 
+                            <label>{{selectedProject!.budget}}</label>
+                        </div>
 
                         <div class="project-budget" *ngIf="selectedProjectBudget">
                             <h2>Project Budget</h2>
+                            <div>Requested budget: 
+                                <label>{{selectedProject!.budget}}</label>
+                            </div>
+
                             <div>Total project revenue: 
                                 <label>{{selectedProjectBudget!.totalRevenuesAmount}}</label>
                             </div>

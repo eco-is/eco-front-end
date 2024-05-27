@@ -205,23 +205,24 @@ export class BudgetPlanProjectsComponent {
         }
       );
     } else {
-      //// TODO - updateProjectBudget
-      // this.financeService.updateProjectBudget(this.selectedProjectBudget).subscribe(
-      //   (result) => {
-      //     this.selectedProjectBudget = result;
-      //     this.snackBar.open('Project budget updated successfully!', 'Close', { 
-      //       duration: 5000,
-      //       panelClass: 'green-snackbar' });
+      //this.selectedProjectBudget.totalExpensesAmount = 
+      this.selectedProjectBudget.totalRevenuesAmount = this.totalProjectRevenue.totalAmount;
+      this.financeService.updateProjectBudget(this.selectedProjectBudget).subscribe(
+        (result) => {
+          this.selectedProjectBudget = result;
+          this.snackBar.open('Project budget updated successfully!', 'Close', { 
+            duration: 5000,
+            panelClass: 'green-snackbar' });
 
-      //     let title = 'Updates on Project Budget';
-      //     let description = 'Project Budget for your project ' + this.selectedProject!.name + ' has been updated.';
-      //     this.notifyProjectManager(result, title, description);
-      //   },
-      //   (error) => {
-      //     let errorMessage = 'Error while updating project budget. Please try again later.';
-      //     this.errorMessageDisplay(error, errorMessage);
-      //   }
-      // );      
+          let title = 'Updates on Project Budget';
+          let description = 'Project Budget for your project ' + this.selectedProject!.name + ' has been updated.';
+          this.notifyProjectManager(result, title, description);
+        },
+        (error) => {
+          let errorMessage = 'Error while updating project budget. Please try again later.';
+          this.errorMessageDisplay(error, errorMessage);
+        }
+      );      
     }
   }
 
