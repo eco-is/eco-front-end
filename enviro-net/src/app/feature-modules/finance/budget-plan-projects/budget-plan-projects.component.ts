@@ -8,10 +8,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { ProjectsService } from '../../projects/projects.service';
-import { Project } from '../../projects/model/project.model';
 import { RankedProject } from '../../projects/model/ranked-project.model';
 import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
+import { TotalProjectRevenue } from '../model/total-project-revenue.model';
+import { Revenue } from '../model/revenue.mode';
 
 @Component({
   selector: 'app-budget-plan-projects',
@@ -19,14 +20,16 @@ import { BudgetPlan } from '../model/budget-plan.model';
   styleUrls: ['./budget-plan-projects.component.scss']
 })
 export class BudgetPlanProjectsComponent {
-  displayedColumns: string[] = ['number', 'name'];
-  dataSource: MatTableDataSource<Project>;
+  totalProjectRevenue!: TotalProjectRevenue;
+  displayedColumnsRevenues: string[] = ['number', 'createdOn', 'type', 'amount'];
+  dataSource: MatTableDataSource<Revenue>;
+  totalRevenue = 0;
   page: number = 0;
   size: number = 5;
-  sortField: string = 'type';
+  sortField: string = 'amount';
   sortDirection: string = 'desc';
-  totalExpenses = 0;
 
+  displayedColumnsProjects: string[] = ['number', 'name'];
   selectedProject: RankedProject | null = null;
   ranked: RankedProject[] = [];
 
@@ -50,7 +53,7 @@ export class BudgetPlanProjectsComponent {
     this.authService.user$.subscribe(user => {
       this.user = user;
     });
-    this.dataSource = new MatTableDataSource<Project>();
+    this.dataSource = new MatTableDataSource<Revenue>();
     const id = this.route.snapshot.paramMap.get('budgetPlanId');
     this.budgetPlanId = id !== null ? +id : 0;
     if (this.budgetPlanId){
@@ -70,7 +73,6 @@ export class BudgetPlanProjectsComponent {
 
     this.cdr.detectChanges();
     this.loadProjects();
-    
   }
   
   onPageChange(event: PageEvent) {
@@ -78,6 +80,7 @@ export class BudgetPlanProjectsComponent {
     this.page = event.pageIndex;
     this.loadProjects();
   }
+
   isHovered = false;
   toggleHover(hovered: boolean) {
     this.isHovered = hovered;
@@ -102,13 +105,49 @@ export class BudgetPlanProjectsComponent {
       result => {
       this.ranked = result;
       if (this.ranked.length > 0) {
-        this.selectedProject = this.ranked[0];
+        this.selectProject(this.ranked[0]);
       } 
+      this.loadTotalProjectRevenue(this.selectedProject!);  // TODO sort
     });
   }
 
   selectProject(project : RankedProject): void {
     this.selectedProject = project;
+    this.loadTotalProjectRevenue(this.selectedProject);
+  }
+
+  loadTotalProjectRevenue(project: RankedProject): void{
+    if (project.type === 'INTERNAL') {
+      this.financeService.getAllInternalTotalProjectRevenue(
+        project.id,
+        this.page, this.size, this.sortField, this.sortDirection
+      ).subscribe(
+        (result) => {
+          this.totalProjectRevenue = result;
+          this.dataSource = new MatTableDataSource<Revenue>();
+          this.dataSource.data = this.totalProjectRevenue.content.content;
+          this.totalRevenue = this.totalProjectRevenue.content.totalElements;
+        }, (error) => {
+          let errorMessage = 'Error while loading project revenue. Please try again.';
+          this.errorMessageDisplay(error, errorMessage);
+        }
+      );
+    } else {
+      this.financeService.getAllExternalTotalProjectRevenue(
+        project.id,
+        this.page, this.size, this.sortField, this.sortDirection
+      ).subscribe(
+        (result) => {
+          this.totalProjectRevenue = result;
+          this.dataSource = new MatTableDataSource<Revenue>();
+          this.dataSource.data = this.totalProjectRevenue.content.content;
+          this.totalRevenue = this.totalProjectRevenue.content.totalElements;
+        }, (error) => {
+          let errorMessage = 'Error while loading project revenue. Please try again.';
+          this.errorMessageDisplay(error, errorMessage);
+        }
+      );
+    }
   }
 
   errorMessageDisplay(error: any, errorMessage : string) : void{

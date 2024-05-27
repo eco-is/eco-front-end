@@ -10,6 +10,7 @@ import { OrganizationGoalsSet } from './model/organization-goals-set.model';
 import { FixedExpenses } from './model/fixed-expenses.model';
 import { FixedExpensesEstimation } from './model/fixed-expenses-estimation.model';
 import { Revenue } from './model/revenue.mode';
+import { TotalProjectRevenue } from './model/total-project-revenue.model';
 
 @Injectable({
     providedIn: 'root'
@@ -278,6 +279,27 @@ export class FinanceService {
         return this.http.put<Revenue>(environment.apiHost + 'revenues/update', revenue, options);
     }
 
-    //
+    // TotalProjectRevenue
+    private buildParamsTotalProjectRevenue(projectId: number, page : number, size : number, sortBy : string, sortDirection : string): HttpParams {
+        let params = new HttpParams()
+          .set('projectId', projectId.toString())
+          .set('page', page.toString())
+          .set('size', size.toString())
+          .set('sort', sortBy)
+          .set('direction', sortDirection);
+          
+        return params;
+    }
+
+    getAllExternalTotalProjectRevenue(projectId: number, page : number, size : number, sortBy : string, sortDirection : string): Observable<TotalProjectRevenue> {
+        const params = this.buildParamsTotalProjectRevenue(projectId, page, size, sortBy, sortDirection);
+        return this.http.get<TotalProjectRevenue>(environment.apiHost + 'project-revenues/external', { params });
+    }
+    getAllInternalTotalProjectRevenue(projectId: number, page : number, size : number, sortBy : string, sortDirection : string): Observable<TotalProjectRevenue> {
+        const params = this.buildParamsTotalProjectRevenue(projectId, page, size, sortBy, sortDirection);
+        return this.http.get<TotalProjectRevenue>(environment.apiHost + 'project-revenues/internal', { params });
+    }
     
+    //
+
 }

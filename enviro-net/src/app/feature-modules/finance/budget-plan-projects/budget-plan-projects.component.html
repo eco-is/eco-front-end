@@ -24,7 +24,7 @@
                         <td mat-cell *matCellDef="let projectIndex = index">{{ (page * size) + projectIndex + 1 }}</td>
                     </ng-container>
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Projects </th>
+                        <th mat-header-cell *matHeaderCellDef>Projects </th>
                         <td mat-cell *matCellDef="let project">
                             <div> {{ project.name }} </div>
                             <div class="one-row-div"> 
@@ -34,7 +34,7 @@
                         </td>
                     </ng-container>
         
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsProjects;" 
                         (click)="selectProject(row)" 
                         [ngClass]="{'selected-project-row': row === selectedProject, 'external-project': row.type === 'EXTERNAL' && row !== selectedProject}">
                     </tr>
@@ -57,12 +57,58 @@
                         Description:  {{ selectedProject!.description }}
                     </div>
                 </div>
+                <label>Status: {{selectedProject!.status}}</label>
                 <label>Duration: {{selectedProject!.durationMonths}} months</label>
                 <label>Manager: {{selectedProject!.manager.username}}</label>
                 <!-- <label>Manager: {{selectedProject!.manager.name}} {{selectedProject!.manager.surname}}</label> -->
 
-                <!-- TODO - project revenue table -->
-                <!-- TODO - project projects table -->
+                <div class="project-revenues">
+                    <div class="project-revenues-header">
+                        <h2>Project revenues</h2>
+                        <h3>Total revenue amount: {{totalProjectRevenue.totalAmount}} </h3>
+                    </div>
+                    <table mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="number">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let revenueIndex = index">{{ (page * size) + revenueIndex + 1 }}</td>
+                        </ng-container>
+            
+                        <ng-container matColumnDef="createdOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                            <td mat-cell *matCellDef="let revenue">
+                                <div> {{ revenue.createdOn | date:'dd MMM yyyy, HH:mm:ss' }} </div>
+                            </td>
+                        </ng-container>
+            
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                            <td mat-cell *matCellDef="let revenue">
+                                <div>
+                                    {{ revenue.type }}
+                                    <div class="details">
+                                        <div *ngIf="revenue.type === 'PROJECT_REVENUE' || revenue.type === 'PROJECT_DONATION'">
+                                            Project: {{ revenue.project.name }}
+                                        </div>
+                                        <div *ngIf="revenue.type === 'PROJECT_DONATION' || revenue.type === 'DONATION'">
+                                            Donator: {{ revenue.donator.name }} {{ revenue.donator.surname }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>          
+            
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                            <td mat-cell *matCellDef="let revenue">{{ revenue.amount }}</td>
+                        </ng-container>           
+            
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsRevenues"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsRevenues;"></tr>
+                    </table>
+            
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="size" [length]="totalRevenue" showFirstLastButtons
+                        (page)="onPageChange($event)"></mat-paginator>
+                </div>                
 
                 <button class="save-button">Save</button>
             </div>

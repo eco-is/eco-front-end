@@ -214,11 +214,69 @@
                 max-height: none;
             }
 
-           
-           
             label {
                 font-size: 18px;
                 margin-bottom: 8px;
+            }
+
+            .project-revenues {
+                .project-revenues-header {
+                    height: 50px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    border-collapse: collapse;
+                    border-radius: 5px;
+                    background-color: #719255;
+                    color: #f5f9ea;
+                    
+                    h2 {
+                        margin-left: 2%;
+                        margin-top: 1%;
+                        font-size: 16px;
+                    }
+                    h3 {
+                        align-self: flex-end;
+                        margin-left: auto;
+                        margin-top: 1%;
+                        padding: 1%;
+                        padding-right: 2%;
+                        font-size: 16px;
+                    }
+                }
+
+                table {
+                    display: block;
+                    max-height: 200px;
+                    width: 100%;
+                    overflow-y: auto;
+                    border-collapse: collapse;
+                    border-radius: 5px;
+            
+                    th,
+                    td {
+                        padding: 12px;
+                        text-align: left;
+                        border-bottom: 1px solid #d3e5ab;
+                        width: 100%;
+                    }
+
+                    th:first-child,
+                    td:first-child {
+                        width: 10%;
+                    }
+                    th:nth-child(2),
+                    td:nth-child(2) {
+                        width: 20%;
+                    }
+
+                    tr:nth-child(even) td {
+                        background-color: lighten(#d3e5ab, 20%); 
+                    }
+                    tr:not(th):hover td {
+                        background-color: lighten(#d3e5ab, 10%); 
+                    }
+                }
             }
 
             .save-button{
@@ -227,6 +285,7 @@
                 position: relative;
                 align-self: flex-end;
                 margin-left: auto;
+                margin-top: 16px;
 
                 background-color: #476c2a;
                 color: #d3e5ab;
