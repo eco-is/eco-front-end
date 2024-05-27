@@ -51,6 +51,7 @@
         gap: 10px;
         border-radius: 5px;
         position: relative;
+        max-height: 720px;
     
         .header-div {
             display: flex;
@@ -65,7 +66,9 @@
         width: 100%;
         display: flex;
         flex-direction: row;
-        padding: 20px;
+        padding: 10px;
+        padding-bottom: 5px;
+        padding-right: 0px;
         gap: 10px;
         border-radius: 5px;
         position: relative;
@@ -74,7 +77,7 @@
             width: 25%;
             max-width: 400px;
             height: auto;
-            max-height: 400px;
+            max-height: 520px;
 
             h2 {
                 font-size: 18px;
@@ -86,7 +89,7 @@
 
         table {
             display: block;
-            max-height: 400px;
+            max-height: 505px;
             overflow-y: auto;
             border-collapse: collapse;
             border-radius: 5px;
@@ -125,7 +128,8 @@
         .project-content {
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 10px;
+            padding-right: 0px;
             width: 75%;
 
             h1 {
@@ -134,10 +138,17 @@
                 text-align: left;
             }
 
-            .rank{
+            .rank-position {
                 position: relative;
                 align-self: flex-end;
                 margin-left: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+            .rank{
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -190,33 +201,73 @@
                 background-color: #3d6223;
             }
 
-            .hower-expand-container {
-                margin-bottom: 20px;
-                overflow: hidden;
-                width: 95%;
-                min-height: 20px;
-                height: auto;
-                max-height: 200px;
-                overflow: auto;
+            .project-scrollable {
+                display: block;
+                padding: 4px;
+                max-height: 450px;
                 overflow-y: auto;
+                
+                .project-scrollable-flex {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+            
+            .hover-expand-container {
+                margin-bottom: 20px;
+                width: 100%;
+                min-height: 20px;
+                max-height: 150px;
                 transition: max-height 0.3s ease;
             }
-            .hower-expand-content {
+            
+            .hover-expand-content {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                font-size: 16px;
                 cursor: pointer;
-                font-size: 18px;
-                margin-left: 2px;
-            }  
-            .hower-expand-content.expanded {
+            }
+            
+            .hover-expand-content.expanded {
                 white-space: normal;
                 max-height: none;
+                max-height: 150px;
+                overflow-y: auto;
             }
 
             label {
-                font-size: 18px;
-                margin-bottom: 8px;
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+
+            .project-budget {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 10px;
+                margin: 3%;
+                margin-top: 5px;
+                width: fit-content;
+                //align-items: center;
+
+                border-radius: 15px;
+                border-collapse: collapse;
+                border: none;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+                padding: 5px 10px;
+                cursor: default;
+
+                background-color:#719255; 
+                color: #f5f9ea;//color: #ffac03;
+
+
+                label{
+                    margin-left: 20px;
+                    margin-right: 20px;
+                    color: #ffac03;
+                    // color: #ff9a02;
+                }
             }
 
             .project-revenues {
@@ -242,14 +293,13 @@
                         padding: 1%;
                         padding-right: 2%;
                         font-size: 16px;
-                    }
+                    }  
                 }
 
                 table {
                     display: block;
-                    max-height: 200px;
+                    max-height: none;
                     width: 100%;
-                    overflow-y: auto;
                     border-collapse: collapse;
                     border-radius: 5px;
             
@@ -263,7 +313,7 @@
 
                     th:first-child,
                     td:first-child {
-                        width: 10%;
+                        width: 5%;
                     }
                     th:nth-child(2),
                     td:nth-child(2) {
@@ -286,6 +336,7 @@
                 align-self: flex-end;
                 margin-left: auto;
                 margin-top: 16px;
+                margin-bottom: 16px;
 
                 background-color: #476c2a;
                 color: #d3e5ab;

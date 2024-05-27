@@ -9,10 +9,13 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { ProjectsService } from '../../projects/projects.service';
 import { RankedProject } from '../../projects/model/ranked-project.model';
+import { AdministrationService } from '../../administration/administration.service';
+import { Notification } from '../../administration/model/notification.model';
 import { FinanceService } from '../finance.service';
 import { BudgetPlan } from '../model/budget-plan.model';
 import { TotalProjectRevenue } from '../model/total-project-revenue.model';
 import { Revenue } from '../model/revenue.mode';
+import { ProjectBudget } from '../model/project-budget.model';
 
 @Component({
   selector: 'app-budget-plan-projects',
@@ -31,6 +34,7 @@ export class BudgetPlanProjectsComponent {
 
   displayedColumnsProjects: string[] = ['number', 'name'];
   selectedProject: RankedProject | null = null;
+  selectedProjectBudget: ProjectBudget | null = null;
   ranked: RankedProject[] = [];
 
   user: User | undefined;
@@ -45,6 +49,7 @@ export class BudgetPlanProjectsComponent {
     private authService: AuthService,
     private projectService: ProjectsService,
     private financeService: FinanceService,
+    private administrationService: AdministrationService,
     private router: Router, 
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
@@ -108,12 +113,16 @@ export class BudgetPlanProjectsComponent {
         this.selectProject(this.ranked[0]);
       } 
       this.loadTotalProjectRevenue(this.selectedProject!);  // TODO sort
+    }, (error) => {
+      let errorMessage = 'Error while loading ranked projects. Please try again.';
+      this.errorMessageDisplay(error, errorMessage);
     });
   }
 
   selectProject(project : RankedProject): void {
     this.selectedProject = project;
     this.loadTotalProjectRevenue(this.selectedProject);
+    this.loadProjectBudget(project);
   }
 
   loadTotalProjectRevenue(project: RankedProject): void{
@@ -150,12 +159,102 @@ export class BudgetPlanProjectsComponent {
     }
   }
 
-  errorMessageDisplay(error: any, errorMessage : string) : void{
+  loadProjectBudget(selectedProject: RankedProject): void{
+    this.selectedProjectBudget = null;
+    this.financeService.getProjectBudget(selectedProject.id).subscribe(
+      (result) => {
+        this.selectedProjectBudget = result;
+      }, (error) => {
+        if (error.status === 404) {
+        let errorMessage = "Project Budget for Project " + selectedProject.name + " doesn't exist. If you would like to create it, please press save button on the bottom of the page!";
+          this.errorMessageDisplay(error, errorMessage, 10000);
+        } else {
+          let errorMessage = 'Error while loading project budget. Please try again.';
+          this.errorMessageDisplay(error, errorMessage);
+        }
+      });
+  }
+
+  saveProjectBudget(): void {
+    if (!this.selectedProjectBudget) {
+      const newProjectBudget: ProjectBudget = {
+        id: 0,
+        project: this.selectedProject!,
+        creator: {
+          id: this.user!.id,
+          username: this.user!.username,
+          name: '', surname: '', email: 'mail@gmail.com'
+        },
+        totalRevenuesAmount: this.totalProjectRevenue.totalAmount,
+        totalExpensesAmount: 0
+      };
+
+      this.financeService.createProjectBudget(newProjectBudget).subscribe(
+        (result) => {
+          this.selectedProjectBudget = result;
+          this.snackBar.open('Project budget created successfully!', 'Close', { 
+            duration: 5000,
+            panelClass: 'green-snackbar' });
+
+          let title = 'New Project Budget';
+          let description = 'New Project Budget created for your project: ' + this.selectedProject!.name + '.';
+          this.notifyProjectManager(result, title, description);
+        }, (error) => {
+          let errorMessage = 'Error while creating project budget. Please try again.';
+          this.errorMessageDisplay(error, errorMessage);
+        }
+      );
+    } else {
+      //// TODO - updateProjectBudget
+      // this.financeService.updateProjectBudget(this.selectedProjectBudget).subscribe(
+      //   (result) => {
+      //     this.selectedProjectBudget = result;
+      //     this.snackBar.open('Project budget updated successfully!', 'Close', { 
+      //       duration: 5000,
+      //       panelClass: 'green-snackbar' });
+
+      //     let title = 'Updates on Project Budget';
+      //     let description = 'Project Budget for your project ' + this.selectedProject!.name + ' has been updated.';
+      //     this.notifyProjectManager(result, title, description);
+      //   },
+      //   (error) => {
+      //     let errorMessage = 'Error while updating project budget. Please try again later.';
+      //     this.errorMessageDisplay(error, errorMessage);
+      //   }
+      // );      
+    }
+  }
+
+  notifyProjectManager(projectBudget: ProjectBudget, title: string, description: string, link: string | undefined = undefined): void {
+    const newNotification: Notification = {
+      id: 0,
+      createdOn: new Date(),
+      user: {
+        id: projectBudget.project.manager.id,
+        username: projectBudget.project.manager.username,
+        name: '', surname: '', email: 'mail@gmail.com'
+      }, 
+      title: title,
+      description: description,
+      read: false,
+      link: link,
+    };
+    this.administrationService.sendNotification(newNotification).subscribe(
+      (result) => {
+      }, (error) => {
+        let errorMessage = 'Error while creating notification for project manager. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      });
+  }
+
+  errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
     }
-    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
-    console.error('Error :', error);
+    this.snackBar.open(errorMessage, 'Close', { 
+      duration: duration,
+      panelClass: 'green-snackbar' });
+    console.error('Error :', error.error.message);
   }
  
   navigateBack() : void {

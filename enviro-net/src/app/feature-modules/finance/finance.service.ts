@@ -11,6 +11,7 @@ import { FixedExpenses } from './model/fixed-expenses.model';
 import { FixedExpensesEstimation } from './model/fixed-expenses-estimation.model';
 import { Revenue } from './model/revenue.mode';
 import { TotalProjectRevenue } from './model/total-project-revenue.model';
+import { ProjectBudget } from './model/project-budget.model';
 
 @Injectable({
     providedIn: 'root'
@@ -300,6 +301,20 @@ export class FinanceService {
         return this.http.get<TotalProjectRevenue>(environment.apiHost + 'project-revenues/internal', { params });
     }
     
+    // ProjectBudget
+    createProjectBudget(projectBudget: ProjectBudget) : Observable<ProjectBudget> {
+        return this.http.post<ProjectBudget>(environment.apiHost + 'project-budget/create', projectBudget);
+    }
+    
+    getProjectBudget(id: number): Observable<ProjectBudget> {
+        return this.http.get<ProjectBudget>(environment.apiHost + 'project-budget/get/' + id);
+    }
+    
+    updateProjectBudget(projectBudget: ProjectBudget) : Observable<ProjectBudget> {
+        const options = {  headers: new HttpHeaders() };
+        return this.http.put<ProjectBudget>(environment.apiHost + 'project-budget/update', projectBudget, options);
+    }
+
     //
 
 }
