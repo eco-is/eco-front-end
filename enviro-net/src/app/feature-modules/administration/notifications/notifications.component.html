@@ -1,0 +1,36 @@
+<button id="notifications-button" mat-icon-button (click)="toggleNotifications()">
+    <mat-icon *ngIf="unreadNotifications > 0" matBadge="{{unreadNotifications}}" matBadgeColor="warn">notifications</mat-icon>
+    <mat-icon *ngIf="unreadNotifications === 0">notifications</mat-icon>
+</button>
+
+<div *ngIf="showNotifications" id="notifications-container">
+    <div *ngIf="notifications && notifications.length > 0" class="header-div">
+        <h1>Notifications</h1>
+        <button (click)="readAll()" mat-button class="read-all">Read all</button>
+    </div>    
+    <div *ngIf="notifications && notifications.length > 0">
+        <table mat-table [dataSource]="notifications"  class="notification" >
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let notification">
+                    <div class="notification-content">
+                        <h1>{{ notification.title }}</h1>
+                        <p>{{ notification.description }}</p>
+                        <a *ngIf="notification.link" href="javascript:void(0)" (click)="navigateToNotificationLink(notification)">See details</a>
+                        <div class="notification-actions">
+                            <small>{{ notification.createdOn | date: 'short' }}</small>
+                            <button *ngIf="!notification.read" mat-button (click)="read(notification)">Mark as Read</button>
+                            <button *ngIf="notification.read" mat-button (click)="markAsUnread(notification)">Mark as Unread</button>
+                            <button mat-button (click)="delete(notification)">Delete</button>
+                          </div>
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    
+    <div *ngIf="!notifications || notifications.length === 0" class="no-notifications">
+        <p>No notifications available.</p>
+    </div>
+</div>

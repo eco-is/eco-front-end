@@ -4,4 +4,4 @@ export interface UserContact {
     surname: string;
     username: string;
     email: string;
-}  
+}

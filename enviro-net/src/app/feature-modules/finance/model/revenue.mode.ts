@@ -1,4 +1,4 @@
-import { UserContact } from "./user-contact.model";
+import { UserContact } from "../../administration/model/user-contact.model";
 import { Project } from "../../projects/model/project.model";
 
 export interface Revenue { 

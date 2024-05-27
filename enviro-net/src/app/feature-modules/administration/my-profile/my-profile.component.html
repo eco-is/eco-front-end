@@ -1,5 +1,11 @@
 <div id="my-profile">
     <h1>My Profile</h1>
+    <div id="notifications-div">
+        <app-notifications
+            [openNotifications]="true" 
+            [userId]="user!.id" >
+        </app-notifications>
+    </div>
     
     <div id="profile-info-div">
         <div id="picture-div">
