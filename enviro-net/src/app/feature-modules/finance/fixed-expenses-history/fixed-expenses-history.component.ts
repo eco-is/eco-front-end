@@ -141,11 +141,15 @@ export class FixedExpensesHistoryComponent {
       this.size,
       this.sortField,
       this.sortDirection
-    ).subscribe(result => {
-      this.dataSource = new MatTableDataSource<FixedExpenses>();
-      this.dataSource.data = result.content;
-      this.totalExpenses = result.totalElements;
-    });
+    ).subscribe(
+      (result) => {
+        this.dataSource = new MatTableDataSource<FixedExpenses>();
+        this.dataSource.data = result.content;
+        this.totalExpenses = result.totalElements;
+      }, (error) =>{
+        let errorMessage = 'Error while fetching fixed expenses. Please try again later.';
+        this.errorMessageDisplay(error, errorMessage);
+      });
   }
 
   searchExpenses(): void {
@@ -167,6 +171,47 @@ export class FixedExpensesHistoryComponent {
     this.loadFixedExpenses();
   }
 
+  onGeneratePDF(): void {
+    this.page = 0;
+    this.types = this.searchForm.get('types')?.value;
+    this.period = {
+      startDate: this.searchForm.get('startDate')?.value,
+      endDate: this.searchForm.get('endDate')?.value,
+    };
+    if (this.period.startDate) {
+      this.period.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.period.endDate) {
+      this.period.endDate.setHours(23, 59, 59, 999);
+    }
+    this.paginator.firstPage();
+
+    this.financeService.getAllFixedExpenses(
+      this.period!, this.types, this.employees, this.creators,
+      this.page, 50,//this.size,
+      this.sortField, this.sortDirection
+    ).subscribe(result => {
+      this.dataSource.data = result.content; 
+      this.totalExpenses = result.totalElements;
+      this.generateReport(result.content);
+    });
+  }
+  generateReport(expenses: FixedExpenses[]): void {
+    let list : string[] = ["number", "type", "creator", "description", "amount"];
+    console.log(list)
+    this.financeService.generateFixedExpensesPDF( 
+        "filename", 
+        list, 
+        expenses
+      ).subscribe(
+      (result) => {
+      }, (error) => {
+        let errorMessage = 'Error while generating PDFs. Please try again.';
+        this.errorMessageDisplay(error, errorMessage);
+      }
+    );
+  }
+
   clearAll() {
     this.searchForm.reset({
       types: [[]],
@@ -185,11 +230,13 @@ export class FixedExpensesHistoryComponent {
     this.router.navigate(['fixed-expenses/latest']);
   }
 
-  errorMessageDisplay(error: any, errorMessage : string) : void{
+  errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
     }
-    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+    this.snackBar.open(errorMessage, 'Close', { 
+      duration: duration,
+      panelClass: 'green-snackbar' });
     console.error('Error :', error);
   }
 }
