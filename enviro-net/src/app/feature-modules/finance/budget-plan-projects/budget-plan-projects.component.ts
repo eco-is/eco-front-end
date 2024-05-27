@@ -67,23 +67,24 @@ export class BudgetPlanProjectsComponent {
   }
 
   ngAfterViewInit(): void {
+    this.loadProjects();
     this.sort.direction = this.sortDirection as SortDirection;
     this.sort.active = this.sortField;
 
     this.sort.sortChange.subscribe(() => {
       this.sortField = this.sort.active;
       this.sortDirection = this.sort.direction as string;
-      this.loadProjects();
+      this.loadTotalProjectRevenue(this.selectedProject!);
     });
-
+    
     this.cdr.detectChanges();
-    this.loadProjects();
+    this.loadTotalProjectRevenue(this.selectedProject!);
   }
   
   onPageChange(event: PageEvent) {
     this.size = event.pageSize;
     this.page = event.pageIndex;
-    this.loadProjects();
+    this.loadTotalProjectRevenue(this.selectedProject!);
   }
 
   isHovered = false;
@@ -112,7 +113,7 @@ export class BudgetPlanProjectsComponent {
       if (this.ranked.length > 0) {
         this.selectProject(this.ranked[0]);
       } 
-      this.loadTotalProjectRevenue(this.selectedProject!);  // TODO sort
+      this.loadTotalProjectRevenue(this.selectedProject!);
     }, (error) => {
       let errorMessage = 'Error while loading ranked projects. Please try again.';
       this.errorMessageDisplay(error, errorMessage);
@@ -125,39 +126,25 @@ export class BudgetPlanProjectsComponent {
     this.loadProjectBudget(project);
   }
 
-  loadTotalProjectRevenue(project: RankedProject): void{
-    if (project.type === 'INTERNAL') {
-      this.financeService.getAllInternalTotalProjectRevenue(
-        project.id,
-        this.page, this.size, this.sortField, this.sortDirection
-      ).subscribe(
+  loadTotalProjectRevenue(project: RankedProject): void {
+    if (project) {
+      const getRevenueObservable = project.type === 'INTERNAL'
+        ? this.financeService.getAllInternalTotalProjectRevenue(project.id, this.page, this.size, this.sortField, this.sortDirection)
+        : this.financeService.getAllExternalTotalProjectRevenue(project.id, this.page, this.size, this.sortField, this.sortDirection);
+  
+      getRevenueObservable.subscribe(
         (result) => {
           this.totalProjectRevenue = result;
-          this.dataSource = new MatTableDataSource<Revenue>();
           this.dataSource.data = this.totalProjectRevenue.content.content;
           this.totalRevenue = this.totalProjectRevenue.content.totalElements;
-        }, (error) => {
-          let errorMessage = 'Error while loading project revenue. Please try again.';
-          this.errorMessageDisplay(error, errorMessage);
-        }
-      );
-    } else {
-      this.financeService.getAllExternalTotalProjectRevenue(
-        project.id,
-        this.page, this.size, this.sortField, this.sortDirection
-      ).subscribe(
-        (result) => {
-          this.totalProjectRevenue = result;
-          this.dataSource = new MatTableDataSource<Revenue>();
-          this.dataSource.data = this.totalProjectRevenue.content.content;
-          this.totalRevenue = this.totalProjectRevenue.content.totalElements;
-        }, (error) => {
+        }, 
+        (error) => {
           let errorMessage = 'Error while loading project revenue. Please try again.';
           this.errorMessageDisplay(error, errorMessage);
         }
       );
     }
-  }
+  }  
 
   loadProjectBudget(selectedProject: RankedProject): void{
     this.selectedProjectBudget = null;
