@@ -317,9 +317,11 @@ export class FinanceService {
     }
 
     // generatePDFs
-    private buildParamsFixedExpensesPDF(filename: string, columns : string[]): HttpParams {
+    private buildParamsFixedExpensesPDF(filename: string, columns : string[], title: string, text: string = ''): HttpParams {
         let params = new HttpParams()
-          .set('filename', filename);
+          .set('filename', filename)
+          .set('title', title)
+          .set('text', text);
         if (columns && columns.length > 0) {
             columns.forEach(column => {
               params = params.append('columns', column);
@@ -328,16 +330,16 @@ export class FinanceService {
         
         return params;
     }
-    generateFixedExpensesPDF(filename: string, columns: string[], fixedExpensesDtos: FixedExpenses[]): Observable<void> {
-        const params = this.buildParamsFixedExpensesPDF(filename, columns);
+    generateFixedExpensesPDF(filename: string, columns: string[], fixedExpensesDtos: any[], title: string, text: string = ''): Observable<void> {
+        const params = this.buildParamsFixedExpensesPDF(filename, columns, title, text);
         return this.http.post(environment.apiHost + 'accountant-generate-pdf/generate', fixedExpensesDtos, 
-        { responseType: 'blob', observe: 'response' }).pipe(
-            map((response: HttpResponse<Blob>) => {
-                const contentType = response.headers.get('Content-Type') || 'application/pdf';
-                const blob = new Blob([response.body!], { type: contentType });
-                saveAs(blob, filename);
-                return;
-            })
+        { params: params, responseType: 'blob', observe: 'response' }).pipe(
+          map((response: HttpResponse<Blob>) => {
+            const contentType = response.headers.get('Content-Type') || 'application/pdf';
+            const blob = new Blob([response.body!], { type: contentType });
+            saveAs(blob, filename);
+            return;
+          })
         );
     }
 

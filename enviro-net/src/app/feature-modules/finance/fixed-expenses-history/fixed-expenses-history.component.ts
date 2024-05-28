@@ -5,6 +5,7 @@ import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Member } from '../../administration/model/member.model';
@@ -12,6 +13,7 @@ import { AdministrationService } from 'src/app/feature-modules/administration/ad
 import { DateRange } from '../model/date-range.model';
 import { FinanceService } from '../finance.service';
 import { FixedExpenses } from '../model/fixed-expenses.model';
+import { GenerateReportDialogComponent } from '../generate-report-dialog/generate-report-dialog.component';
 
 @Component({
   selector: 'app-fixed-expenses-history',
@@ -58,7 +60,8 @@ export class FixedExpensesHistoryComponent {
     private router: Router, 
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     this.authService.user$.subscribe(user => {
       this.user = user;
@@ -193,23 +196,27 @@ export class FixedExpensesHistoryComponent {
     ).subscribe(result => {
       this.dataSource.data = result.content; 
       this.totalExpenses = result.totalElements;
-      this.generateReport(result.content);
+      this.openGenerateReportDialog(result.content);
     });
   }
-  generateReport(expenses: FixedExpenses[]): void {
-    let list : string[] = ["number", "type", "creator", "description", "amount"];
-    console.log(list)
-    this.financeService.generateFixedExpensesPDF( 
-        "filename", 
-        list, 
-        expenses
-      ).subscribe(
-      (result) => {
-      }, (error) => {
-        let errorMessage = 'Error while generating PDFs. Please try again.';
-        this.errorMessageDisplay(error, errorMessage);
+
+  openGenerateReportDialog(expenses: FixedExpenses[]): void {
+    let list : string[] = ["number", "id", "type", "period", "amount", "creator", "createdOn", "description", "employee", "overtimeHours"];
+    const dialogRef = this.dialog.open(GenerateReportDialogComponent, {
+      width: '600px',
+      data: {
+        columnOptions: list,
+        data: expenses,
+        service: 'FINANCE_fixed_expense'
       }
-    );
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let message = 'PDF generated!'
+        this.snackBar.open(message, 'Close', { panelClass: 'green-snackbar', duration: 5000 });  
+      }
+    });
   }
 
   clearAll() {

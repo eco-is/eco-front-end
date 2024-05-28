@@ -20,6 +20,7 @@ import { LatestFixedExpensesComponent } from './latest-fixed-expenses/latest-fix
 import { EstimateFixedExpensesComponent } from './estimate-fixed-expenses/estimate-fixed-expenses.component';
 import { RevenueHistoryComponent } from './revenue-history/revenue-history.component';
 import { BudgetPlanProjectsComponent } from './budget-plan-projects/budget-plan-projects.component';
+import { GenerateReportDialogComponent } from './generate-report-dialog/generate-report-dialog.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { BudgetPlanProjectsComponent } from './budget-plan-projects/budget-plan-
       LatestFixedExpensesComponent,
       EstimateFixedExpensesComponent,
       RevenueHistoryComponent,
-      BudgetPlanProjectsComponent
+      BudgetPlanProjectsComponent,
+      GenerateReportDialogComponent
   ],
     imports: [
       CommonModule,
