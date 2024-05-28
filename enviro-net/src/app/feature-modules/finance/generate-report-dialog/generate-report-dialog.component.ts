@@ -85,6 +85,16 @@ export class GenerateReportDialogComponent implements OnInit {
             error: (error) => this.errorMessageDisplay(error, 'Failed to generate finance report! Please try again later.', 5000)
           });
         break;
+      case 'FINANCE_revenue':
+        this.financeService.generateRevenuesPDF(
+          this.filename, this.columns,
+          this.data.data, this.title, this.text
+        )
+          .subscribe({
+            next: (response) => this.dialogRef.close(response),
+            error: (error) => this.errorMessageDisplay(error, 'Failed to generate finance report! Please try again later.', 5000)
+          });
+        break;
       case 'EDUCATION':
         // this.educationService.generatePDFReport(this.filename, this.columns, this.title, this.text)
         //   .subscribe({
