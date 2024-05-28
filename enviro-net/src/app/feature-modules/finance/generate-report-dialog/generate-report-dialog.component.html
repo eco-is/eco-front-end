@@ -1,0 +1,37 @@
+<div class="generatePDFs-container">
+    <button mat-icon-button class="close-button" (click)="onClose()" tabindex="-1">
+        <mat-icon>close</mat-icon>
+    </button>
+    <h2>Generate PDF report</h2>
+    <form [formGroup]="formGroup" (ngSubmit)="generatePDFReport()">
+        <div class="one-row">
+            <mat-form-field>
+                <mat-label>Save file with name: </mat-label>
+                <input matInput formControlName="filename" type="text" />
+                <mat-error *ngIf="formGroup.value.filename === ''">* Filename is required!</mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="fill">
+                <mat-label>Columns included in report:</mat-label>
+                <mat-select formControlName="columns" multiple>
+                <mat-option *ngFor="let column of data.columnOptions" [value]="column">{{ column }}</mat-option>                </mat-select>
+                <mat-error *ngIf="formGroup.value.columns">* Columns must be chosen!</mat-error>
+            </mat-form-field>
+        </div>
+        
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" type="text" />
+            <mat-error *ngIf="formGroup.value.title === ''">* Title is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Text</mat-label>
+            <textarea matInput formControlName="text"></textarea>
+        </mat-form-field>
+    
+        <button color="primary" type="submit" mat-raised-button (click)="generatePDFReport()" >
+            <mat-icon>picture_as_pdf</mat-icon>Generate
+        </button>
+    </form>
+</div>

@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { environment } from 'src/env/environment';
+import { saveAs } from 'file-saver';
 import { DateRange } from './model/date-range.model';
 import { BudgetPlan } from './model/budget-plan.model';
 import { OrganizationGoal } from './model/organization-goal.model';
@@ -313,6 +314,46 @@ export class FinanceService {
     updateProjectBudget(projectBudget: ProjectBudget) : Observable<ProjectBudget> {
         const options = {  headers: new HttpHeaders() };
         return this.http.put<ProjectBudget>(environment.apiHost + 'project-budget/update', projectBudget, options);
+    }
+
+    // generatePDFs
+    private buildParamsFixedExpensesPDF(filename: string, columns : string[], title: string, text: string = ''): HttpParams {
+        let params = new HttpParams()
+          .set('filename', filename)
+          .set('title', title)
+          .set('text', text);
+        if (columns && columns.length > 0) {
+            columns.forEach(column => {
+              params = params.append('columns', column);
+            });
+        }
+        
+        return params;
+    }
+    generateFixedExpensesPDF(filename: string, columns: string[], fixedExpenses: any[], title: string, text: string = ''): Observable<void> {
+        const params = this.buildParamsFixedExpensesPDF(filename, columns, title, text);
+        return this.http.post(environment.apiHost + 'finance-generate-pdf/fixed-expenses', fixedExpenses, 
+        { params: params, responseType: 'blob', observe: 'response' }).pipe(
+          map((response: HttpResponse<Blob>) => {
+            const contentType = response.headers.get('Content-Type') || 'application/pdf';
+            const blob = new Blob([response.body!], { type: contentType });
+            saveAs(blob, filename);
+            return;
+          })
+        );
+    }
+
+    generateRevenuesPDF(filename: string, columns: string[], revenues: any[], title: string, text: string = ''): Observable<void> {
+        const params = this.buildParamsFixedExpensesPDF(filename, columns, title, text);
+        return this.http.post(environment.apiHost + 'finance-generate-pdf/revenues', revenues, 
+        { params: params, responseType: 'blob', observe: 'response' }).pipe(
+          map((response: HttpResponse<Blob>) => {
+            const contentType = response.headers.get('Content-Type') || 'application/pdf';
+            const blob = new Blob([response.body!], { type: contentType });
+            saveAs(blob, filename);
+            return;
+          })
+        );
     }
 
     //

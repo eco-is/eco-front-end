@@ -5,10 +5,12 @@ import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { FinanceService } from '../finance.service';
 import { Revenue } from '../model/revenue.mode';
+import { GenerateReportDialogComponent } from '../generate-report-dialog/generate-report-dialog.component';
 
 @Component({
   selector: 'app-revenue-history',
@@ -52,7 +54,8 @@ export class RevenueHistoryComponent {
     private router: Router, 
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     this.authService.user$.subscribe(user => {
       this.user = user;
@@ -135,6 +138,65 @@ export class RevenueHistoryComponent {
     this.loadRevenues();
   }
 
+  onGeneratePDF(): void {
+    this.page = 0;
+    this.types = this.searchForm.get('types')?.value;
+    this.startDate = this.searchForm.get('startDate')?.value;
+    this.endDate = this.searchForm.get('endDate')?.value;
+    if (this.searchForm.get('aboveAmount')?.value !== null) {
+      this.aboveAmount = this.searchForm.get('aboveAmount')?.value; 
+    }
+    if (this.searchForm.get('belowAmount')?.value !== null) {
+      this.belowAmount = this.searchForm.get('belowAmount')?.value;
+    }
+    
+    if (this.startDate) {
+      this.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.endDate) {
+      this.endDate.setHours(23, 59, 59, 999);
+    }
+    this.paginator.firstPage();
+    
+    let startDateString = '';
+    let endDateString = '';
+    if (this.startDate) {
+      startDateString = this.formatDateToCustomString(this.startDate);
+    } 
+    if (this.endDate) {
+      endDateString = this.formatDateToCustomString(this.endDate);
+    }
+    this.financeService.getAllRevenues(
+      this.types,
+      startDateString, endDateString,
+      this.aboveAmount, this.belowAmount,
+      this.page, 50/*this.size*/, this.sortField, this.sortDirection
+    ).subscribe(result => {
+      this.dataSource.data = result.content;
+      this.totalRevenue = result.totalElements;
+      this.openGenerateReportDialog(result.content);
+    });  
+  }
+
+  openGenerateReportDialog(revenues: Revenue[]): void {
+    let list : string[] = ["number", "id", "type", "amount", "createdOn", "project", "donator"];
+    const dialogRef = this.dialog.open(GenerateReportDialogComponent, {
+      width: '600px',
+      data: {
+        columnOptions: list,
+        data: revenues,
+        service: 'FINANCE_revenue'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let message = 'PDF generated!'
+        this.snackBar.open(message, 'Close', { panelClass: 'green-snackbar', duration: 5000 });  
+      }
+    });
+  }
+
   clearAll() {
     this.searchForm.reset({
       types: [[]],
@@ -167,11 +229,13 @@ export class RevenueHistoryComponent {
     return formattedDate;
   }
 
-  errorMessageDisplay(error: any, errorMessage : string) : void{
+  errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
     }
-    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+    this.snackBar.open(errorMessage, 'Close', { 
+      duration: duration,
+      panelClass: 'green-snackbar' });
     console.error('Error :', error);
   }
 }

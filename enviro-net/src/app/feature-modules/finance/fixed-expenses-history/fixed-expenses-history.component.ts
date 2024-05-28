@@ -5,6 +5,7 @@ import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Member } from '../../administration/model/member.model';
@@ -12,6 +13,7 @@ import { AdministrationService } from 'src/app/feature-modules/administration/ad
 import { DateRange } from '../model/date-range.model';
 import { FinanceService } from '../finance.service';
 import { FixedExpenses } from '../model/fixed-expenses.model';
+import { GenerateReportDialogComponent } from '../generate-report-dialog/generate-report-dialog.component';
 
 @Component({
   selector: 'app-fixed-expenses-history',
@@ -58,7 +60,8 @@ export class FixedExpensesHistoryComponent {
     private router: Router, 
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     this.authService.user$.subscribe(user => {
       this.user = user;
@@ -141,11 +144,15 @@ export class FixedExpensesHistoryComponent {
       this.size,
       this.sortField,
       this.sortDirection
-    ).subscribe(result => {
-      this.dataSource = new MatTableDataSource<FixedExpenses>();
-      this.dataSource.data = result.content;
-      this.totalExpenses = result.totalElements;
-    });
+    ).subscribe(
+      (result) => {
+        this.dataSource = new MatTableDataSource<FixedExpenses>();
+        this.dataSource.data = result.content;
+        this.totalExpenses = result.totalElements;
+      }, (error) =>{
+        let errorMessage = 'Error while fetching fixed expenses. Please try again later.';
+        this.errorMessageDisplay(error, errorMessage);
+      });
   }
 
   searchExpenses(): void {
@@ -167,6 +174,51 @@ export class FixedExpensesHistoryComponent {
     this.loadFixedExpenses();
   }
 
+  onGeneratePDF(): void {
+    this.page = 0;
+    this.types = this.searchForm.get('types')?.value;
+    this.period = {
+      startDate: this.searchForm.get('startDate')?.value,
+      endDate: this.searchForm.get('endDate')?.value,
+    };
+    if (this.period.startDate) {
+      this.period.startDate.setHours(23, 59, 59, 999);
+    }
+    if (this.period.endDate) {
+      this.period.endDate.setHours(23, 59, 59, 999);
+    }
+    this.paginator.firstPage();
+
+    this.financeService.getAllFixedExpenses(
+      this.period!, this.types, this.employees, this.creators,
+      this.page, 50,//this.size,
+      this.sortField, this.sortDirection
+    ).subscribe(result => {
+      this.dataSource.data = result.content; 
+      this.totalExpenses = result.totalElements;
+      this.openGenerateReportDialog(result.content);
+    });
+  }
+
+  openGenerateReportDialog(expenses: FixedExpenses[]): void {
+    let list : string[] = ["number", "id", "type", "period", "amount", "creator", "createdOn", "description", "employee", "overtimeHours"];
+    const dialogRef = this.dialog.open(GenerateReportDialogComponent, {
+      width: '600px',
+      data: {
+        columnOptions: list,
+        data: expenses,
+        service: 'FINANCE_fixed_expense'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let message = 'PDF generated!'
+        this.snackBar.open(message, 'Close', { panelClass: 'green-snackbar', duration: 5000 });  
+      }
+    });
+  }
+
   clearAll() {
     this.searchForm.reset({
       types: [[]],
@@ -185,11 +237,13 @@ export class FixedExpensesHistoryComponent {
     this.router.navigate(['fixed-expenses/latest']);
   }
 
-  errorMessageDisplay(error: any, errorMessage : string) : void{
+  errorMessageDisplay(error: any, errorMessage : string, duration: number = 5000) : void{
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
     }
-    this.snackBar.open(errorMessage, 'Close', { panelClass: 'green-snackbar' });
+    this.snackBar.open(errorMessage, 'Close', { 
+      duration: duration,
+      panelClass: 'green-snackbar' });
     console.error('Error :', error);
   }
 }
