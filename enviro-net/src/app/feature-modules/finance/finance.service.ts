@@ -193,10 +193,10 @@ export class FinanceService {
     }
     
     // FixedExpensesEstimation
-    generateFixedExpensesEstimationsForBudgetPlan(budgetPlanId : number): Observable<FixedExpensesEstimation[]> {
+    getFixedExpensesEstimationsForBudgetPlanId(budgetPlanId : number): Observable<FixedExpensesEstimation[]> {
         let params = new HttpParams()
           .set('budgetPlanId', budgetPlanId.toString());
-        return this.http.get<FixedExpensesEstimation[]>(environment.apiHost + 'fixed-expenses-estimation/generate', { params });
+        return this.http.get<FixedExpensesEstimation[]>(environment.apiHost + 'fixed-expenses-estimation/get', { params });
     }
 
     createFixedExpensesEstimation(expense : FixedExpensesEstimation) : Observable<FixedExpensesEstimation> {

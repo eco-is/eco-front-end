@@ -97,12 +97,12 @@ export class EstimateFixedExpensesComponent {
     this.budgetPlanId = id !== null ? +id : 0;
     if (this.budgetPlanId){
       this.loadBudgetPlan(this.budgetPlanId);
-      this.generateExpensesEstimation();
+      this.getExpensesEstimations();
     }
   }
 
-  generateExpensesEstimation() : void {
-    this.financeService.generateFixedExpensesEstimationsForBudgetPlan(this.budgetPlanId!).subscribe(
+  getExpensesEstimations() : void {
+    this.financeService.getFixedExpensesEstimationsForBudgetPlanId(this.budgetPlanId!).subscribe(
       result => {
       this.calculateTotal(result);
       }, (error) => {
@@ -248,7 +248,7 @@ export class EstimateFixedExpensesComponent {
     this.updateDataSource(this.newFixedExpense);
     this.editStates[this.newFixedExpense.id] = !this.editStates[this.newFixedExpense.id];
     this.editFixedExpense(this.newFixedExpense);
-    this.generateExpensesEstimation();
+    this.getExpensesEstimations();
   }
   saveNewFixedExpense(expense: FixedExpensesEstimation): void{
     // Update the expense object with values from the edit form
@@ -303,7 +303,7 @@ export class EstimateFixedExpensesComponent {
         (result) => {
           expense = result;
           this.updateDataSource(expense);
-          this.generateExpensesEstimation();
+          this.getExpensesEstimations();
         }, (error) => {
           let errorMessage = 'Error while updating fixed expense estimation. Please try again.';
           this.errorMessageDisplay(error, errorMessage);

@@ -118,6 +118,15 @@ export class BudgetPlanDetailsEditComponent {
         }
       );
     } else {
+      const start = new Date(this.formGroup.value.startDate!);
+      const end = new Date(this.formGroup.value.endDate!);
+      let dateRange : DateRange = {
+        startDate: start, endDate: end,
+      }
+      this.plan.fiscalDateRange = dateRange;
+      this.plan.description = this.formGroup.value.description!;
+      this.plan.name = this.formGroup.value.name!;
+
       this.financeService.updateBudgetPlan(this.plan!).subscribe(
         () => {
           this.snackBar.open(this.plan!.name + ' updated!', '', { 
